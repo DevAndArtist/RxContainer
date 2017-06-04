@@ -30,8 +30,9 @@
 		C6C392431EE44A7D008F743A = {
 			isa = PBXGroup;
 			children = (
-				C6C3924F1EE44A7D008F743A /* RxContainer */,
 				C6C3924E1EE44A7D008F743A /* Products */,
+				C6C392581EE4544A008F743A /* Resources */,
+				C6C392591EE4545E008F743A /* Sources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -43,13 +44,20 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C6C3924F1EE44A7D008F743A /* RxContainer */ = {
+		C6C392581EE4544A008F743A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				C6C392501EE44A7D008F743A /* RxContainer.h */,
 				C6C392511EE44A7D008F743A /* Info.plist */,
 			);
-			path = RxContainer;
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C6C392591EE4545E008F743A /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Sources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -246,7 +254,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = RxContainer/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.devandartist.RxContainer;
@@ -264,7 +272,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = RxContainer/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.devandartist.RxContainer;
