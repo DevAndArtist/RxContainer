@@ -150,6 +150,7 @@
 				C6C3924A1EE44A7D008F743A /* Headers */,
 				C6C3924B1EE44A7D008F743A /* Resources */,
 				D6D5CCFBEEF00BCB9DA736B0 /* [CP] Copy Pods Resources */,
+				C6C392691EE45A43008F743A /* SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -266,6 +267,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RxContainerTests/Pods-RxContainerTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		C6C392691EE45A43008F743A /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint";
 		};
 		D6D5CCFBEEF00BCB9DA736B0 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -532,6 +547,7 @@
 				C6C392681EE4552D008F743A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
