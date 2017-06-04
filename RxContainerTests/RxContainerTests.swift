@@ -6,6 +6,7 @@
 //  Copyright © 2017 DevAndArtist. All rights reserved.
 //
 
+@testable import RxContainer
 import XCTest
 
 class RxContainerTests : XCTestCase {
