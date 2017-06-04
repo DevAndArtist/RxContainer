@@ -24,7 +24,11 @@ excluded:
   - Pods
 
 nesting:
-  type_level: 2
+  type_level: 3
+
+identifier_name:
+  excluded: 
+    - to
 
 trailing_whitespace:
   ignores_empty_lines: true
