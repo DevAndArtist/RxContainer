@@ -12,6 +12,7 @@
 		C6C392521EE44A7D008F743A /* RxContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = C6C392501EE44A7D008F743A /* RxContainer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C6C392611EE4552D008F743A /* RxContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392601EE4552D008F743A /* RxContainerTests.swift */; };
 		C6C392631EE4552D008F743A /* RxContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C3924D1EE44A7D008F743A /* RxContainer.framework */; };
+		C6C3926B1EE45E51008F743A /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C3926A1EE45E51008F743A /* ContainerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 		C6C3925E1EE4552D008F743A /* RxContainerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RxContainerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6C392601EE4552D008F743A /* RxContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxContainerTests.swift; sourceTree = "<group>"; };
 		C6C392621EE4552D008F743A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C6C3926A1EE45E51008F743A /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 		C6C392591EE4545E008F743A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C6C3926A1EE45E51008F743A /* ContainerViewController.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -194,6 +197,7 @@
 				TargetAttributes = {
 					C6C3924C1EE44A7D008F743A = {
 						CreatedOnToolsVersion = 8.3.2;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 					C6C3925D1EE4552D008F743A = {
@@ -334,6 +338,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6C3926B1EE45E51008F743A /* ContainerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,6 +466,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 598C357E12BC2B017F710A0A /* Pods-project-RxContainer.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -472,6 +478,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.devandartist.RxContainer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -480,6 +487,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 79E274E7859BF3F97153DAF5 /* Pods-project-RxContainer.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -499,6 +507,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1281082A1EBCBA7454553730 /* Pods-RxContainerTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = RxContainerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.devandartist.RxContainerTests;
@@ -511,6 +520,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9946CF7DC1EBE1744C357FB0 /* Pods-RxContainerTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = RxContainerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.devandartist.RxContainerTests;
