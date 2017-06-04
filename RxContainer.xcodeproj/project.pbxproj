@@ -13,6 +13,7 @@
 		C6C392611EE4552D008F743A /* RxContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392601EE4552D008F743A /* RxContainerTests.swift */; };
 		C6C392631EE4552D008F743A /* RxContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C3924D1EE44A7D008F743A /* RxContainer.framework */; };
 		C6C3926B1EE45E51008F743A /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C3926A1EE45E51008F743A /* ContainerViewController.swift */; };
+		C6C3926D1EE46568008F743A /* ViewComponentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C3926C1EE46568008F743A /* ViewComponentKey.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +40,7 @@
 		C6C392601EE4552D008F743A /* RxContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxContainerTests.swift; sourceTree = "<group>"; };
 		C6C392621EE4552D008F743A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C6C3926A1EE45E51008F743A /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
+		C6C3926C1EE46568008F743A /* ViewComponentKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewComponentKey.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				C6C3926A1EE45E51008F743A /* ContainerViewController.swift */,
+				C6C3926C1EE46568008F743A /* ViewComponentKey.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6C3926D1EE46568008F743A /* ViewComponentKey.swift in Sources */,
 				C6C3926B1EE45E51008F743A /* ContainerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
