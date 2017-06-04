@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol ViewComponent {
+/* closed */ protocol ViewComponent {
 
 	func viewController(forKey key: ViewComponentKey) -> UIViewController
 	func view(forKey key: ViewComponentKey) -> UIView

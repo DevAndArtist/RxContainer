@@ -15,6 +15,11 @@
 		C6C3926B1EE45E51008F743A /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C3926A1EE45E51008F743A /* ContainerViewController.swift */; };
 		C6C3926D1EE46568008F743A /* ViewComponentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C3926C1EE46568008F743A /* ViewComponentKey.swift */; };
 		C6C3926F1EE46694008F743A /* ViewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C3926E1EE46694008F743A /* ViewComponent.swift */; };
+		C6C392711EE47A8C008F743A /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392701EE47A8C008F743A /* Animator.swift */; };
+		C6C392731EE47BF8008F743A /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392721EE47BF8008F743A /* Operation.swift */; };
+		C6C392751EE47C6A008F743A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392741EE47C6A008F743A /* Event.swift */; };
+		C6C392771EE47C74008F743A /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392761EE47C74008F743A /* Transition.swift */; };
+		C6C392791EE47C8F008F743A /* TransitionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392781EE47C8F008F743A /* TransitionContext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +48,11 @@
 		C6C3926A1EE45E51008F743A /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		C6C3926C1EE46568008F743A /* ViewComponentKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewComponentKey.swift; sourceTree = "<group>"; };
 		C6C3926E1EE46694008F743A /* ViewComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewComponent.swift; sourceTree = "<group>"; };
+		C6C392701EE47A8C008F743A /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
+		C6C392721EE47BF8008F743A /* Operation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operation.swift; sourceTree = "<group>"; };
+		C6C392741EE47C6A008F743A /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		C6C392761EE47C74008F743A /* Transition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
+		C6C392781EE47C8F008F743A /* TransitionContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionContext.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,7 +129,12 @@
 		C6C392591EE4545E008F743A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C6C392701EE47A8C008F743A /* Animator.swift */,
 				C6C3926A1EE45E51008F743A /* ContainerViewController.swift */,
+				C6C392741EE47C6A008F743A /* Event.swift */,
+				C6C392721EE47BF8008F743A /* Operation.swift */,
+				C6C392761EE47C74008F743A /* Transition.swift */,
+				C6C392781EE47C8F008F743A /* TransitionContext.swift */,
 				C6C3926E1EE46694008F743A /* ViewComponent.swift */,
 				C6C3926C1EE46568008F743A /* ViewComponentKey.swift */,
 			);
@@ -344,8 +359,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6C392771EE47C74008F743A /* Transition.swift in Sources */,
+				C6C392711EE47A8C008F743A /* Animator.swift in Sources */,
+				C6C392791EE47C8F008F743A /* TransitionContext.swift in Sources */,
 				C6C3926D1EE46568008F743A /* ViewComponentKey.swift in Sources */,
 				C6C3926B1EE45E51008F743A /* ContainerViewController.swift in Sources */,
+				C6C392731EE47BF8008F743A /* Operation.swift in Sources */,
+				C6C392751EE47C6A008F743A /* Event.swift in Sources */,
 				C6C3926F1EE46694008F743A /* ViewComponent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
