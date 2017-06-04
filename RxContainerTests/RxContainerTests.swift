@@ -3,7 +3,7 @@
 //  RxContainerTests
 //
 //  Created by Adrian Zubarev on 04.06.17.
-//  Copyright © 2017 DevAndArtist. All rights reserved.
+//  Copyright © 2017 RxSwiftCommunity. All rights reserved.
 //
 
 @testable import RxContainer
