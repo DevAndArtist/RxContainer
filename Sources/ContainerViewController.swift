@@ -19,12 +19,13 @@ open class ContainerViewController : UIViewController {
 	// open/public properties
 	/// The view controllers currently on the view controller stack.
 	///
-	/// The root view controller is at index `0` in the array and the top 
-	/// controller is at index n-1, where n is the number of items in the array.
+	/// The root view controller is at index `0` in the array and the 
+	/// top controller is at index n-1, where n is the number of items
+	/// in the array.
 	///
-	/// Assigning a new array of view controllers to this property is equivalent to 
-	/// calling the `setViewControllers(_:animated:)` method with the `animated` parameter
-	/// set to `false`.
+	/// Assigning a new array of view controllers to this property is 
+	/// equivalent to calling the `setViewControllers(_:animated:)` 
+	/// method with the `animated` parameter set to `false`.
 	open var viewControllers: [UIViewController] {
 		get { return self.viewControllerStack }
 		set { self.setViewControllers(newValue, animated: false) }
@@ -62,6 +63,12 @@ open class ContainerViewController : UIViewController {
 		super.init(nibName: nil, bundle: nil)
 	}
 
+	/// Initializes and returns a newly created container view controller.
+	///
+	/// This is a convenience method for initializing the receiver and
+	/// pushing view controllers onto the view controller stack. Every
+	/// view controller stack must have at least one view controller to 
+	/// act as the root.
 	public convenience init(_ viewControllers: UIViewController...) {
 		self.init()
 		self.viewControllers = viewControllers
