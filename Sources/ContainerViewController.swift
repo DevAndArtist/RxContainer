@@ -19,12 +19,10 @@ open class ContainerViewController : UIViewController {
 	open var viewControllers: [UIViewController] = []
 
 	open var rootViewController: UIViewController? {
-
 		return self.viewControllers.first
 	}
 
 	open var topViewController: UIViewController? {
-
 		return self.viewControllers.last
 	}
 
@@ -39,23 +37,19 @@ open class ContainerViewController : UIViewController {
 	}
 
 	open var events: Observable<ContainerViewController.Event> {
-
 		return self.eventsSubject.asObservable()
 	}
 
 	public init() {
-
 		super.init(nibName: nil, bundle: nil)
 	}
 
 	public convenience init(_ viewControllers: UIViewController...) {
-
 		self.init()
 		self.viewControllers = viewControllers
 	}
 
 	public required init?(coder aDecoder: NSCoder) {
-
 		super.init(coder: aDecoder)
 	}
 }
@@ -68,19 +62,16 @@ extension ContainerViewController {
 
 	@discardableResult
 	open func pop(animated: Bool = true) -> UIViewController? {
-
 		return nil
 	}
 
 	@discardableResult
 	open func pop(to viewController: UIViewController, animated: Bool = true) -> [UIViewController]? {
-
 		return nil
 	}
 
 	@discardableResult
 	open func popToRootViewController(animated: Bool = true) -> [UIViewController]? {
-
 		return nil
 	}
 
