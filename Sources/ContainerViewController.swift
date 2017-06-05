@@ -11,10 +11,21 @@ import UIKit
 
 open class ContainerViewController : UIViewController {
 
-	// internal/fileprivate properties
+	// internal/fileprivate/private properties
 	fileprivate var viewControllerStack = [UIViewController]()
 	let disposeBag = DisposeBag()
 	let eventsSubject = PublishSubject<ContainerViewController.Event>()
+
+	/// Once the syntax sugar from [SE-0111 commentary
+	/// ](https://lists.swift.org/pipermail/swift-evolution-announce/2016-July/000233.html)
+	/// made into the language, this closure will become either
+	///
+	///    - `open var animator(for:): (Transition) -> Animator?`
+	///
+	/// or
+	///
+	///    - `open var animator: (for: Transition) -> Animator?`
+	private var animator /* (for:) */: (Transition) -> Animator? = { _ in return nil }
 
 	// open/public properties
 	/// The view controllers currently on the view controller stack.
@@ -41,24 +52,24 @@ open class ContainerViewController : UIViewController {
 		return self.viewControllers.last
 	}
 
-	/// Once the syntax sugar from [SE-0111 commentary
-	/// ](https://lists.swift.org/pipermail/swift-evolution-announce/2016-July/000233.html)
-	/// made into the language, this closure will become either
-	///
-	///    - `var animator(for:): (Transition) -> Animator?`
-	///
-	/// or
-	///
-	///    - `var animator: (for: Transition) -> Animator?`
-	open var animator /* (for:) */: (Transition) -> Animator? = {
-		_ in
-		return nil
-	}
-
 	open var events: Observable<ContainerViewController.Event> {
 		return self.eventsSubject
 		           .asObservable()
 		           .observeOn(MainScheduler.instance)
+	}
+
+	/// This function is a getter placeholder for a closure which is not
+	/// yet possible to express in Swift:
+	///    - `open var animator: (for: Transition) -> Animator?`
+	public func animator(for transition: Transition) -> Animator? {
+		return self.animator(transition)
+	}
+
+	/// This function is a setter placeholder for a closure which is not
+	/// yet possible to express in Swift:
+	///    - `open var animator: (for: Transition) -> Animator?`
+	public func animator(for newAnimatorClosure: @escaping (Transition) -> Animator?) {
+		self.animator = newAnimatorClosure
 	}
 
 	/// Initializes and returns a newly created container view controller.
