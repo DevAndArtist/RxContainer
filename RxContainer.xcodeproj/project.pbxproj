@@ -10,7 +10,6 @@
 		30F108A6CA04CB09E0CD6042 /* Pods_project_RxContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75C65F0DCFC605B094DC68D0 /* Pods_project_RxContainer.framework */; };
 		91907F1CDADFDEDC5A291EBC /* Pods_RxContainerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 639104FE3A29CE833494DFF5 /* Pods_RxContainerTests.framework */; };
 		C6C392521EE44A7D008F743A /* RxContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = C6C392501EE44A7D008F743A /* RxContainer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C6C392611EE4552D008F743A /* RxContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392601EE4552D008F743A /* RxContainerTests.swift */; };
 		C6C392631EE4552D008F743A /* RxContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C3924D1EE44A7D008F743A /* RxContainer.framework */; };
 		C6C3926B1EE45E51008F743A /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C3926A1EE45E51008F743A /* ContainerViewController.swift */; };
 		C6C3926D1EE46568008F743A /* ViewComponentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C3926C1EE46568008F743A /* ViewComponentKey.swift */; };
@@ -20,6 +19,7 @@
 		C6C392751EE47C6A008F743A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392741EE47C6A008F743A /* Event.swift */; };
 		C6C392771EE47C74008F743A /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392761EE47C74008F743A /* Transition.swift */; };
 		C6C392791EE47C8F008F743A /* TransitionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392781EE47C8F008F743A /* TransitionContext.swift */; };
+		C6D02B0D1EE5A3E700B0C3FD /* ContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D02B0C1EE5A3E700B0C3FD /* ContainerViewControllerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,7 +43,6 @@
 		C6C392501EE44A7D008F743A /* RxContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RxContainer.h; sourceTree = "<group>"; };
 		C6C392511EE44A7D008F743A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C6C3925E1EE4552D008F743A /* RxContainerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RxContainerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C6C392601EE4552D008F743A /* RxContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxContainerTests.swift; sourceTree = "<group>"; };
 		C6C392621EE4552D008F743A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C6C3926A1EE45E51008F743A /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		C6C3926C1EE46568008F743A /* ViewComponentKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewComponentKey.swift; sourceTree = "<group>"; };
@@ -53,6 +52,7 @@
 		C6C392741EE47C6A008F743A /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		C6C392761EE47C74008F743A /* Transition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
 		C6C392781EE47C8F008F743A /* TransitionContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionContext.swift; sourceTree = "<group>"; };
+		C6D02B0C1EE5A3E700B0C3FD /* ContainerViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewControllerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,8 +144,8 @@
 		C6C3925F1EE4552D008F743A /* RxContainerTests */ = {
 			isa = PBXGroup;
 			children = (
-				C6C392601EE4552D008F743A /* RxContainerTests.swift */,
 				C6C392621EE4552D008F743A /* Info.plist */,
+				C6D02B0C1EE5A3E700B0C3FD /* ContainerViewControllerTests.swift */,
 			);
 			path = RxContainerTests;
 			sourceTree = "<group>";
@@ -374,7 +374,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C6C392611EE4552D008F743A /* RxContainerTests.swift in Sources */,
+				C6D02B0D1EE5A3E700B0C3FD /* ContainerViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

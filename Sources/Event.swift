@@ -15,7 +15,7 @@ extension ContainerViewController {
 		public enum Position { case start, end }
 
 		public let operation: Operation
-		public let position: Position
+		public internal(set) var position: Position
 		public let containerViewController: ContainerViewController
 
 		init(operation: Operation, position: Position, containerViewController: ContainerViewController) {

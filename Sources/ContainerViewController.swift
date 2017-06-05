@@ -11,8 +11,8 @@ import UIKit
 
 open class ContainerViewController : UIViewController {
 
-	// internal properties
-	var viewControllerStack = [UIViewController]()
+	// internal/fileprivate properties
+	fileprivate var viewControllerStack = [UIViewController]()
 	let disposeBag = DisposeBag()
 	let eventsSubject = PublishSubject<ContainerViewController.Event>()
 
@@ -56,9 +56,12 @@ open class ContainerViewController : UIViewController {
 	}
 
 	open var events: Observable<ContainerViewController.Event> {
-		return self.eventsSubject.asObservable()
+		return self.eventsSubject
+		           .asObservable()
+		           .observeOn(MainScheduler.instance)
 	}
 
+	/// Initializes and returns a newly created container view controller.
 	public init() {
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -101,6 +104,44 @@ extension ContainerViewController {
 	}
 
 	open func setViewControllers(_ viewControllers: [UIViewController], animated: Bool = true) {
+		// Ignore an empty stack
+		if viewControllers.isEmpty { return }
+		// Override `animated` value if needed
+		let animated = self.canAnimateTransition() ? animated : false
+		// Delegate set operation to an internal method
+		self.performSet(viewControllers, animated: animated)
+	}
+}
 
+extension ContainerViewController {
+
+	func performSet(_ viewControllers: [UIViewController], animated: Bool) {
+		// Crash if the provided stack is empty
+		precondition(!viewControllers.isEmpty, "New view controller stack cannot be empty.")
+		// Create new instances for consistency
+		let (_, newStack) = (self.viewControllerStack, viewControllers)
+		// Proceed with a transion if possible otherwise alter the stack directly
+		// and drive with the default behaviour
+		if self.canAnimateTransition() {
+			// Create and fire a new set event
+			var setEvent = Event(operation: Operation(kind: .set(newStack), isAnimated: animated),
+			                     position: .start,
+			                     containerViewController: self)
+			self.eventsSubject.onNext(setEvent)
+			// Alter the stack
+			self.viewControllerStack = newStack
+			// Alter the event position to `.ent` before firing a new one
+			setEvent.position = .end
+			self.eventsSubject.onNext(setEvent)
+		} else {
+			// Alter the stack
+			self.viewControllerStack = newStack
+		}
+	}
+
+	/// It is assumed that there should be no transion when the current
+	/// view controller stack is empty as is about to be set.
+	func canAnimateTransition() -> Bool {
+		return !self.viewControllerStack.isEmpty
 	}
 }

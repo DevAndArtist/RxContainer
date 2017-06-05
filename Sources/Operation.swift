@@ -20,5 +20,10 @@ extension ContainerViewController {
 
 		public let kind: Kind
 		public let isAnimated: Bool
+
+		init(kind: Kind, isAnimated: Bool) {
+			self.kind = kind
+			self.isAnimated = isAnimated
+		}
 	}
 }
