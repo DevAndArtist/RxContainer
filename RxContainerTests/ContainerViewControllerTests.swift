@@ -71,18 +71,19 @@ class ContainerViewControllerTests : XCTestCase {
 		// Register pseudo delegate before calling the `set` method
 		self.containerViewController
 			.events
-			.subscribeOn(MainScheduler.instance)
 			.subscribe(onNext: {
+				// Test the event for `viewControllers2`
 				if $0.position == .start {
-					XCTAssertFalse($0.containerViewController.viewControllers == viewControllers2)
+					XCTAssertTrue($0.containerViewController.viewControllers != viewControllers2,
+					               "The view controller stack was set before `.start` event.")
 					endCalledLast = false
 				} else {
-					XCTAssertTrue($0.containerViewController.viewControllers == viewControllers2)
+					XCTAssertTrue($0.containerViewController.viewControllers == viewControllers2,
+					              "The view controller stack was not set before `.end` event.")
 					endCalledLast = true
 				}
-
+				// Test if the stack from the event was `viewControllers1`
 				if case .set(let stack) = $0.operation.kind {
-
 					viewControllers1EventOccured = stack == viewControllers1
 				}
 			})
@@ -91,10 +92,13 @@ class ContainerViewControllerTests : XCTestCase {
 		XCTAssertTrue(self.containerViewController.viewControllers.isEmpty)
 		// Set the whole stack on the current container view controller
 		self.containerViewController.setViewControllers(viewControllers1)
-		XCTAssertFalse(viewControllers1EventOccured)
-		XCTAssertTrue(self.containerViewController.viewControllers == viewControllers1)
-
+		XCTAssertFalse(viewControllers1EventOccured,
+		               "A wrong set event occured.")
+		XCTAssertTrue(self.containerViewController.viewControllers == viewControllers1,
+		              "View controller stack was not set correctly without an event.")
+		// Re-set the whole stack on the current container view controller
 		self.containerViewController.setViewControllers(viewControllers2)
-		XCTAssertTrue(endCalledLast)
+		XCTAssertTrue(endCalledLast,
+		              "View controller stack was not set correctly after the set event.")
 	}
 }
