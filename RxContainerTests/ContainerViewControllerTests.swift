@@ -7,6 +7,7 @@
 //
 
 @testable import RxContainer
+import RxSwift
 import XCTest
 
 class ContainerViewControllerTests : XCTestCase {
@@ -55,5 +56,45 @@ class ContainerViewControllerTests : XCTestCase {
 		// Test when the stack is not empty
 		XCTAssertTrue(self.containerViewController.canAnimateTransition(),
 		              "View controller stack is not empty and therefore an animated transition can occur.")
+	}
+
+	func testSetEventDelivery() {
+		// Create a view controller stacks of two VC's
+		let viewControllers1 = [UIViewController(), UIViewController()]
+		let viewControllers2 = [UIViewController(), UIViewController()]
+		// Create a dispose bag for the following subscription
+		let disposeBag = DisposeBag()
+		// A variable to test delivery order
+		var endCalledLast = false
+		//
+		var viewControllers1EventOccured = false
+		// Register pseudo delegate before calling the `set` method
+		self.containerViewController
+			.events
+			.subscribeOn(MainScheduler.instance)
+			.subscribe(onNext: {
+				if $0.position == .start {
+					XCTAssertFalse($0.containerViewController.viewControllers == viewControllers2)
+					endCalledLast = false
+				} else {
+					XCTAssertTrue($0.containerViewController.viewControllers == viewControllers2)
+					endCalledLast = true
+				}
+
+				if case .set(let stack) = $0.operation.kind {
+
+					viewControllers1EventOccured = stack == viewControllers1
+				}
+			})
+			.disposed(by: disposeBag)
+
+		XCTAssertTrue(self.containerViewController.viewControllers.isEmpty)
+		// Set the whole stack on the current container view controller
+		self.containerViewController.setViewControllers(viewControllers1)
+		XCTAssertFalse(viewControllers1EventOccured)
+		XCTAssertTrue(self.containerViewController.viewControllers == viewControllers1)
+
+		self.containerViewController.setViewControllers(viewControllers2)
+		XCTAssertTrue(endCalledLast)
 	}
 }
