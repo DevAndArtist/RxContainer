@@ -25,7 +25,7 @@ open class ContainerViewController : UIViewController {
 	/// or
 	///
 	///    - `open var animator: (for: Transition) -> Animator?`
-	private var animator /* (for:) */: (Transition) -> Animator? = { _ in return nil }
+	private var animatorClosure /* (for:) */: (Transition) -> Animator? = { _ in return nil }
 
 	// open/public properties
 	/// The view controllers currently on the view controller stack.
@@ -62,14 +62,18 @@ open class ContainerViewController : UIViewController {
 	/// yet possible to express in Swift:
 	///    - `open var animator: (for: Transition) -> Animator?`
 	public func animator(for transition: Transition) -> Animator? {
-		return self.animator(transition)
+		return self.animatorClosure(transition)
 	}
 
-	/// This function is a setter placeholder for a closure which is not
-	/// yet possible to express in Swift:
+	/// This property should only be used as a setter placeholder for 
+	/// a closure which is not yet possible to express in Swift:
 	///    - `open var animator: (for: Transition) -> Animator?`
-	public func animator(for newAnimatorClosure: @escaping (Transition) -> Animator?) {
-		self.animator = newAnimatorClosure
+	///
+	/// WARNING: The getter will always result in a fatal error,
+	/// use `animator(for:)` method as a getter instead.
+	public var animator /* (for:) */: (Transition) -> Animator? {
+		get { fatalError("Use `animator(for:)` instead") }
+		set { self.animatorClosure = newValue }
 	}
 
 	/// Initializes and returns a newly created container view controller.
