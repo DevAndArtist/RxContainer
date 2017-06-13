@@ -8,46 +8,24 @@
 
 import UIKit
 
-extension ContainerViewController {
+public final class Transition {
 
-	public struct Transition {
+	public private(set) var animation: ((Context) -> Void)?
+	public private(set) var completion: ((Context) -> Void)?
 
-		public enum Key { case from, to }
-		public enum Kind { case push, pop }
+	public let context: Context
 
-		// internal properties
-		let fromViewController: UIViewController
-		let toViewController: UIViewController
+	init(with context: Context) {
+		self.context = context
+	}
 
-		// public properties
-		public let kind: Kind
-		public let containerView: UIView
-		public let isAnimated: Bool
+	public func animateAlongside(_ animation: ( /* @escaping */ (Context) -> Void)?,
+	                             completion: ( /* @escaping */ (Context) -> Void)? = nil) {
+		self.animation = animation
+		self.completion = completion
+	}
 
-		init(ofKind kind: Kind,
-		     on containerView: UIView,
-		     from fromViewController: UIViewController,
-		     to toViewController: UIViewController,
-		     animated: Bool) {
-			// Initialize all properties neede for the transition
-			self.kind = kind
-			self.containerView = containerView
-			self.fromViewController = fromViewController
-			self.toViewController = toViewController
-			self.isAnimated = animated
-		}
+	public func complete(_ didComplete: Bool) {
 
-		public func viewController(forKey key: Key) -> UIViewController {
-			switch key {
-			case .from:
-				return self.fromViewController
-			case .to:
-				return self.toViewController
-			}
-		}
-
-		public func view(forKey key: Key) -> UIView {
-			return self.viewController(forKey: key).view
-		}
 	}
 }

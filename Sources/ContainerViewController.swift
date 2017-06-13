@@ -105,24 +105,53 @@ extension ContainerViewController {
 		// Crash if the provided stack is empty
 		precondition(!viewControllers.isEmpty, "New view controller stack cannot be empty.")
 		// Create new instances for consistency
-		let (_, newStack) = (self.viewControllerStack, viewControllers)
+		let (oldStack, newStack) = (self.viewControllerStack, viewControllers)
 		// Proceed with a transion if possible otherwise alter the stack directly
 		// and drive with the default behaviour
 		if self.canAnimateTransition() {
 			// Create and fire a new set event
-			var setEvent = Event(operation: Operation(kind: .set(newStack), isAnimated: animated),
-			                     position: .start,
-			                     containerViewController: self)
-			self.eventsSubject.onNext(setEvent)
+			var event = Event(operation: Operation(kind: .set(newStack), isAnimated: animated),
+			                  position: .start,
+			                  containerViewController: self)
+			self.eventsSubject.onNext(event)
 			// Alter the stack
 			self.viewControllerStack = newStack
 			// Alter the event position to `.ent` before firing a new one
-			setEvent.position = .end
-			self.eventsSubject.onNext(setEvent)
-		} else {
-			// Alter the stack
-			self.viewControllerStack = newStack
-		}
+			event.position = .end
+			self.eventsSubject.onNext(event)
+			// Extract view controllers for the transition
+			guard let fromViewController = oldStack.last, let toViewController = newStack.last else { return }
+			// Determin context kind
+			let contextKind: Transition.Context.Kind = oldStack.contains(toViewController) ? .pop : .push
+			// Instantiate a new context
+			let context = Transition.Context(kind: contextKind,
+			                                 containerView: self.view,
+			                                 fromViewController: fromViewController,
+			                                 toViewController: toViewController,
+			                                 isAnimated: animated)
+			// Create a transition
+			let transition = Transition(with: context)
+			//
+			let direction: DefaultAnimator.Direction = contextKind == .push ? .left : .right
+			// Get an animator for the transition
+			let animator = self.delegate?
+				               .animator(for: transition) ?? DefaultAnimator(for: transition, withDirection: direction)
+			animator.animate()
+
+		} else { /* self.performSetWithoutAnimation(newStack) */ }
+	}
+
+	func performSetWithoutAnimation(_ viewControllers: [UIViewController]) {
+		// Crash if the provided stack is empty
+		precondition(!viewControllers.isEmpty, "New view controller stack cannot be empty.")
+		// Alter the stack
+		self.viewControllerStack = viewControllers
+		// Extract view controller
+		guard let viewController = viewControllers.last else { return }
+		let view: UIView = viewController.view
+		view.autoresizingMask = .complete
+		view.frame = self.view.bounds
+		self.view.addSubview(view)
 	}
 
 	/// It is assumed that there should be no transion when the current
