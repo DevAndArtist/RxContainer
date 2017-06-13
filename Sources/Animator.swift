@@ -18,9 +18,6 @@ import UIKit
 	var transition: Transition { get }
 
 	///
-	var duration: TimeInterval { get }
-
-	///
 	func animate()
 
 	///
@@ -29,6 +26,7 @@ import UIKit
 
 extension Animator {
 
-	/// This is a `no-op` implementation.
+	/// This is a `no-op` implementation, re-implement this method
+	/// if you need to perform work after the transition completed.
 	public func transition(completed: Bool) { /* no-op */ }
 }

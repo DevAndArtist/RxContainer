@@ -22,9 +22,6 @@ public final class DefaultAnimator : Animator {
 	public let direction: Direction
 
 	///
-	public var duration: TimeInterval { return 0.3 }
-
-	///
 	public init(for transition: Transition,
 	            withDirection direction: Direction) {
 		self.transition = transition
@@ -52,7 +49,7 @@ public final class DefaultAnimator : Animator {
 		}
 
 		if context.isAnimated {
-			UIView.animate(withDuration: self.duration, animations: finalState, completion: complete)
+			UIView.animate(withDuration: 0.3, animations: finalState, completion: complete)
 		} else {
 			finalState()
 			complete(true)
