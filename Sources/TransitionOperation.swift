@@ -48,7 +48,7 @@ final class TransitionOperation : Operation {
 	}
 
 	///
-	init(for animator: Animator) {
+	init(with animator: Animator) {
 		self.animator = animator
 	}
 

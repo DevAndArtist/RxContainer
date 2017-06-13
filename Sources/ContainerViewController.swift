@@ -139,7 +139,7 @@ extension ContainerViewController {
 			// Get an animator
 			let animator = self.animator(for: transition)
 			// Start transition
-			self.enqueueTransitionOperation(for: animator) {
+			self.enqueueTransitionOperation(with: animator) {
 				// complete set transition
 			}
 
@@ -150,9 +150,9 @@ extension ContainerViewController {
 extension ContainerViewController {
 
 	///
-	func enqueueTransitionOperation(for animator: Animator, completion: @escaping () -> Void) {
+	func enqueueTransitionOperation(with animator: Animator, completion: @escaping () -> Void) {
 		// Create transition operation for the animator
-		let operation = TransitionOperation(for: animator)
+		let operation = TransitionOperation(with: animator)
 		// Prepare completion block
 		animator.transition.transitionCompletion = {
 			[unowned animator, unowned operation] in
