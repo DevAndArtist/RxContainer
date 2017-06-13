@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		30F108A6CA04CB09E0CD6042 /* Pods_project_RxContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75C65F0DCFC605B094DC68D0 /* Pods_project_RxContainer.framework */; };
 		91907F1CDADFDEDC5A291EBC /* Pods_RxContainerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 639104FE3A29CE833494DFF5 /* Pods_RxContainerTests.framework */; };
+		C6AAE1C51EF06B730076A934 /* TransitionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6AAE1C41EF06B730076A934 /* TransitionOperation.swift */; };
 		C6C392521EE44A7D008F743A /* RxContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = C6C392501EE44A7D008F743A /* RxContainer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C6C392631EE4552D008F743A /* RxContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C3924D1EE44A7D008F743A /* RxContainer.framework */; };
 		C6C3926B1EE45E51008F743A /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C3926A1EE45E51008F743A /* ContainerViewController.swift */; };
@@ -40,6 +41,7 @@
 		75C65F0DCFC605B094DC68D0 /* Pods_project_RxContainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project_RxContainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		79E274E7859BF3F97153DAF5 /* Pods-project-RxContainer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-project-RxContainer.release.xcconfig"; path = "Pods/Target Support Files/Pods-project-RxContainer/Pods-project-RxContainer.release.xcconfig"; sourceTree = "<group>"; };
 		9946CF7DC1EBE1744C357FB0 /* Pods-RxContainerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxContainerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RxContainerTests/Pods-RxContainerTests.release.xcconfig"; sourceTree = "<group>"; };
+		C6AAE1C41EF06B730076A934 /* TransitionOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionOperation.swift; sourceTree = "<group>"; };
 		C6C3924D1EE44A7D008F743A /* RxContainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RxContainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6C392501EE44A7D008F743A /* RxContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RxContainer.h; sourceTree = "<group>"; };
 		C6C392511EE44A7D008F743A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				C6C392721EE47BF8008F743A /* Operation.swift */,
 				C6C392761EE47C74008F743A /* Transition.swift */,
 				C6D255291EEFF87900A0BECF /* TransitionContext.swift */,
+				C6AAE1C41EF06B730076A934 /* TransitionOperation.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -368,6 +371,7 @@
 				C6C392771EE47C74008F743A /* Transition.swift in Sources */,
 				C6C392711EE47A8C008F743A /* Animator.swift in Sources */,
 				C6C3926B1EE45E51008F743A /* ContainerViewController.swift in Sources */,
+				C6AAE1C51EF06B730076A934 /* TransitionOperation.swift in Sources */,
 				C6C392731EE47BF8008F743A /* Operation.swift in Sources */,
 				C6C392751EE47C6A008F743A /* Event.swift in Sources */,
 				C6D2552A1EEFF87900A0BECF /* TransitionContext.swift in Sources */,

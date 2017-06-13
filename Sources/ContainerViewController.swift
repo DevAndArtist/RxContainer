@@ -17,6 +17,13 @@ open class ContainerViewController : UIViewController {
 	///
 	let eventsSubject = PublishSubject<ContainerViewController.Event>()
 
+	///
+	let operationQueue: OperationQueue = {
+		let queue = OperationQueue.main
+		queue.maxConcurrentOperationCount = 1
+		return queue
+	}()
+
 	// open/public properties
 	/// The view controllers currently on the view controller stack.
 	///
@@ -140,13 +147,17 @@ extension ContainerViewController {
 			// Get an animator for the transition
 			let animator = self.delegate?
 			                   .animator(for: transition) ?? DefaultAnimator(for: transition, withDirection: direction)
+			// Create transition operation for the animator
+			let operation = TransitionOperation(for: animator)
 			// Prepare completion block
 			transition.transitionCompletion = {
-				[unowned animator] in
+				[unowned animator, unowned operation] in
 				animator.transition(completed: $0)
+				// Finish operation to notify the queue
+				operation.isFinished = true
 			}
-			// Start animating
-			animator.animate()
+			// Push the operation onto the queue
+			self.operationQueue.addOperation(operation)
 
 		} else { self.performSetAfterInit(newStack) }
 	}
