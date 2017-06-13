@@ -188,3 +188,14 @@ extension ContainerViewController {
 		return !self.viewControllerStack.isEmpty
 	}
 }
+
+extension ContainerViewController {
+
+	open override func show(_ viewController: UIViewController, sender: Any?) {
+		self.push(viewController, animated: UIView.areAnimationsEnabled)
+	}
+
+	open override func showDetailViewController(_ viewController: UIViewController, sender: Any?) {
+		self.show(viewController, sender: sender)
+	}
+}
