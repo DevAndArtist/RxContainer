@@ -150,11 +150,11 @@ extension ContainerViewController {
 				               .animator(for: transition) ?? DefaultAnimator(for: transition, withDirection: direction)
 			animator.animate()
 
-		} else { /* self.performSetWithoutAnimation(newStack) */ }
+		} else { self.performSetAfterInit(newStack) }
 	}
 
 	///
-	func performSetWithoutAnimation(_ viewControllers: [UIViewController]) {
+	func performSetAfterInit(_ viewControllers: [UIViewController]) {
 		// Crash if the provided stack is empty
 		precondition(!viewControllers.isEmpty, "New view controller stack cannot be empty.")
 		// Alter the stack
