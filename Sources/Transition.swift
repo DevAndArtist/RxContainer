@@ -10,6 +10,8 @@ import UIKit
 
 public final class Transition {
 
+	var transitionCompletion: ( /* @escaping */ (Bool) -> Void)?
+
 	///
 	public private(set) var animation: ((Context) -> Void)?
 
@@ -33,6 +35,6 @@ public final class Transition {
 
 	///
 	public func complete(_ didComplete: Bool) {
-
+		self.transitionCompletion?(didComplete)
 	}
 }

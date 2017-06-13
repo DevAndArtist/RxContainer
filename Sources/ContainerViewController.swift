@@ -153,6 +153,12 @@ extension ContainerViewController {
 			// Get an animator for the transition
 			let animator = self.delegate?
 				               .animator(for: transition) ?? DefaultAnimator(for: transition, withDirection: direction)
+			// Prepare completion block
+			transition.transitionCompletion = {
+				[unowned animator] in
+				animator.transition(completed: $0)
+			}
+			// Start animating
 			animator.animate()
 
 		} else { self.performSetAfterInit(newStack) }
