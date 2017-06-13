@@ -108,7 +108,10 @@ extension ContainerViewController {
 	///
 	@discardableResult
 	open func popToRootViewController(animated: Bool = true) -> [UIViewController]? {
-		return nil
+		// Return `nil` if there is no root view controller yet
+		guard let rootViewController = self.rootViewController else { return nil }
+		// Use the `pop(to:animated)` method to finish the job
+		return self.pop(to: rootViewController, animated: animated)
 	}
 
 	///
