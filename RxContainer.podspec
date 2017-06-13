@@ -6,7 +6,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "RxContainer"
-  s.version      = "0.1.0"
+  s.version      = "0.2.0"
   s.summary      = "RxContainer provides the missing part between `UINavigationController` and `UIViewController`."
   s.description  = <<-DESC
   This CocoaPod provides a custom implementation for a `ContainerViewController`. `ContainerViewController`
