@@ -123,16 +123,10 @@ extension ContainerViewController {
 		// Proceed with a transion if possible otherwise alter the stack directly
 		// and drive with the default behaviour
 		if self.canAnimateTransition() {
-			// Create and fire a new set event
-			var event = Event(operation: Operation(kind: .set(newStack), isAnimated: animated),
-			                  position: .start,
-			                  containerViewController: self)
-			self.eventsSubject.onNext(event)
-			// Alter the stack
-			self.viewControllerStack = newStack
-			// Alter the event position to `.end` before firing a new one
-			event.position = .end
-			self.eventsSubject.onNext(event)
+			// Send events and manipulate the stack
+			self.sendEvents(for: Operation(kind: .set(newStack), isAnimated: animated)) {
+				self.viewControllerStack = newStack
+			}
 			// Extract view controllers for the transition
 			guard let fromViewController = oldStack.last, let toViewController = newStack.last else { return }
 			// Determin context kind
@@ -155,6 +149,7 @@ extension ContainerViewController {
 			// Prepare completion block
 			transition.transitionCompletion = {
 				[unowned animator, unowned operation] in
+				// Notify the animator about completion
 				animator.transition(completed: $0)
 				// Finish operation to notify the queue
 				operation.isFinished = true
@@ -167,6 +162,18 @@ extension ContainerViewController {
 }
 
 extension ContainerViewController {
+
+	///
+	func sendEvents(for operation: Operation, stackManipulation: () -> Void) {
+		// Create and fire a new event
+		var event = Event(operation: operation, position: .start, containerViewController: self)
+		self.eventsSubject.onNext(event)
+		// Alter the stack
+		stackManipulation()
+		// Alter the event position to `.end` before firing a new one
+		event.position = .end
+		self.eventsSubject.onNext(event)
+	}
 
 	///
 	func performSetAfterInit(_ viewControllers: [UIViewController]) {
@@ -191,10 +198,12 @@ extension ContainerViewController {
 
 extension ContainerViewController {
 
+	///
 	open override func show(_ viewController: UIViewController, sender: Any?) {
 		self.push(viewController, animated: UIView.areAnimationsEnabled)
 	}
 
+	///
 	open override func showDetailViewController(_ viewController: UIViewController, sender: Any?) {
 		self.show(viewController, sender: sender)
 	}
