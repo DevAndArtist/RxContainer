@@ -129,39 +129,67 @@ extension ContainerViewController {
 			}
 			// Extract view controllers for the transition
 			guard let fromViewController = oldStack.last, let toViewController = newStack.last else { return }
-			// Determin context kind
-			let contextKind: Transition.Context.Kind = oldStack.contains(toViewController) ? .pop : .push
-			// Instantiate a new context
-			let context = Transition.Context(kind: contextKind,
-			                                 containerView: self.view,
-			                                 fromViewController: fromViewController,
-			                                 toViewController: toViewController,
-			                                 isAnimated: animated)
-			// Create a transition
-			let transition = Transition(with: context)
-			//
-			let direction: DefaultAnimator.Direction = contextKind == .push ? .left : .right
-			// Get an animator for the transition
-			let animator = self.delegate?
-			                   .animator(for: transition) ?? DefaultAnimator(for: transition, withDirection: direction)
-			// Create transition operation for the animator
-			let operation = TransitionOperation(for: animator)
-			// Prepare completion block
-			transition.transitionCompletion = {
-				[unowned animator, unowned operation] in
-				// Notify the animator about completion
-				animator.transition(completed: $0)
-				// Finish operation to notify the queue
-				operation.isFinished = true
+			// Determine context kind
+			let kind: Transition.Context.Kind = oldStack.contains(toViewController) ? .pop : .push
+			// Create a new transition
+			let transition = self.transition(ofKind: kind,
+			                                 from: fromViewController,
+			                                 to: toViewController,
+			                                 animated: animated)
+			// Get an animator
+			let animator = self.animator(for: transition)
+			// Start transition
+			self.enqueueTransitionOperation(for: animator) {
+				// complete set transition
 			}
-			// Push the operation onto the queue
-			self.operationQueue.addOperation(operation)
 
 		} else { self.performSetAfterInit(newStack) }
 	}
 }
 
 extension ContainerViewController {
+
+	///
+	func enqueueTransitionOperation(for animator: Animator, completion: @escaping () -> Void) {
+		// Create transition operation for the animator
+		let operation = TransitionOperation(for: animator)
+		// Prepare completion block
+		animator.transition.transitionCompletion = {
+			[unowned animator, unowned operation] in
+			// Finish transition work
+			completion()
+			// Notify the animator about completion
+			animator.transition(completed: $0)
+			// Finish operation to notify the queue
+			operation.isFinished = true
+		}
+		// Push the operation onto the queue
+		self.operationQueue.addOperation(operation)
+	}
+
+	///
+	func animator(for transition: Transition) -> Animator {
+		//
+		let direction: DefaultAnimator.Direction = transition.context.kind == .push ? .left : .right
+		// Get an animator for the transition
+		return self.delegate?
+		           .animator(for: transition) ?? DefaultAnimator(for: transition, withDirection: direction)
+	}
+
+	///
+	func transition(ofKind kind: Transition.Context.Kind,
+	                from fromViewController: UIViewController,
+	                to toViewController: UIViewController,
+	                animated: Bool) -> Transition {
+		// Instantiate a new context
+		let context = Transition.Context(kind: kind,
+		                                 containerView: self.view,
+		                                 fromViewController: fromViewController,
+		                                 toViewController: toViewController,
+		                                 isAnimated: animated)
+		// Create a transition
+		return Transition(with: context)
+	}
 
 	///
 	func sendEvents(for operation: Operation, stackManipulation: () -> Void) {
