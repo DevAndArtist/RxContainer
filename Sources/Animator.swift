@@ -12,14 +12,13 @@ import UIKit
 ///   - Once protocol nesting is supported this protocol will be nested as `Animator` inside
 ///     `ContainerViewController`.
 ///   - Once `open/public protocol` inconsistency is resolved this protocol will become `open`.
-public protocol _Animator {
-
-	func transitionDuration(using context: ContainerViewController.Transition.Context) -> TimeInterval
-	func animateTransition(using context: ContainerViewController.Transition.Context)
-	func animationEnded(_ transitionCompleted: Bool)
+/* open */ public protocol _Animator {
+	var transition: ContainerViewController.Transition { get }
+	var duration: TimeInterval { get }
+	func animate()
+	func transition(completed: Bool)
 }
 
 extension ContainerViewController {
-
 	public typealias Animator = _Animator
 }

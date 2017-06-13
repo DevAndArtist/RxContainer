@@ -10,37 +10,43 @@ import UIKit
 
 extension ContainerViewController {
 
-	public struct Transition : ViewComponent {
+	public struct Transition {
 
+		public enum Key { case from, to }
 		public enum Kind { case push, pop }
 
 		// internal properties
-		let viewComponents: [ViewComponentKey: UIViewController]
+		let fromViewController: UIViewController
+		let toViewController: UIViewController
 
 		// public properties
 		public let kind: Kind
-		public let containerViewController: ContainerViewController
+		public let containerView: UIView
 		public let isAnimated: Bool
 
-		init(viewComponents: [ViewComponentKey: UIViewController],
-		     kind: Kind,
-		     containerViewController: ContainerViewController,
-		     isAnimated: Bool) {
-			//
-			self.viewComponents = viewComponents
+		init(ofKind kind: Kind,
+		     on containerView: UIView,
+		     from fromViewController: UIViewController,
+		     to toViewController: UIViewController,
+		     animated: Bool) {
+			// Initialize all properties neede for the transition
 			self.kind = kind
-			self.containerViewController = containerViewController
-			self.isAnimated = isAnimated
+			self.containerView = containerView
+			self.fromViewController = fromViewController
+			self.toViewController = toViewController
+			self.isAnimated = animated
 		}
 
-		public func viewController(forKey key: ViewComponentKey) -> UIViewController {
-			guard let viewController = self.viewComponents[key] else {
-				fatalError("Could not find any view controller for key: `\(key)`.")
+		public func viewController(forKey key: Key) -> UIViewController {
+			switch key {
+			case .from:
+				return self.fromViewController
+			case .to:
+				return self.toViewController
 			}
-			return viewController
 		}
 
-		public func view(forKey key: ViewComponentKey) -> UIView {
+		public func view(forKey key: Key) -> UIView {
 			return self.viewController(forKey: key).view
 		}
 	}

@@ -12,14 +12,13 @@
 		C6C392521EE44A7D008F743A /* RxContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = C6C392501EE44A7D008F743A /* RxContainer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C6C392631EE4552D008F743A /* RxContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C3924D1EE44A7D008F743A /* RxContainer.framework */; };
 		C6C3926B1EE45E51008F743A /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C3926A1EE45E51008F743A /* ContainerViewController.swift */; };
-		C6C3926D1EE46568008F743A /* ViewComponentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C3926C1EE46568008F743A /* ViewComponentKey.swift */; };
-		C6C3926F1EE46694008F743A /* ViewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C3926E1EE46694008F743A /* ViewComponent.swift */; };
 		C6C392711EE47A8C008F743A /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392701EE47A8C008F743A /* Animator.swift */; };
 		C6C392731EE47BF8008F743A /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392721EE47BF8008F743A /* Operation.swift */; };
 		C6C392751EE47C6A008F743A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392741EE47C6A008F743A /* Event.swift */; };
 		C6C392771EE47C74008F743A /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392761EE47C74008F743A /* Transition.swift */; };
-		C6C392791EE47C8F008F743A /* TransitionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C392781EE47C8F008F743A /* TransitionContext.swift */; };
 		C6D02B0D1EE5A3E700B0C3FD /* ContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D02B0C1EE5A3E700B0C3FD /* ContainerViewControllerTests.swift */; };
+		C6D255281EEFDE2A00A0BECF /* Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D255271EEFDE2A00A0BECF /* Delegate.swift */; };
+		C6D2552A1EEFF87900A0BECF /* TransitionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D255291EEFF87900A0BECF /* TransitionCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,14 +44,13 @@
 		C6C3925E1EE4552D008F743A /* RxContainerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RxContainerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6C392621EE4552D008F743A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C6C3926A1EE45E51008F743A /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
-		C6C3926C1EE46568008F743A /* ViewComponentKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewComponentKey.swift; sourceTree = "<group>"; };
-		C6C3926E1EE46694008F743A /* ViewComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewComponent.swift; sourceTree = "<group>"; };
 		C6C392701EE47A8C008F743A /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		C6C392721EE47BF8008F743A /* Operation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operation.swift; sourceTree = "<group>"; };
 		C6C392741EE47C6A008F743A /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		C6C392761EE47C74008F743A /* Transition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
-		C6C392781EE47C8F008F743A /* TransitionContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionContext.swift; sourceTree = "<group>"; };
 		C6D02B0C1EE5A3E700B0C3FD /* ContainerViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewControllerTests.swift; sourceTree = "<group>"; };
+		C6D255271EEFDE2A00A0BECF /* Delegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Delegate.swift; sourceTree = "<group>"; };
+		C6D255291EEFF87900A0BECF /* TransitionCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,12 +129,11 @@
 			children = (
 				C6C392701EE47A8C008F743A /* Animator.swift */,
 				C6C3926A1EE45E51008F743A /* ContainerViewController.swift */,
+				C6D255271EEFDE2A00A0BECF /* Delegate.swift */,
 				C6C392741EE47C6A008F743A /* Event.swift */,
 				C6C392721EE47BF8008F743A /* Operation.swift */,
 				C6C392761EE47C74008F743A /* Transition.swift */,
-				C6C392781EE47C8F008F743A /* TransitionContext.swift */,
-				C6C3926E1EE46694008F743A /* ViewComponent.swift */,
-				C6C3926C1EE46568008F743A /* ViewComponentKey.swift */,
+				C6D255291EEFF87900A0BECF /* TransitionCoordinator.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -359,14 +356,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6D255281EEFDE2A00A0BECF /* Delegate.swift in Sources */,
 				C6C392771EE47C74008F743A /* Transition.swift in Sources */,
 				C6C392711EE47A8C008F743A /* Animator.swift in Sources */,
-				C6C392791EE47C8F008F743A /* TransitionContext.swift in Sources */,
-				C6C3926D1EE46568008F743A /* ViewComponentKey.swift in Sources */,
 				C6C3926B1EE45E51008F743A /* ContainerViewController.swift in Sources */,
 				C6C392731EE47BF8008F743A /* Operation.swift in Sources */,
 				C6C392751EE47C6A008F743A /* Event.swift in Sources */,
-				C6C3926F1EE46694008F743A /* ViewComponent.swift in Sources */,
+				C6D2552A1EEFF87900A0BECF /* TransitionCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
