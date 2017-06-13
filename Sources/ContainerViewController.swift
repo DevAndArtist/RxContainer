@@ -108,19 +108,6 @@ extension ContainerViewController {
 	open func setViewControllers(_ viewControllers: [UIViewController], animated: Bool = true) {
 		// Ignore an empty stack
 		if viewControllers.isEmpty { return }
-		// Override `animated` value if needed
-		let animated = self.canAnimateTransition() ? animated : false
-		// Delegate set operation to an internal method
-		self.performSet(viewControllers, animated: animated)
-	}
-}
-
-extension ContainerViewController {
-
-	///
-	func performSet(_ viewControllers: [UIViewController], animated: Bool) {
-		// Crash if the provided stack is empty
-		precondition(!viewControllers.isEmpty, "New view controller stack cannot be empty.")
 		// Create new instances for consistency
 		let (oldStack, newStack) = (self.viewControllerStack, viewControllers)
 		// Proceed with a transion if possible otherwise alter the stack directly
@@ -152,7 +139,7 @@ extension ContainerViewController {
 			let direction: DefaultAnimator.Direction = contextKind == .push ? .left : .right
 			// Get an animator for the transition
 			let animator = self.delegate?
-				               .animator(for: transition) ?? DefaultAnimator(for: transition, withDirection: direction)
+			                   .animator(for: transition) ?? DefaultAnimator(for: transition, withDirection: direction)
 			// Prepare completion block
 			transition.transitionCompletion = {
 				[unowned animator] in
@@ -163,6 +150,9 @@ extension ContainerViewController {
 
 		} else { self.performSetAfterInit(newStack) }
 	}
+}
+
+extension ContainerViewController {
 
 	///
 	func performSetAfterInit(_ viewControllers: [UIViewController]) {
