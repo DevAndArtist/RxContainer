@@ -72,6 +72,11 @@ open class ContainerViewController : UIViewController {
 	public required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 	}
+
+	deinit {
+		// Complete the subject sequence
+		self.eventsSubject.onCompleted()
+	}
 }
 
 extension ContainerViewController {
