@@ -10,20 +10,28 @@ import UIKit
 
 public final class DefaultAnimator : Animator {
 
+	///
 	public enum Direction {
 		case left, right, top, bottom
 	}
 
+	///
 	public let transition: Transition
+
+	///
 	public let direction: Direction
+
+	///
 	public var duration: TimeInterval { return 0.3 }
 
+	///
 	public init(for transition: Transition,
 	            withDirection direction: Direction) {
 		self.transition = transition
 		self.direction = direction
 	}
 
+	///
 	public func animate() {
 
 		let context = self.transition.context

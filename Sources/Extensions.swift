@@ -10,8 +10,8 @@ import UIKit
 
 extension UIViewAutoresizing {
 
+	///
 	static var complete: UIViewAutoresizing {
-
 		return [
 			.flexibleTopMargin,
 			.flexibleBottomMargin,

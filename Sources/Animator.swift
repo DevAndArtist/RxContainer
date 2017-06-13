@@ -13,13 +13,22 @@ import UIKit
 ///     `ContainerViewController`.
 ///   - Once `open/public protocol` inconsistency is resolved this protocol will become `open`.
 /* open */ public protocol Animator : class {
+
+	///
 	var transition: Transition { get }
+
+	///
 	var duration: TimeInterval { get }
+
+	///
 	func animate()
+
+	///
 	func transition(completed: Bool)
 }
 
 extension Animator {
 
+	/// This is a `no-op` implementation.
 	public func transition(completed: Bool) { /* no-op */ }
 }

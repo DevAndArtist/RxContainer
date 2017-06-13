@@ -10,20 +10,33 @@ import UIKit
 
 extension Transition {
 
+	///
 	public struct Context {
 
+		///
 		public enum Key { case from, to }
+
+		///
 		public enum Kind { case push, pop }
 
 		// internal properties
+		///
 		let fromViewController: UIViewController
+		
+		///
 		let toViewController: UIViewController
 
 		// public properties
+		///
 		public let kind: Kind
+
+		///
 		public let containerView: UIView
+
+		///
 		public let isAnimated: Bool
 
+		///
 		init(kind: Kind,
 		     containerView: UIView,
 		     fromViewController: UIViewController,
@@ -37,6 +50,7 @@ extension Transition {
 			self.isAnimated = isAnimated
 		}
 
+		///
 		public func viewController(forKey key: Key) -> UIViewController {
 			switch key {
 			case .from:
@@ -46,6 +60,7 @@ extension Transition {
 			}
 		}
 
+		///
 		public func view(forKey key: Key) -> UIView {
 			return self.viewController(forKey: key).view
 		}

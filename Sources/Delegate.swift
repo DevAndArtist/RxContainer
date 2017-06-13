@@ -13,9 +13,13 @@ import UIKit
 ///     `ContainerViewController`.
 ///   - Once `open/public protocol` inconsistency is resolved this protocol will become `open`.
 /* open */ public protocol _Delegate : class {
+
+	///
 	func animator(for transition: Transition) -> Animator?
 }
 
 extension ContainerViewController {
+
+	///
 	public typealias Delegate = _Delegate
 }

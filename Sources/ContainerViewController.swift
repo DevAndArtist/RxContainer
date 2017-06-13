@@ -11,7 +11,10 @@ import UIKit
 
 open class ContainerViewController : UIViewController {
 	// internal/fileprivate/private properties
+	///
 	fileprivate var viewControllerStack = [UIViewController]()
+	
+	///
 	let eventsSubject = PublishSubject<ContainerViewController.Event>()
 
 	// open/public properties
@@ -39,12 +42,14 @@ open class ContainerViewController : UIViewController {
 		return self.viewControllers.last
 	}
 
+	///
 	open var events: Observable<ContainerViewController.Event> {
 		return self.eventsSubject
 		           .asObservable()
 		           .observeOn(MainScheduler.instance)
 	}
-	
+
+	///
 	open weak var delegate: Delegate?
 
 	/// Initializes and returns a newly created container view controller.
@@ -63,6 +68,7 @@ open class ContainerViewController : UIViewController {
 		self.viewControllers = viewControllers
 	}
 
+	///
 	public required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 	}
@@ -70,25 +76,30 @@ open class ContainerViewController : UIViewController {
 
 extension ContainerViewController {
 
+	///
 	open func push(_ viewController: UIViewController, animated: Bool = true) {
 
 	}
 
+	///
 	@discardableResult
 	open func pop(animated: Bool = true) -> UIViewController? {
 		return nil
 	}
 
+	///
 	@discardableResult
 	open func pop(to viewController: UIViewController, animated: Bool = true) -> [UIViewController]? {
 		return nil
 	}
 
+	///
 	@discardableResult
 	open func popToRootViewController(animated: Bool = true) -> [UIViewController]? {
 		return nil
 	}
 
+	///
 	open func setViewControllers(_ viewControllers: [UIViewController], animated: Bool = true) {
 		// Ignore an empty stack
 		if viewControllers.isEmpty { return }
@@ -101,6 +112,7 @@ extension ContainerViewController {
 
 extension ContainerViewController {
 
+	///
 	func performSet(_ viewControllers: [UIViewController], animated: Bool) {
 		// Crash if the provided stack is empty
 		precondition(!viewControllers.isEmpty, "New view controller stack cannot be empty.")
@@ -141,6 +153,7 @@ extension ContainerViewController {
 		} else { /* self.performSetWithoutAnimation(newStack) */ }
 	}
 
+	///
 	func performSetWithoutAnimation(_ viewControllers: [UIViewController]) {
 		// Crash if the provided stack is empty
 		precondition(!viewControllers.isEmpty, "New view controller stack cannot be empty.")
