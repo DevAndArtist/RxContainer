@@ -15,11 +15,13 @@ public final class DefaultAnimator : Animator {
 	}
 
 	public let transition: Transition
+	public let direction: Direction
 	public var duration: TimeInterval { return 0.3 }
 
-	init(for transition: Transition,
-	     withDirection direction: Direction) {
+	public init(for transition: Transition,
+	            withDirection direction: Direction) {
 		self.transition = transition
+		self.direction = direction
 	}
 
 	public func animate() {
