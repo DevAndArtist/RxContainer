@@ -136,10 +136,10 @@
 				C6ED839E1EEFFEDB009D5C6F /* DefaultAnimator.swift */,
 				C6D255271EEFDE2A00A0BECF /* Delegate.swift */,
 				C6C392741EE47C6A008F743A /* Event.swift */,
+				C6ED83A01EF017B7009D5C6F /* Extensions.swift */,
 				C6C392721EE47BF8008F743A /* Operation.swift */,
 				C6C392761EE47C74008F743A /* Transition.swift */,
 				C6D255291EEFF87900A0BECF /* TransitionContext.swift */,
-				C6ED83A01EF017B7009D5C6F /* Extensions.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
