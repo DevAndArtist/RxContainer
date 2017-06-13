@@ -133,7 +133,7 @@ extension ContainerViewController {
 			self.eventsSubject.onNext(event)
 			// Alter the stack
 			self.viewControllerStack = newStack
-			// Alter the event position to `.ent` before firing a new one
+			// Alter the event position to `.end` before firing a new one
 			event.position = .end
 			self.eventsSubject.onNext(event)
 			// Extract view controllers for the transition
