@@ -121,7 +121,30 @@ extension ContainerViewController {
 	///
 	@discardableResult
 	open func pop(animated: Bool = true) -> UIViewController? {
-		return nil
+		//
+		guard self.viewControllerStack.count > 1 else { return nil }
+		//
+		let endIndex = self.viewControllerStack.endIndex
+		let fromViewController = self.viewControllerStack[endIndex - 1]
+		let toViewController = self.viewControllerStack[endIndex - 2]
+		// Send events and manipulate the stack
+		self.sendEvents(for: Operation(kind: .pop(fromViewController), isAnimated: animated)) {
+			self.viewControllerStack.removeLast(1)
+		}
+		//
+		fromViewController.willMove(toParentViewController: nil)
+		// Create a new transition
+		let transition = self.transition(ofKind: .pop,
+		                                 from: fromViewController,
+		                                 to: toViewController,
+		                                 animated: animated)
+		// Get an animator
+		let animator = self.animator(for: transition)
+		// Start transition
+		self.startTransition(on: animator) {
+			fromViewController.removeFromParentViewController()
+		}
+		return fromViewController
 	}
 
 	///
