@@ -150,7 +150,38 @@ extension ContainerViewController {
 	///
 	@discardableResult
 	open func pop(to viewController: UIViewController, animated: Bool = true) -> [UIViewController]? {
-		return nil
+		//
+		guard let position = self.viewControllerStack.index(of: viewController) else {
+			fatalError("Cannot pop a view controller that is not on the stack")
+		}
+		// Get the top view controller from the stack
+		let endIndex = self.viewControllerStack.endIndex
+		let fromViewController = self.viewControllers[endIndex - 1]
+		// Don't do anthing if the controllers are the same. For instance the stack contains only the
+		// root view controller and the `popToRootViewController(animated:)` method is called.
+		if fromViewController === viewController { return nil }
+		// Get the view controllers that we want to drop from the stack.
+		let resultArray = Array(self.viewControllers.dropFirst(position + 1))
+		// Send events and manipulate the stack
+		self.sendEvents(for: Operation(kind: .pop(fromViewController), isAnimated: animated)) {
+			self.viewControllerStack.removeLast(resultArray.count)
+		}
+		// Notify all these controllers in the right order that they will be removed.
+		resultArray.reversed()
+		           .forEach { $0.willMove(toParentViewController: nil) }
+		// Create a new transition
+		let transition = self.transition(ofKind: .pop,
+		                                 from: fromViewController,
+		                                 to: viewController,
+		                                 animated: animated)
+		// Get an animator
+		let animator = self.animator(for: transition)
+		// Start transition
+		self.startTransition(on: animator) {
+			resultArray.reversed()
+			           .forEach { $0.removeFromParentViewController() }
+		}
+		return resultArray
 	}
 
 	///
