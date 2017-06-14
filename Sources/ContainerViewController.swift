@@ -90,7 +90,32 @@ extension ContainerViewController {
 
 	///
 	open func push(_ viewController: UIViewController, animated: Bool = true) {
+		//
+		if let fromViewController = self.topViewController {
+			// Address for the view controller
+			let address = String(format: "%p", viewController)
+			//
+			precondition(!self.viewControllerStack.contains(viewController),
+			             "View controller stack already contanins <UIViewController: \(address)>")
+			// Send events and manipulate the stack
+			self.sendEvents(for: Operation(kind: .push(viewController), isAnimated: animated)) {
+				self.viewControllerStack.append(viewController)
+			}
+			//
+			self.addChildViewController(viewController)
+			// Create a new transition
+			let transition = self.transition(ofKind: .push,
+			                                 from: fromViewController,
+			                                 to: viewController,
+			                                 animated: animated)
+			// Get an animator
+			let animator = self.animator(for: transition)
+			// Start transition
+			self.startTransition(on: animator) {
+				viewController.didMove(toParentViewController: self)
+			}
 
+		} else { self.performSetAfterInit([viewController]) }
 	}
 
 	///
