@@ -91,31 +91,31 @@ extension ContainerViewController {
 	///
 	open func push(_ viewController: UIViewController, animated: Bool = true) {
 		//
-		if let fromViewController = self.topViewController {
-			// Address for the view controller
-			let address = String(format: "%p", viewController)
-			//
-			precondition(!self.viewControllerStack.contains(viewController),
-			             "View controller stack already contanins <UIViewController: \(address)>")
-			// Send events and manipulate the stack
-			self.sendEvents(for: Operation(kind: .push(viewController), isAnimated: animated)) {
-				self.viewControllerStack.append(viewController)
-			}
-			//
-			self.addChildViewController(viewController)
-			// Create a new transition
-			let transition = self.transition(ofKind: .push,
-			                                 from: fromViewController,
-			                                 to: viewController,
-			                                 animated: animated)
-			// Get an animator
-			let animator = self.animator(for: transition)
-			// Start transition
-			self.startTransition(on: animator) {
-				viewController.didMove(toParentViewController: self)
-			}
-
-		} else { self.performSetAfterInit([viewController]) }
+		guard let fromViewController = self.topViewController else {
+			return self.performSetAfterInit([viewController])
+		}
+		// Address for the view controller
+		let address = String(format: "%p", viewController)
+		//
+		precondition(!self.viewControllerStack.contains(viewController),
+		             "View controller stack already contanins <UIViewController: \(address)>")
+		// Send events and manipulate the stack
+		self.sendEvents(for: Operation(kind: .push(viewController), isAnimated: animated)) {
+			self.viewControllerStack.append(viewController)
+		}
+		//
+		self.addChildViewController(viewController)
+		// Create a new transition
+		let transition = self.transition(ofKind: .push,
+		                                 from: fromViewController,
+		                                 to: viewController,
+		                                 animated: animated)
+		// Get an animator
+		let animator = self.animator(for: transition)
+		// Start transition
+		self.startTransition(on: animator) {
+			viewController.didMove(toParentViewController: self)
+		}
 	}
 
 	///
@@ -201,41 +201,39 @@ extension ContainerViewController {
 		let (oldStack, newStack) = (self.viewControllerStack, viewControllers)
 		// Proceed with a transion if possible otherwise alter the stack directly
 		// and drive with the default behaviour
-		if self.canAnimateTransition() {
-			// Send events and manipulate the stack
-			self.sendEvents(for: Operation(kind: .set(newStack), isAnimated: animated)) {
-				self.viewControllerStack = newStack
-			}
-			// Remove any view controller that is also inside the new stack,
-			// because we don't need to notify these.
-			// Also reverse the order for correct notifications order.
-			let filteredOldStack = oldStack.filter(!newStack.contains).reversed()
-			// Notify only view controllers that will be removed from the stack
-			filteredOldStack.forEach { $0.willMove(toParentViewController: nil) }
-			// Also filter the new stack to prevent wrong relationship events.
-			let filteredNewStack = newStack.filter(!oldStack.contains)
-			// Link only new view controllers to self
-			filteredNewStack.forEach(self.addChildViewController)
-			// Extract view controllers for the transition
-			guard let fromViewController = oldStack.last, let toViewController = newStack.last else { return }
-			// Determine context kind
-			let kind: Transition.Context.Kind = oldStack.contains(toViewController) ? .pop : .push
-			// Create a new transition
-			let transition = self.transition(ofKind: kind,
-			                                 from: fromViewController,
-			                                 to: toViewController,
-			                                 animated: animated)
-			// Get an animator
-			let animator = self.animator(for: transition)
-			// Start transition
-			self.startTransition(on: animator) {
-				// Remove only distinct view controllers
-				filteredOldStack.forEach { $0.removeFromParentViewController() }
-				// Notify only new linked view controllers
-				filteredNewStack.forEach(UIViewController.didMove(self))
-			}
-
-		} else { self.performSetAfterInit(newStack) }
+		guard self.canAnimateTransition() else { return self.performSetAfterInit(newStack) }
+		// Send events and manipulate the stack
+		self.sendEvents(for: Operation(kind: .set(newStack), isAnimated: animated)) {
+			self.viewControllerStack = newStack
+		}
+		// Remove any view controller that is also inside the new stack,
+		// because we don't need to notify these.
+		// Also reverse the order for correct notifications order.
+		let filteredOldStack = oldStack.filter(!newStack.contains).reversed()
+		// Notify only view controllers that will be removed from the stack
+		filteredOldStack.forEach { $0.willMove(toParentViewController: nil) }
+		// Also filter the new stack to prevent wrong relationship events.
+		let filteredNewStack = newStack.filter(!oldStack.contains)
+		// Link only new view controllers to self
+		filteredNewStack.forEach(self.addChildViewController)
+		// Extract view controllers for the transition
+		guard let fromViewController = oldStack.last, let toViewController = newStack.last else { return }
+		// Determine context kind
+		let kind: Transition.Context.Kind = oldStack.contains(toViewController) ? .pop : .push
+		// Create a new transition
+		let transition = self.transition(ofKind: kind,
+		                                 from: fromViewController,
+		                                 to: toViewController,
+		                                 animated: animated)
+		// Get an animator
+		let animator = self.animator(for: transition)
+		// Start transition
+		self.startTransition(on: animator) {
+			// Remove only distinct view controllers
+			filteredOldStack.forEach { $0.removeFromParentViewController() }
+			// Notify only new linked view controllers
+			filteredNewStack.forEach(UIViewController.didMove(self))
+		}
 	}
 }
 
