@@ -22,3 +22,7 @@ extension UIViewAutoresizing {
 		]
 	}
 }
+
+prefix func ! <T>(closure: @escaping (T) -> Bool) -> (T) -> Bool {
+	return { !closure($0) }
+}

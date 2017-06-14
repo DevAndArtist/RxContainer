@@ -127,6 +127,16 @@ extension ContainerViewController {
 			self.sendEvents(for: Operation(kind: .set(newStack), isAnimated: animated)) {
 				self.viewControllerStack = newStack
 			}
+			// Remove any view controller that is also inside the new stack,
+			// because we don't need to notify these.
+			// Also reverse the order for correct notifications order.
+			let filteredOldStack = oldStack.filter(!newStack.contains).reversed()
+			// Notify only view controllers that will be removed from the stack
+			filteredOldStack.forEach { $0.willMove(toParentViewController: nil) }
+			// Also filter the new stack to prevent wrong relationship events.
+			let filteredNewStack = newStack.filter(!oldStack.contains)
+			// Link only new view controllers to self
+			filteredNewStack.forEach(self.addChildViewController)
 			// Extract view controllers for the transition
 			guard let fromViewController = oldStack.last, let toViewController = newStack.last else { return }
 			// Determine context kind
@@ -139,8 +149,11 @@ extension ContainerViewController {
 			// Get an animator
 			let animator = self.animator(for: transition)
 			// Start transition
-			self.enqueueTransitionOperation(with: animator) {
-				// complete set transition
+			self.startTransition(on: animator) {
+				// Remove only distinct view controllers
+				filteredOldStack.forEach { $0.removeFromParentViewController() }
+				// Notify only new linked view controllers
+				filteredNewStack.forEach(UIViewController.didMove(self))
 			}
 
 		} else { self.performSetAfterInit(newStack) }
@@ -150,21 +163,21 @@ extension ContainerViewController {
 extension ContainerViewController {
 
 	///
-	func enqueueTransitionOperation(with animator: Animator, completion: @escaping () -> Void) {
-		// Create transition operation for the animator
-		let operation = TransitionOperation(with: animator)
-		// Prepare completion block
-		animator.transition.transitionCompletion = {
-			[unowned animator, unowned operation] in
-			// Finish transition work
-			completion()
-			// Notify the animator about completion
-			animator.transition(completed: $0)
-			// Finish operation to notify the queue
-			operation.isFinished = true
+	func startTransition(on animator: Animator, completion: @escaping () -> Void) {
+		if animator.transition.context.isAnimated {
+			// Create transition operation for the animator
+			let operation = TransitionOperation(with: animator)
+			animator.add(operation: operation, completion: completion)
+			// Push the operation onto the queue
+			self.operationQueue.addOperation(operation)
+		} else {
+			// Add only the completion block and drive the transition
+			// hopefully on the main thread by the animator
+			animator.add(completion: completion)
+			// The animator is responsible to handle correct the transition
+			// without any animation
+			animator.animate()
 		}
-		// Push the operation onto the queue
-		self.operationQueue.addOperation(operation)
 	}
 
 	///
@@ -206,15 +219,22 @@ extension ContainerViewController {
 	///
 	func performSetAfterInit(_ viewControllers: [UIViewController]) {
 		// Crash if the provided stack is empty
-		precondition(!viewControllers.isEmpty, "New view controller stack cannot be empty.")
+		guard let viewController = viewControllers.last else {
+			fatalError("New view controller stack cannot be empty.")
+		}
 		// Alter the stack
 		self.viewControllerStack = viewControllers
-		// Extract view controller
-		guard let viewController = viewControllers.last else { return }
+		//
+		viewControllers.forEach(self.addChildViewController)
+		//
 		let view: UIView = viewController.view
 		view.autoresizingMask = .complete
-		view.frame = self.view.bounds
+		view.translatesAutoresizingMaskIntoConstraints = true
 		self.view.addSubview(view)
+		// Just in case
+		UIView.performWithoutAnimation { view.frame = self.view.bounds }
+		// Finish without animation or transition
+		viewController.didMove(toParentViewController: self)
 	}
 
 	/// It is assumed that there should be no transion when the current

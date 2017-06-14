@@ -30,3 +30,18 @@ extension Animator {
 	/// if you need to perform work after the transition completed.
 	public func transition(completed: Bool) { /* no-op */ }
 }
+
+extension Animator {
+
+	func add(operation: TransitionOperation? = nil, completion: @escaping () -> Void) {
+		self.transition.transitionCompletion = {
+			[unowned self, weak operation] in
+			// Finish transition work
+			completion()
+			// Notify the animator about completion
+			self.transition(completed: $0)
+			// Finish operation to notify the queue
+			operation?.isFinished = true
+		}
+	}
+}
