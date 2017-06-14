@@ -75,7 +75,7 @@ class ContainerViewControllerTests : XCTestCase {
 				// Test the event for `viewControllers2`
 				if $0.position == .start {
 					XCTAssertTrue($0.containerViewController.viewControllers != viewControllers2,
-					               "The view controller stack was set before `.start` event.")
+					              "The view controller stack was set before `.start` event.")
 					endCalledLast = false
 				} else {
 					XCTAssertTrue($0.containerViewController.viewControllers == viewControllers2,
