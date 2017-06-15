@@ -6,6 +6,7 @@
 //  Copyright © 2017 RxSwiftCommunity. All rights reserved.
 //
 
+import RxContainer
 import UIKit
 
 class ViewController : UIViewController {
