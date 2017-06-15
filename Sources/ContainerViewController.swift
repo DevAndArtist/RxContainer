@@ -324,6 +324,13 @@ extension ContainerViewController {
 extension ContainerViewController {
 
 	///
+	open override func viewDidLoad() {
+		super.viewDidLoad()
+		// Mask the view
+		self.view.layer.masksToBounds = true
+	}
+
+	///
 	open override func show(_ viewController: UIViewController, sender: Any?) {
 		self.push(viewController, animated: UIView.areAnimationsEnabled)
 	}
