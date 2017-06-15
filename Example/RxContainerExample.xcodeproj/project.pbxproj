@@ -68,11 +68,11 @@
 		C6C87EA91EF30E8D0012D64F /* RxContainerExample */ = {
 			isa = PBXGroup;
 			children = (
+				C6C87EB61EF30E8D0012D64F /* Info.plist */,
 				C6C87EAA1EF30E8D0012D64F /* AppDelegate.swift */,
 				C6C87EAC1EF30E8D0012D64F /* ViewController.swift */,
 				C6C87EB11EF30E8D0012D64F /* Assets.xcassets */,
 				C6C87EB31EF30E8D0012D64F /* LaunchScreen.storyboard */,
-				C6C87EB61EF30E8D0012D64F /* Info.plist */,
 			);
 			path = RxContainerExample;
 			sourceTree = "<group>";
