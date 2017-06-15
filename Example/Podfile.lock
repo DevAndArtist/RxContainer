@@ -1,0 +1,23 @@
+PODS:
+  - RxContainer (0.4.0):
+    - RxSwift (~> 3.4)
+  - RxSwift (3.4.1)
+  - SwiftLint (0.19.0)
+
+DEPENDENCIES:
+  - RxContainer (from `../`)
+  - RxSwift (~> 3.0)
+  - SwiftLint
+
+EXTERNAL SOURCES:
+  RxContainer:
+    :path: ../
+
+SPEC CHECKSUMS:
+  RxContainer: ade7aa48c355a9d1c78e6cba11fb87a269ea8093
+  RxSwift: 656f8fbeca5bc372121a72d9ebdd3cd3bc0ffade
+  SwiftLint: 3537a05b34060e78e7510f04fb7537d738247803
+
+PODFILE CHECKSUM: 41bd38a16bd605b8cc14812ac43ff5b79fa6ce5e
+
+COCOAPODS: 1.2.1

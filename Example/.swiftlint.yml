@@ -1,0 +1,40 @@
+opt_in_rules:
+  - closure_end_indentation
+  - closure_spacing
+  - fatal_error_message
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - sorted_imports
+  - operator_usage_whitespace
+  - redundant_nil_coalescing
+  - switch_case_on_newline
+  - attributes
+  - no_extension_access_modifier
+  - implicit_return
+
+# rule identifiers to exclude from running
+disabled_rules: 
+  - colon
+  - closure_parameter_position
+  - opening_brace
+  - file_length
+
+# paths to ignore during linting
+excluded: 
+  - Pods
+
+nesting:
+  type_level: 3
+
+identifier_name:
+  excluded: 
+    - to
+    - up
+
+trailing_whitespace:
+  ignores_empty_lines: true
+  ignores_comments: true
+
+attributes:
+  always_on_same_line: ["@IBAction", "@IBOutlet", "@IBInspectable", "@objc"]
+  always_on_line_above: ["@IBDesignable", "@UIApplicationMain", "@discardableResult"]
