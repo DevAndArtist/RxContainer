@@ -143,9 +143,9 @@ extension DefaultAnimator {
 		self.preTransitionState()
 
 		if context.isAnimated {
-			UIView.animate(withDuration: 0.3,
+			UIView.animate(withDuration: 0.5,
 			               delay: 0,
-			               options: .curveEaseIn,
+			               options: .curveEaseInOut,
 			               animations: self.finalState,
 			               completion: self.complete)
 		} else {
