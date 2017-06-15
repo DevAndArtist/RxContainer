@@ -31,6 +31,13 @@ public final class DefaultAnimator : Animator {
 	}
 
 	///
+	fileprivate let overlayView: UIView = {
+		let view = UIView()
+		view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+		return view
+	}()
+
+	///
 	fileprivate private(set) lazy var containerView: UIView = self.context.containerView
 
 	///
@@ -44,7 +51,11 @@ public final class DefaultAnimator : Animator {
 
 	///
 	fileprivate var views: [UIView] {
-		return self.shouldPush ? [self.fromView, self.toView] : [self.toView, self.fromView]
+		// Return in correct order depending on the kind of the transition context
+		if self.shouldPush {
+			return [self.fromView, self.overlayView, self.toView]
+		}
+		return [self.toView, self.overlayView, self.fromView]
 	}
 
 	///
@@ -94,6 +105,8 @@ extension DefaultAnimator {
 			self.toView.transform = CGAffineTransform(translationX: 0, y: translation)
 		}
 		self.fromView.transform = .identity
+
+		self.overlayView.alpha = self.shouldPush ? 0 : 1
 	}
 
 	///
@@ -110,6 +123,8 @@ extension DefaultAnimator {
 		}
 		self.toView.transform = .identity
 
+		self.overlayView.alpha = self.shouldPush ? 1 : 0
+
 		self.optionalAnimation?(self.context)
 	}
 
@@ -117,6 +132,7 @@ extension DefaultAnimator {
 	private func complete(_ didComplete: Bool) {
 		self.fromView.transform = .identity
 		self.fromView.removeFromSuperview()
+		self.overlayView.removeFromSuperview()
 		self.optionalCompletion?(self.context)
 		self.transition.complete(didComplete)
 	}
