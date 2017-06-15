@@ -8,45 +8,47 @@
 
 import UIKit
 
+///
 public final class DefaultAnimator : Animator {
 
 	///
 	public enum Direction {
-		case left, right, top, bottom
+		case left, right, up, down
 	}
 
 	//
-	var context: Transition.Context {
-		return self.transition.context
-	}
+	///
+	fileprivate private(set) lazy var context: Transition.Context = self.transition.context
 
-	var optionalAnimation: ((Transition.Context) -> Void)? {
+	///
+	fileprivate var optionalAnimation: ((Transition.Context) -> Void)? {
 		return self.transition.animation
 	}
 
-	var optionalCompletion: ((Transition.Context) -> Void)? {
+	///
+	fileprivate var optionalCompletion: ((Transition.Context) -> Void)? {
 		return self.transition.completion
 	}
 
-	var containerView: UIView {
-		return self.context.containerView
-	}
+	///
+	fileprivate private(set) lazy var containerView: UIView = self.context.containerView
 
-	var fromView: UIView {
-		return self.context.view(forKey: .from)
-	}
+	///
+	fileprivate private(set) lazy var fromView: UIView = self.context.view(forKey: .from)
 
-	var toView: UIView {
-		return self.context.view(forKey: .to)
-	}
+	///
+	fileprivate private(set) lazy var toView: UIView = self.context.view(forKey: .to)
 
-	var shouldPush: Bool {
-		return self.context.kind == .push
-	}
+	///
+	fileprivate private(set) lazy var shouldPush: Bool = self.context.kind == .push
 
-	var views: [UIView] {
+	///
+	fileprivate var views: [UIView] {
 		return self.shouldPush ? [self.fromView, self.toView] : [self.toView, self.fromView]
 	}
+
+	///
+	fileprivate let factor = CGFloat(0.3)
 
 	//
 	///
@@ -61,18 +63,17 @@ public final class DefaultAnimator : Animator {
 		self.transition = transition
 		self.direction = direction
 	}
+}
 
-	func finalState() {
+extension DefaultAnimator {
 
-		if self.context.isAnimated {
-			self.optionalAnimation?(self.context)
-		} else {
-			UIView.performWithoutAnimation { self.optionalAnimation?(self.context) }
-		}
+	///
+	private func signValue(for direction: Direction) -> CGFloat {
+		return direction == .left || direction == .up ? 1 : -1
 	}
 
 	///
-	public func animate() {
+	private func preTransitionState() {
 
 		self.views.forEach {
 			$0.autoresizingMask = .complete
@@ -82,16 +83,58 @@ public final class DefaultAnimator : Animator {
 			self.containerView.addSubview($0)
 		}
 
-		func complete(_ didComplete: Bool) {
-			self.transition.complete(didComplete)
-			self.optionalCompletion?(self.context)
+		let size = self.containerView.bounds.size
+
+		switch self.direction {
+		case .left, .right:
+			let translation = signValue(for: self.direction) * (size.width * (self.shouldPush ? 1 : self.factor))
+			self.toView.transform = CGAffineTransform(translationX: translation, y: 0)
+		case .up, .down:
+			let translation = signValue(for: self.direction) * size.height
+			self.toView.transform = CGAffineTransform(translationX: 0, y: translation)
 		}
+		self.fromView.transform = .identity
+	}
+
+	///
+	private func finalState() {
+
+		let size = self.containerView.bounds.size
+
+		switch self.direction {
+		case .left, .right:
+			let translation = signValue(for: self.direction) * (size.width * (self.shouldPush ? self.factor : 1))
+			self.fromView.transform = CGAffineTransform(translationX: -(translation), y: 0)
+		case .up, .down:
+			self.fromView.transform = .identity
+		}
+		self.toView.transform = .identity
+
+		self.optionalAnimation?(self.context)
+	}
+
+	///
+	private func complete(_ didComplete: Bool) {
+		self.fromView.transform = .identity
+		self.fromView.removeFromSuperview()
+		self.optionalCompletion?(self.context)
+		self.transition.complete(didComplete)
+	}
+
+	///
+	public func animate() {
+
+		self.preTransitionState()
 
 		if context.isAnimated {
-			UIView.animate(withDuration: 0.3, animations: self.finalState, completion: complete)
+			UIView.animate(withDuration: 0.3,
+			               delay: 0,
+			               options: .curveEaseIn,
+			               animations: self.finalState,
+			               completion: self.complete)
 		} else {
-			finalState()
-			complete(true)
+			self.finalState()
+			self.complete(true)
 		}
 	}
 }
