@@ -14,7 +14,7 @@
 	<img src="https://img.shields.io/badge/Compatibility-Carthage%20%7C%20CocoaPods-a0a0a0.svg?maxAge=120&style=flat-square"/>
 </p>
 
-The API is future oriented, which means the following description is already using nested open protocols or default implementation in protocols even if these features are not currently possibble. However the module itself is wirtten so that it already behaves like written below.
+The API is future oriented, which means the following description is already using nested open protocols or default implementation in protocols even if these features are not currently possibble. However the module itself is written so that it already behaves like written below.
 
 ##### ContainerViewController:
 
