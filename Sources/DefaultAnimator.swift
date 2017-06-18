@@ -95,7 +95,7 @@ extension DefaultAnimator {
 			self.layoutGuide.widthAnchor.constraint(equalTo: self.containerView.widthAnchor, multiplier: 2),
 			self.layoutGuide.heightAnchor.constraint(equalTo: self.containerView.heightAnchor, multiplier: 2),
 			self.layoutGuide.centerXAnchor.constraint(equalTo: self.containerView.centerXAnchor),
-			self.layoutGuide.centerYAnchor.constraint(equalTo: self.containerView.centerYAnchor),
+			self.layoutGuide.centerYAnchor.constraint(equalTo: self.containerView.centerYAnchor)
 		]
 		NSLayoutConstraint.activate(constraints)
 	}
