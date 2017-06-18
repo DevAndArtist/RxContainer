@@ -1,8 +1,8 @@
 <p align="center"><img src="Resources/logo.png" /></p>
 <p align="center">
 	<img src="https://img.shields.io/badge/Language-Swift%203.1-orange.svg?style=flat-square&link=https://swift.org&link=https://github.com/apple/swift/blob/master/CHANGELOG.md"/>	
-	<img src="https://img.shields.io/cocoapods/v/RxContainer.svg?maxAge=3600&label=Version&colorB=01A5EB&style=flat-square"/>
-	<img src="https://img.shields.io/badge/License-MIT-ff5050.svg?maxAge=3600&style=flat-square"/><br>
+	<img src="https://img.shields.io/cocoapods/v/RxContainer.svg?maxAge=120&label=Version&colorB=01A5EB&style=flat-square"/>
+	<img src="https://img.shields.io/badge/License-MIT-ff5050.svg?maxAge=120&style=flat-square"/><br>
 	<!---hide until linked correctly--
 	<a href="https://travis-ci.org/DevAndArtist/RxContainer">
 		<img src="http://img.shields.io/travis/DevAndArtist/RxContainer.svg?label=Travis%20CI&style=flat-square"/>
@@ -11,7 +11,7 @@
 		<img src="https://img.shields.io/codecov/c/github/DevAndArtist/RxContainer.svg?label=Code%20coverage&style=flat-square"/>
 	--->
 	</a>
-	<img src="https://img.shields.io/badge/Compatibility-Carthage%20%7C%20CocoaPods-a0a0a0.svg?maxAge=3600&style=flat-square"/>
+	<img src="https://img.shields.io/badge/Compatibility-Carthage%20%7C%20CocoaPods-a0a0a0.svg?maxAge=120&style=flat-square"/>
 </p>
 
 The API is future oriented, which means the following description is already using nested open protocols or default implementation in protocols even if these features are not currently possibble. However the module itself is wirtten so that it already behaves like written below.
