@@ -22,7 +22,7 @@ final class TransitionOperation : Operation {
 
 	///
 	override var isAsynchronous: Bool {
-		return false
+		return true
 	}
 
 	///
