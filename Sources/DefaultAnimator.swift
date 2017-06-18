@@ -14,6 +14,10 @@ public final class DefaultAnimator : Animator {
 	///
 	public enum Direction {
 		case left, right, up, down
+
+		var isLeftOrUp: Bool {
+			return self == .left || self == .up
+		}
 	}
 
 	//
@@ -31,9 +35,12 @@ public final class DefaultAnimator : Animator {
 	}
 
 	///
+	fileprivate let layoutGuide = UILayoutGuide()
+
+	///
 	fileprivate let overlayView: UIView = {
 		let view = UIView()
-		view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+		view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
 		return view
 	}()
 
@@ -61,6 +68,9 @@ public final class DefaultAnimator : Animator {
 	///
 	fileprivate let factor = CGFloat(0.3)
 
+	///
+	fileprivate var constraintToDeactivate: NSLayoutConstraint?
+
 	//
 	///
 	public let transition: Transition
@@ -79,78 +89,144 @@ public final class DefaultAnimator : Animator {
 extension DefaultAnimator {
 
 	///
-	private func signValue(for direction: Direction) -> CGFloat {
-		return direction == .left || direction == .up ? 1 : -1
+	private func setupLayoutGuide() {
+		self.containerView.addLayoutGuide(self.layoutGuide)
+		let constraints: [NSLayoutConstraint] = [
+			self.layoutGuide.widthAnchor.constraint(equalTo: self.containerView.widthAnchor, multiplier: 2),
+			self.layoutGuide.heightAnchor.constraint(equalTo: self.containerView.heightAnchor, multiplier: 2),
+			self.layoutGuide.centerXAnchor.constraint(equalTo: self.containerView.centerXAnchor),
+			self.layoutGuide.centerYAnchor.constraint(equalTo: self.containerView.centerYAnchor),
+		]
+		NSLayoutConstraint.activate(constraints)
+	}
+
+	///
+	private func setupViews() {
+		//
+		self.views.forEach {
+			$0.removeFromSuperview()
+			$0.translatesAutoresizingMaskIntoConstraints = false
+			self.containerView.addSubview($0)
+
+			var constraints: [NSLayoutConstraint] = [
+				$0.widthAnchor.constraint(equalTo: self.containerView.widthAnchor),
+				$0.heightAnchor.constraint(equalTo: self.containerView.heightAnchor)
+			]
+
+			let lowerPriorityConstraints: [NSLayoutConstraint] = [
+				$0.centerXAnchor.constraint(equalTo: self.containerView.centerXAnchor),
+				$0.centerYAnchor.constraint(equalTo: self.containerView.centerYAnchor),
+				$0.topAnchor.constraint(equalTo: self.containerView.topAnchor),
+				$0.bottomAnchor.constraint(equalTo: self.containerView.bottomAnchor),
+				$0.leadingAnchor.constraint(equalTo: self.containerView.leadingAnchor),
+				$0.trailingAnchor.constraint(equalTo: self.containerView.trailingAnchor)
+			]
+			lowerPriorityConstraints.forEach {
+				// Lower the priority of these constraints, so we don't have to remove them.
+				// Other constraints with higher priorty will take over them when needed.
+				$0.priority = UILayoutPriorityDefaultHigh
+				constraints.append($0)
+			}
+			NSLayoutConstraint.activate(constraints)
+		}
 	}
 
 	///
 	private func preTransitionState() {
-
-		self.views.forEach {
-			$0.autoresizingMask = .complete
-			$0.translatesAutoresizingMaskIntoConstraints = true
-			$0.removeFromSuperview()
-			$0.frame = self.containerView.bounds
-			self.containerView.addSubview($0)
-		}
-
-		let size = self.containerView.bounds.size
-
+		//
+		self.setupLayoutGuide()
+		self.setupViews()
+		//
+		let constraint: NSLayoutConstraint
 		switch self.direction {
 		case .left, .right:
-			let translation = signValue(for: self.direction) * (size.width * (self.shouldPush ? 1 : self.factor))
-			self.toView.transform = CGAffineTransform(translationX: translation, y: 0)
+			let centerXAnchor: NSLayoutXAxisAnchor
+			if self.direction.isLeftOrUp {
+				centerXAnchor = self.shouldPush ? self.layoutGuide.trailingAnchor : self.containerView.trailingAnchor
+			} else {
+				centerXAnchor = self.shouldPush ? self.layoutGuide.leadingAnchor : self.containerView.leadingAnchor
+			}
+			constraint = self.toView.centerXAnchor.constraint(equalTo: centerXAnchor)
 		case .up, .down:
-			let translation = signValue(for: self.direction) * size.height
-			self.toView.transform = CGAffineTransform(translationX: 0, y: translation)
+			let centerYAnchor: NSLayoutYAxisAnchor
+			if self.direction.isLeftOrUp {
+				centerYAnchor = self.shouldPush ? self.layoutGuide.bottomAnchor : self.containerView.centerYAnchor
+			} else {
+				centerYAnchor = self.shouldPush ? self.layoutGuide.topAnchor : self.containerView.centerYAnchor
+			}
+			constraint = self.toView.centerYAnchor.constraint(equalTo: centerYAnchor)
 		}
-		self.fromView.transform = .identity
-
+		constraint.isActive = true
+		self.constraintToDeactivate = constraint
+		//
 		self.overlayView.alpha = self.shouldPush ? 0 : 1
+		// Force update
+		self.containerView.layoutIfNeeded()
 	}
 
 	///
-	private func finalState() {
-
-		let size = self.containerView.bounds.size
-
+	private func postTransitionState() -> () -> Void {
+		//
+		let constraint: NSLayoutConstraint
 		switch self.direction {
 		case .left, .right:
-			let translation = signValue(for: self.direction) * (size.width * (self.shouldPush ? self.factor : 1))
-			self.fromView.transform = CGAffineTransform(translationX: -(translation), y: 0)
+			let centerXAnchor: NSLayoutXAxisAnchor
+			if self.direction.isLeftOrUp {
+				centerXAnchor = self.shouldPush ? self.containerView.leadingAnchor : self.layoutGuide.leadingAnchor
+			} else {
+				centerXAnchor = self.shouldPush ? self.containerView.trailingAnchor : self.layoutGuide.trailingAnchor
+			}
+			constraint = self.fromView.centerXAnchor.constraint(equalTo: centerXAnchor)
 		case .up, .down:
-			self.fromView.transform = .identity
+			let centerYAnchor: NSLayoutYAxisAnchor
+			if self.direction.isLeftOrUp {
+				centerYAnchor = self.shouldPush ? self.containerView.centerYAnchor : self.layoutGuide.topAnchor
+			} else {
+				centerYAnchor = self.shouldPush ? self.containerView.centerYAnchor : self.layoutGuide.bottomAnchor
+			}
+			constraint = self.fromView.centerYAnchor.constraint(equalTo: centerYAnchor)
 		}
-		self.toView.transform = .identity
+		constraint.isActive = true
+		//
+		if let constraintToDeactivate = self.constraintToDeactivate {
+			NSLayoutConstraint.deactivate([constraintToDeactivate])
+		}
 
-		self.overlayView.alpha = self.shouldPush ? 1 : 0
-
-		self.optionalAnimation?(self.context)
+		return {
+			self.containerView.layoutIfNeeded()
+			self.overlayView.alpha = self.shouldPush ? 1 : 0
+			self.optionalAnimation?(self.context)
+		}
 	}
 
 	///
-	private func complete(_ didComplete: Bool) {
-		self.fromView.transform = .identity
-		self.fromView.removeFromSuperview()
-		self.overlayView.removeFromSuperview()
-		self.optionalCompletion?(self.context)
-		self.transition.complete(didComplete)
+	private func completeTransition(_ didComplete: Bool) {
+		UIView.performWithoutAnimation {
+			self.constraintToDeactivate = nil
+			self.fromView.removeFromSuperview()
+			self.overlayView.removeFromSuperview()
+			self.containerView.removeLayoutGuide(self.layoutGuide)
+			self.optionalCompletion?(self.context)
+			self.transition.complete(didComplete)
+		}
 	}
 
 	///
 	public func animate() {
-
-		self.preTransitionState()
-
+		//
+		UIView.performWithoutAnimation(self.preTransitionState)
+		//
+		let animation = self.postTransitionState()
+		//
 		if context.isAnimated {
 			UIView.animate(withDuration: 0.5,
 			               delay: 0,
 			               options: .curveEaseInOut,
-			               animations: self.finalState,
-			               completion: self.complete)
+			               animations: animation,
+			               completion: self.completeTransition)
 		} else {
-			self.finalState()
-			self.complete(true)
+			UIView.performWithoutAnimation(animation)
+			self.completeTransition(true)
 		}
 	}
 }
