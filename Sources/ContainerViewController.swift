@@ -331,6 +331,24 @@ extension ContainerViewController {
 	}
 
 	///
+	open override func willTransition(to newCollection: UITraitCollection,
+	                                  with coordinator: UIViewControllerTransitionCoordinator) {
+		super.willTransition(to: newCollection, with: coordinator)
+		// Spawn new rotation operation
+		let operation = RotationOperation()
+		// Filter transitions which are not running
+		let transitionOperations = self.operationQueue.operations
+			.flatMap { $0 as? TransitionOperation }
+			.filter { !$0.isExecuting }
+		// Force other transitions to wait until the rotation is done
+		transitionOperations.forEach { $0.addDependency(operation) }
+		//
+		coordinator.animate(alongsideTransition: nil) { _ in operation.isFinished = true }
+		//
+		operation.start()
+	}
+
+	///
 	open override func show(_ viewController: UIViewController, sender: Any?) {
 		self.push(viewController, animated: UIView.areAnimationsEnabled)
 	}
