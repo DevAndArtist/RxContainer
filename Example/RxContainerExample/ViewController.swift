@@ -72,6 +72,4 @@ class ViewController : UIViewController {
 			containerViewController.popToRootViewController()
 		}
 	}
-
-	override var shouldAutorotate: Bool { return false }
 }
