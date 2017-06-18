@@ -549,7 +549,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1281082A1EBCBA7454553730 /* Pods-RxContainerTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = RxContainerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.devandartist.RxContainerTests;
@@ -562,7 +561,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9946CF7DC1EBE1744C357FB0 /* Pods-RxContainerTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = RxContainerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.devandartist.RxContainerTests;
