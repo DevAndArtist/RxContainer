@@ -357,4 +357,10 @@ extension ContainerViewController {
 	open override func showDetailViewController(_ viewController: UIViewController, sender: Any?) {
 		self.show(viewController, sender: sender)
 	}
+
+	///
+	open override var shouldAutorotate: Bool {
+		// Subclasses should not rotate when a transition is executing
+		return !self.operationQueue.operations.contains { ($0 as? TransitionOperation)?.isExecuting ?? false }
+	}
 }
