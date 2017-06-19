@@ -37,17 +37,22 @@ extension Transition {
 		public let isAnimated: Bool
 
 		///
+		public let isInteractive: Bool
+
+		///
 		init(kind: Kind,
 		     containerView: UIView,
 		     fromViewController: UIViewController,
 		     toViewController: UIViewController,
-		     isAnimated: Bool) {
+		     isAnimated: Bool,
+		     isInteractive: Bool) {
 			// Initialize all properties neede for the transition
 			self.kind = kind
 			self.containerView = containerView
 			self.fromViewController = fromViewController
 			self.toViewController = toViewController
 			self.isAnimated = isAnimated
+			self.isInteractive = isInteractive
 		}
 
 		///
