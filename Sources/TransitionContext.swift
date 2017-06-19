@@ -44,15 +44,14 @@ extension Transition {
 		     containerView: UIView,
 		     fromViewController: UIViewController,
 		     toViewController: UIViewController,
-		     isAnimated: Bool,
-		     isInteractive: Bool) {
+		     option: ContainerViewController.Option) {
 			// Initialize all properties neede for the transition
 			self.kind = kind
 			self.containerView = containerView
 			self.fromViewController = fromViewController
 			self.toViewController = toViewController
-			self.isAnimated = isAnimated
-			self.isInteractive = isInteractive
+			self.isAnimated = option.isAnimated
+			self.isInteractive = option.isInteractive
 		}
 
 		///

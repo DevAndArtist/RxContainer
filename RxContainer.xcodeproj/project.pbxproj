@@ -23,6 +23,7 @@
 		C6D2552A1EEFF87900A0BECF /* TransitionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D255291EEFF87900A0BECF /* TransitionContext.swift */; };
 		C6ED839F1EEFFEDB009D5C6F /* DefaultAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6ED839E1EEFFEDB009D5C6F /* DefaultAnimator.swift */; };
 		C6ED83A11EF017B7009D5C6F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6ED83A01EF017B7009D5C6F /* Extensions.swift */; };
+		C6F7F0E81EF85069003E8071 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F7F0E71EF85069003E8071 /* Option.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		C6D255291EEFF87900A0BECF /* TransitionContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionContext.swift; sourceTree = "<group>"; };
 		C6ED839E1EEFFEDB009D5C6F /* DefaultAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAnimator.swift; sourceTree = "<group>"; };
 		C6ED83A01EF017B7009D5C6F /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		C6F7F0E71EF85069003E8071 /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 				C6C392741EE47C6A008F743A /* Event.swift */,
 				C6ED83A01EF017B7009D5C6F /* Extensions.swift */,
 				C6C392721EE47BF8008F743A /* Operation.swift */,
+				C6F7F0E71EF85069003E8071 /* Option.swift */,
 				C61527F41EF67C91007A9DA0 /* RotationOperation.swift */,
 				C6C392761EE47C74008F743A /* Transition.swift */,
 				C6D255291EEFF87900A0BECF /* TransitionContext.swift */,
@@ -372,6 +375,7 @@
 				C6ED83A11EF017B7009D5C6F /* Extensions.swift in Sources */,
 				C6D255281EEFDE2A00A0BECF /* Delegate.swift in Sources */,
 				C6C392771EE47C74008F743A /* Transition.swift in Sources */,
+				C6F7F0E81EF85069003E8071 /* Option.swift in Sources */,
 				C6C392711EE47A8C008F743A /* Animator.swift in Sources */,
 				C6C3926B1EE45E51008F743A /* ContainerViewController.swift in Sources */,
 				C6AAE1C51EF06B730076A934 /* TransitionOperation.swift in Sources */,

@@ -32,11 +32,11 @@ open class ContainerViewController : UIViewController {
 	/// in the array.
 	///
 	/// Assigning a new array of view controllers to this property is 
-	/// equivalent to calling the `setViewControllers(_:animated:)` 
-	/// method with the `animated` parameter set to `false`.
+	/// equivalent to calling the `setViewControllers(_:option:)`
+	/// method with the `option` parameter set to `.immediate`.
 	open var viewControllers: [UIViewController] {
 		get { return self.viewControllerStack }
-		set { self.setViewControllers(newValue, animated: false) }
+		set { self.setViewControllers(newValue, option: .immediate) }
 	}
 
 	/// The root view controller of the view controller stack.
@@ -89,7 +89,7 @@ open class ContainerViewController : UIViewController {
 extension ContainerViewController {
 
 	///
-	open func push(_ viewController: UIViewController, animated: Bool = true, interactive: Bool = false) {
+	open func push(_ viewController: UIViewController, option: Option = .animated) {
 		//
 		guard let fromViewController = self.topViewController else {
 			return self.performSetAfterInit([viewController])
@@ -101,60 +101,57 @@ extension ContainerViewController {
 		             "View controller stack already contanins <UIViewController: \(address)>")
 		let sendEvents = {
 			// Send events and manipulate the stack
-			self.sendEvents(for: Operation(kind: .push(viewController), isAnimated: animated)) {
+			self.sendEvents(for: Operation(kind: .push(viewController), isAnimated: option.isAnimated)) {
 				self.viewControllerStack.append(viewController)
 			}
 			//
 			self.addChildViewController(viewController)
 		}
 		//
-		(!interactive).whenTrue(execute: sendEvents)
+		(!option.isInteractive).whenTrue(execute: sendEvents)
 		// Create a new transition
 		let transition = self.transition(ofKind: .push,
 		                                 from: fromViewController,
 		                                 to: viewController,
-		                                 animated: animated,
-		                                 interactive: interactive)
+		                                 with: option)
 		// Get an animator
 		let animator = self.animator(for: transition)
 		// Start transition
 		self.startTransition(on: animator) {
-			interactive.whenTrue(execute: sendEvents)
+			option.isInteractive.whenTrue(execute: sendEvents)
 			viewController.didMove(toParentViewController: self)
 		}
 	}
 
 	///
 	@discardableResult
-	open func pop(animated: Bool = true, interactive: Bool = false) -> UIViewController? {
+	open func pop(option: Option = .animated) -> UIViewController? {
 		//
 		guard self.viewControllerStack.count > 1 else { return nil }
 		//
 		let endIndex = self.viewControllerStack.endIndex
 		let fromViewController = self.viewControllerStack[endIndex - 1]
 		let toViewController = self.viewControllerStack[endIndex - 2]
-
 		let sendEvents = {
 			// Send events and manipulate the stack
-			self.sendEvents(for: Operation(kind: .pop(fromViewController), isAnimated: animated)) {
+			self.sendEvents(for: Operation(kind: .pop(fromViewController), isAnimated: option.isAnimated)) {
 				self.viewControllerStack.removeLast(1)
 			}
 			//
 			fromViewController.willMove(toParentViewController: nil)
 		}
 		//
-		(!interactive).whenTrue(execute: sendEvents)
+		(!option.isInteractive).whenTrue(execute: sendEvents)
 		// Create a new transition
 		let transition = self.transition(ofKind: .pop,
 		                                 from: fromViewController,
 		                                 to: toViewController,
-		                                 animated: animated,
-		                                 interactive: interactive)
+		                                 with: option)
 		// Get an animator
 		let animator = self.animator(for: transition)
 		// Start transition
 		self.startTransition(on: animator) {
-			interactive.whenTrue(execute: sendEvents)
+			option.isInteractive.whenTrue(execute: sendEvents)
 			fromViewController.removeFromParentViewController()
 		}
 		return fromViewController
@@ -162,9 +159,7 @@ extension ContainerViewController {
 
 	///
 	@discardableResult
-	open func pop(to viewController: UIViewController,
-	              animated: Bool = true,
-	              interactive: Bool = false) -> [UIViewController]? {
+	open func pop(to viewController: UIViewController, option: Option = .animated) -> [UIViewController]? {
 		//
 		guard let position = self.viewControllerStack.index(of: viewController) else {
 			fatalError("Cannot pop a view controller that is not on the stack")
@@ -180,7 +175,7 @@ extension ContainerViewController {
 		//
 		let sendEvents = {
 			// Send events and manipulate the stack
-			self.sendEvents(for: Operation(kind: .pop(fromViewController), isAnimated: animated)) {
+			self.sendEvents(for: Operation(kind: .pop(fromViewController), isAnimated: option.isAnimated)) {
 				self.viewControllerStack.removeLast(resultArray.count)
 			}
 			// Notify all these controllers in the right order that they will be removed.
@@ -188,18 +183,17 @@ extension ContainerViewController {
 				.forEach { $0.willMove(toParentViewController: nil) }
 		}
 		//
-		(!interactive).whenTrue(execute: sendEvents)
+		(!option.isInteractive).whenTrue(execute: sendEvents)
 		// Create a new transition
 		let transition = self.transition(ofKind: .pop,
 		                                 from: fromViewController,
 		                                 to: viewController,
-		                                 animated: animated,
-		                                 interactive: interactive)
+		                                 with: option)
 		// Get an animator
 		let animator = self.animator(for: transition)
 		// Start transition
 		self.startTransition(on: animator) {
-			interactive.whenTrue(execute: sendEvents)
+			option.isInteractive.whenTrue(execute: sendEvents)
 			resultArray.reversed()
 			           .forEach { $0.removeFromParentViewController() }
 		}
@@ -208,17 +202,15 @@ extension ContainerViewController {
 
 	///
 	@discardableResult
-	open func popToRootViewController(animated: Bool = true, interactive: Bool = false) -> [UIViewController]? {
+	open func popToRootViewController(option: Option = .animated) -> [UIViewController]? {
 		// Return `nil` if there is no root view controller yet
 		guard let rootViewController = self.rootViewController else { return nil }
 		// Use the `pop(to:animated)` method to finish the job
-		return self.pop(to: rootViewController, animated: animated, interactive: interactive)
+		return self.pop(to: rootViewController, option: option)
 	}
 
 	///
-	open func setViewControllers(_ viewControllers: [UIViewController],
-	                             animated: Bool = true,
-	                             interactive: Bool = false) {
+	open func setViewControllers(_ viewControllers: [UIViewController], option: Option = .animated) {
 		// Ignore an empty stack
 		if viewControllers.isEmpty { return }
 		// Create new instances for consistency
@@ -235,7 +227,7 @@ extension ContainerViewController {
 		//
 		let sendEvents = {
 			// Send events and manipulate the stack
-			self.sendEvents(for: Operation(kind: .set(newStack), isAnimated: animated)) {
+			self.sendEvents(for: Operation(kind: .set(newStack), isAnimated: option.isAnimated)) {
 				self.viewControllerStack = newStack
 			}
 			// Notify only view controllers that will be removed from the stack
@@ -244,7 +236,7 @@ extension ContainerViewController {
 			filteredNewStack.forEach(self.addChildViewController)
 		}
 		//
-		(!interactive).whenTrue(execute: sendEvents)
+		(!option.isInteractive).whenTrue(execute: sendEvents)
 		// Extract view controllers for the transition
 		guard let fromViewController = oldStack.last, let toViewController = newStack.last else { return }
 		// Determine context kind
@@ -253,13 +245,12 @@ extension ContainerViewController {
 		let transition = self.transition(ofKind: kind,
 		                                 from: fromViewController,
 		                                 to: toViewController,
-		                                 animated: animated,
-		                                 interactive: interactive)
+		                                 with: option)
 		// Get an animator
 		let animator = self.animator(for: transition)
 		// Start transition
 		self.startTransition(on: animator) {
-			interactive.whenTrue(execute: sendEvents)
+			option.isInteractive.whenTrue(execute: sendEvents)
 			// Remove only distinct view controllers
 			filteredOldStack.forEach { $0.removeFromParentViewController() }
 			// Notify only new linked view controllers
@@ -301,17 +292,13 @@ extension ContainerViewController {
 	func transition(ofKind kind: Transition.Context.Kind,
 	                from fromViewController: UIViewController,
 	                to toViewController: UIViewController,
-	                animated: Bool,
-	                interactive: Bool) -> Transition {
-		//
-		let isInteractive = animated ? interactive : false
+	                with option: Option) -> Transition {
 		// Instantiate a new context
 		let context = Transition.Context(kind: kind,
 		                                 containerView: self.view,
 		                                 fromViewController: fromViewController,
 		                                 toViewController: toViewController,
-		                                 isAnimated: animated,
-		                                 isInteractive: isInteractive)
+		                                 option: option)
 		// Create a transition
 		return Transition(with: context)
 	}
@@ -385,7 +372,7 @@ extension ContainerViewController {
 
 	///
 	open override func show(_ viewController: UIViewController, sender: Any?) {
-		self.push(viewController, animated: UIView.areAnimationsEnabled)
+		self.push(viewController, option: UIView.areAnimationsEnabled ? .animated : .immediate)
 	}
 
 	///
