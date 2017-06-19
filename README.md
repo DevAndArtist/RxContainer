@@ -100,12 +100,12 @@ public final class Transition {
 ##### Animator:
 
 ```swift
-open protocol Animator : class {
-    public var transition: Transition { get }
-    public func animate()
+open protocol Animator : AnyObject {
+    var transition: Transition { get }
+    func animate()
     
     // Default implementation
-    public func transition(completed: Bool) { /* no-op */}
+    func transition(completed: Bool) { /* no-op */}
 }
 ```
 ##### DefaultAnimator:
