@@ -108,7 +108,7 @@ extension ContainerViewController {
 			self.addChildViewController(viewController)
 		}
 		//
-		self.execute(closure: sendEvents, when: !interactive)
+		(!interactive).whenTrue(execute: sendEvents)
 		// Create a new transition
 		let transition = self.transition(ofKind: .push,
 		                                 from: fromViewController,
@@ -119,7 +119,7 @@ extension ContainerViewController {
 		let animator = self.animator(for: transition)
 		// Start transition
 		self.startTransition(on: animator) {
-			self.execute(closure: sendEvents, when: interactive)
+			interactive.whenTrue(execute: sendEvents)
 			viewController.didMove(toParentViewController: self)
 		}
 	}
@@ -143,7 +143,7 @@ extension ContainerViewController {
 			fromViewController.willMove(toParentViewController: nil)
 		}
 		//
-		self.execute(closure: sendEvents, when: !interactive)
+		(!interactive).whenTrue(execute: sendEvents)
 		// Create a new transition
 		let transition = self.transition(ofKind: .pop,
 		                                 from: fromViewController,
@@ -154,7 +154,7 @@ extension ContainerViewController {
 		let animator = self.animator(for: transition)
 		// Start transition
 		self.startTransition(on: animator) {
-			self.execute(closure: sendEvents, when: interactive)
+			interactive.whenTrue(execute: sendEvents)
 			fromViewController.removeFromParentViewController()
 		}
 		return fromViewController
@@ -188,7 +188,7 @@ extension ContainerViewController {
 				.forEach { $0.willMove(toParentViewController: nil) }
 		}
 		//
-		self.execute(closure: sendEvents, when: !interactive)
+		(!interactive).whenTrue(execute: sendEvents)
 		// Create a new transition
 		let transition = self.transition(ofKind: .pop,
 		                                 from: fromViewController,
@@ -199,7 +199,7 @@ extension ContainerViewController {
 		let animator = self.animator(for: transition)
 		// Start transition
 		self.startTransition(on: animator) {
-			self.execute(closure: sendEvents, when: interactive)
+			interactive.whenTrue(execute: sendEvents)
 			resultArray.reversed()
 			           .forEach { $0.removeFromParentViewController() }
 		}
@@ -244,7 +244,7 @@ extension ContainerViewController {
 			filteredNewStack.forEach(self.addChildViewController)
 		}
 		//
-		self.execute(closure: sendEvents, when: !interactive)
+		(!interactive).whenTrue(execute: sendEvents)
 		// Extract view controllers for the transition
 		guard let fromViewController = oldStack.last, let toViewController = newStack.last else { return }
 		// Determine context kind
@@ -259,7 +259,7 @@ extension ContainerViewController {
 		let animator = self.animator(for: transition)
 		// Start transition
 		self.startTransition(on: animator) {
-			self.execute(closure: sendEvents, when: interactive)
+			interactive.whenTrue(execute: sendEvents)
 			// Remove only distinct view controllers
 			filteredOldStack.forEach { $0.removeFromParentViewController() }
 			// Notify only new linked view controllers
@@ -353,11 +353,6 @@ extension ContainerViewController {
 	/// view controller stack is empty as is about to be set.
 	func canAnimateTransition() -> Bool {
 		return !self.viewControllerStack.isEmpty
-	}
-
-	///
-	func execute(closure: () -> Void, when boolean: Bool) {
-		if boolean { closure() }
 	}
 }
 

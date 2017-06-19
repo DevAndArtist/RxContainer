@@ -207,7 +207,7 @@ extension DefaultAnimator {
 			self.overlayView.removeFromSuperview()
 			self.containerView.removeLayoutGuide(self.layoutGuide)
 			self.optionalCompletion?(self.context)
-			self.transition.complete(didComplete)
+			self.transition.complete(at: .end)
 		}
 	}
 

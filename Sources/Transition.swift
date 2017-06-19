@@ -10,7 +10,11 @@ import UIKit
 
 public final class Transition {
 
-	var transitionCompletion: ( /* @escaping */ (Bool) -> Void)?
+	public enum CompletionPosition {
+		case start, end
+	}
+
+	var transitionCompletion: ( /* @escaping */ (CompletionPosition) -> Void)?
 
 	///
 	public private(set) var animation: ((Context) -> Void)?
@@ -34,7 +38,7 @@ public final class Transition {
 	}
 
 	///
-	public func complete(_ didComplete: Bool) {
-		self.transitionCompletion?(didComplete)
+	public func complete(at position: CompletionPosition) {
+		self.transitionCompletion?(position)
 	}
 }

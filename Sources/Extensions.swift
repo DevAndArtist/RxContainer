@@ -26,3 +26,10 @@ extension UIViewAutoresizing {
 prefix func ! <T>(closure: @escaping (T) -> Bool) -> (T) -> Bool {
 	return { !closure($0) }
 }
+
+extension Bool {
+	///
+	func whenTrue(execute closure: () -> Void) {
+		if self { closure() }
+	}
+}
