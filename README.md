@@ -21,7 +21,7 @@ The API is future oriented, which means the following description is already usi
 ```swift
 open class ContainerViewController : UIViewController {
 
-    open protocol Delegate : class {
+    open protocol Delegate : AnyObject {
         func animator(for transition: Transition) -> Animator?
     }
 
