@@ -53,7 +53,7 @@ open class ContainerViewController : UIViewController {
 
     public init()
     public convenience init(_ viewControllers: UIViewController...)
-    required public init?(coder aDecoder: NSCoder)
+    public required init?(coder aDecoder: NSCoder)
 
     open func push(_ viewController: UIViewController, animated: Bool = default)
     
