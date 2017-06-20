@@ -33,8 +33,7 @@ extension Animator {
 
 extension Animator {
 	func add(operation: TransitionOperation? = nil, completion: @escaping () -> Void) {
-		self.transition.transitionCompletion = {
-			[unowned self, weak operation] in
+		self.transition.transitionCompletion = { [unowned self, weak operation] in
 			// Finish transition work
 			($0 == .end).whenTrue(execute: completion)
 			// Notify the animator about completion
