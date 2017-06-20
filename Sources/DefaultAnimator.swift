@@ -40,7 +40,7 @@ public final class DefaultAnimator : Animator {
 	///
 	fileprivate let overlayView: UIView = {
 		let view = UIView()
-		view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+		view.backgroundColor = UIColor.black.withAlphaComponent(0.15)
 		view.isUserInteractionEnabled = false
 		return view
 	}()
@@ -76,7 +76,7 @@ public final class DefaultAnimator : Animator {
 	fileprivate var constraintToDeactivate: NSLayoutConstraint?
 
 	///
-	fileprivate let propertyAnimator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut)
+	fileprivate let propertyAnimator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut)
 
 	///
 	fileprivate var progressWhenInterrupted = CGFloat(0)
