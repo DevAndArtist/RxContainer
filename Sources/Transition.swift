@@ -17,10 +17,10 @@ public final class Transition {
 	var transitionCompletion: ( /* @escaping */ (CompletionPosition) -> Void)?
 
 	///
-	public private(set) var animation: ((Context) -> Void)?
+	public private(set) var animation: ( /* @escaping */ (Context) -> Void)?
 
 	///
-	public private(set) var completion: ((Context) -> Void)?
+	public private(set) var completion: ( /* @escaping */ (Context) -> Void)?
 
 	///
 	public let context: Context
