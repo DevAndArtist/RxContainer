@@ -294,7 +294,11 @@ extension DefaultAnimator {
 						let progress = translation.x / width + animator.progressWhenInterrupted
 						animator.propertyAnimator.fractionComplete = progress
 					default:
-						animator.propertyAnimator.isReversed = animator.propertyAnimator.fractionComplete < 0.5
+						let point = $0.velocity(in: animator.containerView)
+						let velocity = animator.direction == .left || animator.direction == .right ? point.x : point.y
+						let progress = animator.propertyAnimator.fractionComplete
+						let shouldReverse = progress < 0.5 && velocity < 100 || velocity < -100
+						animator.propertyAnimator.isReversed = shouldReverse
 						animator.propertyAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
 					}
 				}
