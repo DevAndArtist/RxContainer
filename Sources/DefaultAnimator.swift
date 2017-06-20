@@ -293,11 +293,9 @@ extension DefaultAnimator {
 						let width = animator.containerView.frame.width
 						let progress = translation.x / width + animator.progressWhenInterrupted
 						animator.propertyAnimator.fractionComplete = progress
-					case .ended:
+					default:
 						animator.propertyAnimator.isReversed = animator.propertyAnimator.fractionComplete < 0.5
 						animator.propertyAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
-					default:
-						break
 					}
 				}
 			}
