@@ -41,6 +41,7 @@ public final class DefaultAnimator : Animator {
 	fileprivate let overlayView: UIView = {
 		let view = UIView()
 		view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+		view.isUserInteractionEnabled = false
 		return view
 	}()
 
@@ -69,11 +70,6 @@ public final class DefaultAnimator : Animator {
 	}
 
 	///
-	fileprivate var fromViewGesture: PanGestureRecognizer? {
-		return self.fromView.gestureRecognizers.flatMap({ $0.flatMap({ $0 as? PanGestureRecognizer }).first })
-	}
-
-	///
 	fileprivate let factor = CGFloat(0.3)
 
 	///
@@ -84,7 +80,7 @@ public final class DefaultAnimator : Animator {
 
 	///
 	fileprivate var progressWhenInterrupted = CGFloat(0)
-	
+
 	//
 	///
 	public let transition: Transition
@@ -118,7 +114,6 @@ extension DefaultAnimator {
 	private func setupViews() {
 		//
 		self.views.forEach {
-			$0.removeFromSuperview()
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			self.containerView.addSubview($0)
 
@@ -205,6 +200,10 @@ extension DefaultAnimator {
 		if let constraintToDeactivate = self.constraintToDeactivate {
 			NSLayoutConstraint.deactivate([constraintToDeactivate])
 		}
+		//
+		if self.shouldPop {
+			self.toView.isUserInteractionEnabled = false
+		}
 
 		return {
 			self.containerView.layoutIfNeeded()
@@ -219,6 +218,11 @@ extension DefaultAnimator {
 			self.constraintToDeactivate = nil
 			self.overlayView.removeFromSuperview()
 			self.containerView.removeLayoutGuide(self.layoutGuide)
+			//
+			if self.shouldPop {
+				self.toView.isUserInteractionEnabled = true
+			}
+			//
 			switch position {
 			case .start:
 				self.toView.removeFromSuperview()
@@ -228,12 +232,13 @@ extension DefaultAnimator {
 					let toViewController = self.context.viewController(forKey: .to)
 					let gesture = PanGestureRecognizer()
 					self.toView.addGestureRecognizer(gesture)
+					gesture.delaysTouchesBegan = true
 					gesture.action = { [weak toViewController] in
 						if $0.state == .began {
 							(toViewController?.parent as? ContainerViewController)?.pop(option: .interactive)
 						}
 					}
-				} else if let gesture = self.fromViewGesture {
+				} else if let gesture = self.gestureInView(forKey: .from) {
 					self.fromView.removeGestureRecognizer(gesture)
 				}
 				self.fromView.removeFromSuperview()
@@ -243,6 +248,14 @@ extension DefaultAnimator {
 				fatalError("Transition should not stop somewhere in between")
 			}
 		}
+	}
+
+	///
+	private func gestureInView(forKey key: Transition.Context.Key) -> PanGestureRecognizer? {
+		return self.context.view(forKey: key)
+		                   .gestureRecognizers?
+		                   .flatMap { $0 as? PanGestureRecognizer }
+		                   .first
 	}
 
 	///
@@ -259,7 +272,7 @@ extension DefaultAnimator {
 			//
 			if self.shouldPop && self.context.isInteractive {
 				self.propertyAnimator.pauseAnimation()
-				guard let gesture = self.fromViewGesture else {
+				guard let gesture = self.gestureInView(forKey: .from) else {
 					return self.propertyAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
 				}
 				//
@@ -288,13 +301,13 @@ extension DefaultAnimator {
 	}
 }
 
-
 final class PanGestureRecognizer : UIPanGestureRecognizer {
 
-	var action: ((UIPanGestureRecognizer) -> Void)?
+	var action: ( /* @escaping */ (UIPanGestureRecognizer) -> Void)?
 
 	init() {
 		super.init(target: nil, action: nil)
+		self.maximumNumberOfTouches = 1
 		self.addTarget(self, action: #selector(self.handlePan(_:)))
 	}
 
