@@ -44,6 +44,10 @@ open class ContainerViewController : UIViewController {
         public let kind: Kind
         public let isAnimated: Bool
     }
+    
+    public enum Option {
+        case animated, interactive, immediate
+    }
 
     open var viewControllers: [UIViewController]
     open var rootViewController: UIViewController? { get }
@@ -55,18 +59,18 @@ open class ContainerViewController : UIViewController {
     public convenience init(_ viewControllers: UIViewController...)
     public required init?(coder aDecoder: NSCoder)
 
-    open func push(_ viewController: UIViewController, animated: Bool = default)
+    open func push(_ viewController: UIViewController, option: Option = . animated)
     
     @discardableResult
-    open func pop(animated: Bool = default) -> UIViewController?
+    open func pop(option: Option = . animated) -> UIViewController?
     
     @discardableResult
-    open func pop(to viewController: UIViewController, animated: Bool = default) -> [UIViewController]?
+    open func pop(to viewController: UIViewController, option: Option = . animated) -> [UIViewController]?
     
     @discardableResult
-    open func popToRootViewController(animated: Bool = default) -> [UIViewController]?
+    open func popToRootViewController(option: Option = . animated) -> [UIViewController]?
     
-    open func setViewControllers(_ viewControllers: [UIViewController], animated: Bool = default)
+    open func setViewControllers(_ viewControllers: [UIViewController], , option: Option = .animated)
 }
 ```
 
@@ -75,6 +79,10 @@ open class ContainerViewController : UIViewController {
 ```swift 
 public final class Transition {
 
+    public enum CompletionPosition {
+        case start, end
+    }
+
     public struct Context {
         public enum Key { case from, to }
         public enum Kind { case push, pop }
@@ -82,6 +90,7 @@ public final class Transition {
         public let kind: Kind
         public let containerView: UIView
         public let isAnimated: Bool
+        public let isInteractive: Bool
         public func viewController(forKey key: Key) -> UIViewController
         public func view(forKey key: Key) -> UIView
     }
@@ -93,7 +102,7 @@ public final class Transition {
 
     public func animateAlongside(_ animation: ((Context) -> Void)?, 
                                  completion: ((Context) -> Void)? = default)
-    public func complete(_ didComplete: Bool)
+    public func complete(at position: CompletionPosition)
 }
 ```
 
