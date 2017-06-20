@@ -59,18 +59,18 @@ open class ContainerViewController : UIViewController {
     public convenience init(_ viewControllers: UIViewController...)
     public required init?(coder aDecoder: NSCoder)
 
-    open func push(_ viewController: UIViewController, option: Option = . animated)
+    open func push(_ viewController: UIViewController, option: Option = .animated)
     
     @discardableResult
-    open func pop(option: Option = . animated) -> UIViewController?
+    open func pop(option: Option = .animated) -> UIViewController?
     
     @discardableResult
-    open func pop(to viewController: UIViewController, option: Option = . animated) -> [UIViewController]?
+    open func pop(to viewController: UIViewController, option: Option = .animated) -> [UIViewController]?
     
     @discardableResult
-    open func popToRootViewController(option: Option = . animated) -> [UIViewController]?
+    open func popToRootViewController(option: Option = .animated) -> [UIViewController]?
     
-    open func setViewControllers(_ viewControllers: [UIViewController], , option: Option = .animated)
+    open func setViewControllers(_ viewControllers: [UIViewController], option: Option = .animated)
 }
 ```
 
