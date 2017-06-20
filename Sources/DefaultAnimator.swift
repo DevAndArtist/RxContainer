@@ -57,6 +57,9 @@ public final class DefaultAnimator : Animator {
 	fileprivate private(set) lazy var shouldPush: Bool = self.context.kind == .push
 
 	///
+	fileprivate var shouldPop: Bool { return !self.shouldPush }
+
+	///
 	fileprivate var views: [UIView] {
 		// Return in correct order depending on the kind of the transition context
 		if self.shouldPush {
@@ -66,11 +69,22 @@ public final class DefaultAnimator : Animator {
 	}
 
 	///
+	fileprivate var fromViewGesture: PanGestureRecognizer? {
+		return self.fromView.gestureRecognizers.flatMap({ $0.flatMap({ $0 as? PanGestureRecognizer }).first })
+	}
+
+	///
 	fileprivate let factor = CGFloat(0.3)
 
 	///
 	fileprivate var constraintToDeactivate: NSLayoutConstraint?
 
+	///
+	fileprivate let propertyAnimator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut)
+
+	///
+	fileprivate var progressWhenInterrupted = CGFloat(0)
+	
 	//
 	///
 	public let transition: Transition
@@ -200,14 +214,34 @@ extension DefaultAnimator {
 	}
 
 	///
-	private func completeTransition(_ didComplete: Bool) {
+	private func completeTransition(at position: UIViewAnimatingPosition) {
 		UIView.performWithoutAnimation {
 			self.constraintToDeactivate = nil
-			self.fromView.removeFromSuperview()
 			self.overlayView.removeFromSuperview()
 			self.containerView.removeLayoutGuide(self.layoutGuide)
-			self.optionalCompletion?(self.context)
-			self.transition.complete(at: .end)
+			switch position {
+			case .start:
+				self.toView.removeFromSuperview()
+				self.transition.complete(at: .start)
+			case .end:
+				if self.shouldPush {
+					let toViewController = self.context.viewController(forKey: .to)
+					let gesture = PanGestureRecognizer()
+					self.toView.addGestureRecognizer(gesture)
+					gesture.action = { [weak toViewController] in
+						if $0.state == .began {
+							(toViewController?.parent as? ContainerViewController)?.pop(option: .interactive)
+						}
+					}
+				} else if let gesture = self.fromViewGesture {
+					self.fromView.removeGestureRecognizer(gesture)
+				}
+				self.fromView.removeFromSuperview()
+				self.optionalCompletion?(self.context)
+				self.transition.complete(at: .end)
+			case .current:
+				fatalError("Transition should not stop somewhere in between")
+			}
 		}
 	}
 
@@ -218,15 +252,53 @@ extension DefaultAnimator {
 		//
 		let animation = self.postTransitionState()
 		//
-		if context.isAnimated {
-			UIView.animate(withDuration: 0.5,
-			               delay: 0,
-			               options: .curveEaseInOut,
-			               animations: animation,
-			               completion: self.completeTransition)
+		if self.context.isAnimated {
+			self.propertyAnimator.addAnimations(animation)
+			self.propertyAnimator.addCompletion(self.completeTransition)
+			self.propertyAnimator.startAnimation()
+			//
+			if self.shouldPop && self.context.isInteractive {
+				self.propertyAnimator.pauseAnimation()
+				guard let gesture = self.fromViewGesture else {
+					return self.propertyAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
+				}
+				//
+				gesture.action = { [weak self] in
+					guard let animator = self else { return }
+					switch $0.state {
+					case .began:
+						animator.propertyAnimator.pauseAnimation()
+						animator.progressWhenInterrupted = animator.propertyAnimator.fractionComplete
+					case .changed:
+						let translation = $0.translation(in: animator.containerView)
+						let width = animator.containerView.frame.width
+						let progress = translation.x / width + animator.progressWhenInterrupted
+						animator.propertyAnimator.fractionComplete = progress
+					case .ended:
+						animator.propertyAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
+					default:
+						break
+					}
+				}
+			}
 		} else {
 			UIView.performWithoutAnimation(animation)
-			self.completeTransition(true)
+			self.completeTransition(at: .end)
 		}
+	}
+}
+
+
+final class PanGestureRecognizer : UIPanGestureRecognizer {
+
+	var action: ((UIPanGestureRecognizer) -> Void)?
+
+	init() {
+		super.init(target: nil, action: nil)
+		self.addTarget(self, action: #selector(self.handlePan(_:)))
+	}
+
+	@objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
+		self.action?(gesture)
 	}
 }
