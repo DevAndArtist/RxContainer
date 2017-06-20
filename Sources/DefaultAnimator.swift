@@ -219,26 +219,32 @@ extension DefaultAnimator {
 			self.overlayView.removeFromSuperview()
 			self.containerView.removeLayoutGuide(self.layoutGuide)
 			//
-			if self.shouldPop {
-				self.toView.isUserInteractionEnabled = true
-			}
+			self.toView.isUserInteractionEnabled = true
+			self.fromView.isUserInteractionEnabled = true
 			//
 			switch position {
 			case .start:
+				if self.shouldPop, let gesture = self.gestureInView(forKey: .from) {
+					let viewController = self.context.viewController(forKey: .from)
+					gesture.action = { [weak viewController] in
+						if $0.state == .began {
+							(viewController?.parent as? ContainerViewController)?.pop(option: .interactive)
+						}
+					}
+				}
 				self.toView.removeFromSuperview()
 				self.transition.complete(at: .start)
 			case .end:
 				if self.shouldPush {
-					let toViewController = self.context.viewController(forKey: .to)
 					let gesture = PanGestureRecognizer()
-					self.toView.addGestureRecognizer(gesture)
-					gesture.delaysTouchesBegan = true
-					gesture.action = { [weak toViewController] in
+					let viewController = self.context.viewController(forKey: .to)
+					gesture.action = { [weak viewController] in
 						if $0.state == .began {
-							(toViewController?.parent as? ContainerViewController)?.pop(option: .interactive)
+							(viewController?.parent as? ContainerViewController)?.pop(option: .interactive)
 						}
 					}
-				} else if let gesture = self.gestureInView(forKey: .from) {
+					self.toView.addGestureRecognizer(gesture)
+				} else if self.shouldPop, let gesture = self.gestureInView(forKey: .from) {
 					self.fromView.removeGestureRecognizer(gesture)
 				}
 				self.fromView.removeFromSuperview()
@@ -288,6 +294,7 @@ extension DefaultAnimator {
 						let progress = translation.x / width + animator.progressWhenInterrupted
 						animator.propertyAnimator.fractionComplete = progress
 					case .ended:
+						animator.propertyAnimator.isReversed = animator.propertyAnimator.fractionComplete < 0.5
 						animator.propertyAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
 					default:
 						break
