@@ -12,7 +12,8 @@ final class PanGestureRecognizer : UIPanGestureRecognizer {
 
 	var action: ( /* @escaping */ (UIPanGestureRecognizer) -> Void)?
 
-	init() {
+	init(with action: ( /* @escaping */ (UIPanGestureRecognizer) -> Void)? = nil) {
+		self.action = action
 		super.init(target: nil, action: nil)
 		self.maximumNumberOfTouches = 1
 		self.addTarget(self, action: #selector(self.handlePan(_:)))

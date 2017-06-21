@@ -222,28 +222,23 @@ extension DefaultAnimator {
 			self.toView.isUserInteractionEnabled = true
 			self.fromView.isUserInteractionEnabled = true
 			//
+			let viewController = self.context.viewController(forKey: self.shouldPop ? .from : .to)
+			let action: (UIPanGestureRecognizer) -> Void = { [weak viewController] in
+				if $0.state == .began {
+					(viewController?.parent as? ContainerViewController)?.pop(option: .interactive)
+				}
+			}
+			//
 			switch position {
 			case .start:
-				if self.shouldPop, let gesture = self.gestureInView(forKey: .from) {
-					let viewController = self.context.viewController(forKey: .from)
-					gesture.action = { [weak viewController] in
-						if $0.state == .began {
-							(viewController?.parent as? ContainerViewController)?.pop(option: .interactive)
-						}
-					}
+				if self.shouldPop {
+					self.gestureInView(forKey: .from)?.action = action
 				}
 				self.toView.removeFromSuperview()
 				self.transition.complete(at: .start)
 			case .end:
 				if self.shouldPush {
-					let gesture = PanGestureRecognizer()
-					let viewController = self.context.viewController(forKey: .to)
-					gesture.action = { [weak viewController] in
-						if $0.state == .began {
-							(viewController?.parent as? ContainerViewController)?.pop(option: .interactive)
-						}
-					}
-					self.toView.addGestureRecognizer(gesture)
+					self.toView.addGestureRecognizer(PanGestureRecognizer(with: action))
 				} else if self.shouldPop, let gesture = self.gestureInView(forKey: .from) {
 					self.fromView.removeGestureRecognizer(gesture)
 				}
