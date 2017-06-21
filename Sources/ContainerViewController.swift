@@ -18,7 +18,7 @@ open class ContainerViewController : UIViewController {
 	let eventsSubject = PublishSubject<ContainerViewController.Event>()
 
 	///
-	let operationQueue: OperationQueue = {
+	let transitionQueue: OperationQueue = {
 		let queue = OperationQueue.main
 		queue.maxConcurrentOperationCount = 1
 		return queue
@@ -268,7 +268,7 @@ extension ContainerViewController {
 			let operation = TransitionOperation(with: animator)
 			animator.add(operation: operation, completion: completion)
 			// Push the operation onto the queue
-			self.operationQueue.addOperation(operation)
+			self.transitionQueue.addOperation(operation)
 		} else {
 			// Add only the completion block and drive the transition
 			// hopefully on the main thread by the animator
@@ -359,7 +359,7 @@ extension ContainerViewController {
 		// Spawn new rotation operation
 		let operation = RotationOperation()
 		// Filter transitions which are not running
-		let transitionOperations = self.operationQueue.operations
+		let transitionOperations = self.transitionQueue.operations
 			.flatMap { $0 as? TransitionOperation }
 			.filter { !$0.isExecuting }
 		// Force other transitions to wait until the rotation is done
@@ -383,6 +383,6 @@ extension ContainerViewController {
 	///
 	open override var shouldAutorotate: Bool {
 		// Subclasses should not rotate when a transition is executing
-		return !self.operationQueue.operations.contains { ($0 as? TransitionOperation)?.isExecuting ?? false }
+		return !self.transitionQueue.operations.contains { ($0 as? TransitionOperation)?.isExecuting ?? false }
 	}
 }
