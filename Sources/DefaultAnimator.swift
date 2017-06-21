@@ -276,31 +276,31 @@ extension DefaultAnimator {
 			self.propertyAnimator.addCompletion(self.completeTransition)
 			self.propertyAnimator.startAnimation()
 			//
-			if self.shouldPop && self.context.isInteractive {
-				self.propertyAnimator.pauseAnimation()
-				guard let gesture = self.gestureInView(forKey: .from) else {
-					return self.propertyAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
-				}
-				//
-				gesture.action = { [weak self] in
-					guard let animator = self else { return }
-					switch $0.state {
-					case .began:
-						animator.propertyAnimator.pauseAnimation()
-						animator.progressWhenInterrupted = animator.propertyAnimator.fractionComplete
-					case .changed:
-						let translation = $0.translation(in: animator.containerView)
-						let width = animator.containerView.frame.width
-						let progress = translation.x / width + animator.progressWhenInterrupted
-						animator.propertyAnimator.fractionComplete = progress
-					default:
-						let point = $0.velocity(in: animator.containerView)
-						let velocity = animator.direction == .left || animator.direction == .right ? point.x : point.y
-						let progress = animator.propertyAnimator.fractionComplete
-						let shouldReverse = progress < 0.5 && velocity < 100 || velocity < -100
-						animator.propertyAnimator.isReversed = shouldReverse
-						animator.propertyAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
-					}
+			guard self.shouldPop && self.context.isInteractive else { return }
+			//
+			self.propertyAnimator.pauseAnimation()
+			guard let gesture = self.gestureInView(forKey: .from) else {
+				return self.propertyAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
+			}
+			//
+			gesture.action = { [weak self] in
+				guard let animator = self else { return }
+				switch $0.state {
+				case .began:
+					animator.propertyAnimator.pauseAnimation()
+					animator.progressWhenInterrupted = animator.propertyAnimator.fractionComplete
+				case .changed:
+					let translation = $0.translation(in: animator.containerView)
+					let width = animator.containerView.frame.width
+					let progress = translation.x / width + animator.progressWhenInterrupted
+					animator.propertyAnimator.fractionComplete = progress
+				default:
+					let point = $0.velocity(in: animator.containerView)
+					let velocity = animator.direction == .left || animator.direction == .right ? point.x : point.y
+					let progress = animator.propertyAnimator.fractionComplete
+					let shouldReverse = progress < 0.5 && velocity < 100 || velocity < -100
+					animator.propertyAnimator.isReversed = shouldReverse
+					animator.propertyAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
 				}
 			}
 		} else {
