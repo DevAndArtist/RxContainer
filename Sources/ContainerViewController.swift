@@ -24,6 +24,9 @@ open class ContainerViewController : UIViewController {
 		return queue
 	}()
 
+	///
+	let rotationQueue = OperationQueue()
+
 	// open/public properties
 	/// The view controllers currently on the view controller stack.
 	///
@@ -367,7 +370,7 @@ extension ContainerViewController {
 		//
 		coordinator.animate(alongsideTransition: nil) { _ in operation.isFinished = true }
 		//
-		operation.start()
+		self.rotationQueue.addOperation(operation)
 	}
 
 	///
