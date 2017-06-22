@@ -296,11 +296,7 @@ extension DefaultAnimator {
 			self.propertyAnimator.startAnimation()
 			//
 			guard self.shouldPop && self.context.isInteractive else { return }
-			//
-			self.propertyAnimator.pauseAnimation()
-			guard let gesture = self.gestureInView(forKey: .from) else {
-				return self.propertyAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
-			}
+			guard let gesture = self.gestureInView(forKey: .from) else { return }
 			//
 			gesture.action = { [weak self] in
 				guard let animator = self else { return }
@@ -311,6 +307,9 @@ extension DefaultAnimator {
 					animator.propertyAnimator.pauseAnimation()
 					animator.progressWhenInterrupted = animator.propertyAnimator.fractionComplete
 				case .changed:
+					if animator.propertyAnimator.isRunning {
+						animator.propertyAnimator.pauseAnimation()
+					}
 					let point = $0.translation(in: animator.containerView)
 					let frame = animator.containerView.frame
 					let size = isDirectionHorizontal ? frame.width : frame.height
