@@ -148,6 +148,10 @@ extension DefaultAnimator {
 			}
 			NSLayoutConstraint.activate(constraints)
 		}
+		// Remove the overlay view from the slide transition
+		if self.style == .slide {
+			self.overlayView.removeFromSuperview()
+		}
 	}
 
 	///
