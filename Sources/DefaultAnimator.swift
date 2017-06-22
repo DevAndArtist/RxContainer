@@ -222,11 +222,9 @@ extension DefaultAnimator {
 			self.toView.isUserInteractionEnabled = true
 			self.fromView.isUserInteractionEnabled = true
 			//
-			let viewController = self.context.viewController(forKey: self.shouldPop ? .from : .to)
-			let action: (UIPanGestureRecognizer) -> Void = { [weak viewController] in
-				if $0.state == .began {
-					(viewController?.parent as? ContainerViewController)?.pop(option: .interactive)
-				}
+			let containerViewController = self.transition.containerViewController
+			let action: (UIPanGestureRecognizer) -> Void = { [weak containerViewController] in
+				if $0.state == .began { containerViewController?.pop(option: .interactive) }
 			}
 			//
 			switch position {

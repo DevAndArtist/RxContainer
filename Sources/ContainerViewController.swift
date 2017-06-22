@@ -303,7 +303,7 @@ extension ContainerViewController {
 		                                 toViewController: toViewController,
 		                                 option: option)
 		// Create a transition
-		return Transition(with: context)
+		return Transition(with: context, on: self)
 	}
 
 	///

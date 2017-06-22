@@ -26,8 +26,12 @@ public final class Transition {
 	public let context: Context
 
 	///
-	init(with context: Context) {
+	public let containerViewController: ContainerViewController
+
+	///
+	init(with context: Context, on containerViewController: ContainerViewController) {
 		self.context = context
+		self.containerViewController = containerViewController
 	}
 
 	///
