@@ -20,6 +20,11 @@ public final class DefaultAnimator : Animator {
 		}
 	}
 
+	///
+	public enum Style {
+		case overlap, slide
+	}
+
 	//
 	///
 	fileprivate private(set) lazy var context: Transition.Context = self.transition.context
@@ -89,10 +94,15 @@ public final class DefaultAnimator : Animator {
 	public let direction: Direction
 
 	///
+	public let style: Style
+
+	///
 	public init(for transition: Transition,
-	            withDirection direction: Direction) {
+	            withDirection direction: Direction,
+	            style: Style = .overlap) {
 		self.transition = transition
 		self.direction = direction
+		self.style = style
 	}
 }
 
@@ -146,22 +156,28 @@ extension DefaultAnimator {
 		self.setupLayoutGuide()
 		self.setupViews()
 		//
+		let shouldOverlap = self.style == .overlap
+		//
 		let constraint: NSLayoutConstraint
 		switch self.direction {
 		case .left, .right:
-			let centerXAnchor: NSLayoutXAxisAnchor
+			let (anchorForPop, centerXAnchor): (NSLayoutXAxisAnchor, NSLayoutXAxisAnchor)
 			if self.direction.isLeftOrUp {
-				centerXAnchor = self.shouldPush ? self.layoutGuide.trailingAnchor : self.containerView.trailingAnchor
+				anchorForPop = shouldOverlap ? self.containerView.trailingAnchor : self.layoutGuide.trailingAnchor
+				centerXAnchor = self.shouldPush ? self.layoutGuide.trailingAnchor : anchorForPop
 			} else {
-				centerXAnchor = self.shouldPush ? self.layoutGuide.leadingAnchor : self.containerView.leadingAnchor
+				anchorForPop = shouldOverlap ? self.containerView.leadingAnchor : self.layoutGuide.leadingAnchor
+				centerXAnchor = self.shouldPush ? self.layoutGuide.leadingAnchor : anchorForPop
 			}
 			constraint = self.toView.centerXAnchor.constraint(equalTo: centerXAnchor)
 		case .up, .down:
-			let centerYAnchor: NSLayoutYAxisAnchor
+			let (anchorForPop, centerYAnchor): (NSLayoutYAxisAnchor, NSLayoutYAxisAnchor)
 			if self.direction.isLeftOrUp {
-				centerYAnchor = self.shouldPush ? self.layoutGuide.bottomAnchor : self.containerView.centerYAnchor
+				anchorForPop = shouldOverlap ? self.containerView.centerYAnchor : self.layoutGuide.bottomAnchor
+				centerYAnchor = self.shouldPush ? self.layoutGuide.bottomAnchor : anchorForPop
 			} else {
-				centerYAnchor = self.shouldPush ? self.layoutGuide.topAnchor : self.containerView.centerYAnchor
+				anchorForPop = shouldOverlap ? self.containerView.centerYAnchor : self.layoutGuide.topAnchor
+				centerYAnchor = self.shouldPush ? self.layoutGuide.topAnchor : anchorForPop
 			}
 			constraint = self.toView.centerYAnchor.constraint(equalTo: centerYAnchor)
 		}
@@ -176,22 +192,28 @@ extension DefaultAnimator {
 	///
 	private func postTransitionState() -> () -> Void {
 		//
+		let shouldOverlap = self.style == .overlap
+		//
 		let constraint: NSLayoutConstraint
 		switch self.direction {
 		case .left, .right:
-			let centerXAnchor: NSLayoutXAxisAnchor
+			let (anchorForPush, centerXAnchor): (NSLayoutXAxisAnchor, NSLayoutXAxisAnchor)
 			if self.direction.isLeftOrUp {
-				centerXAnchor = self.shouldPush ? self.containerView.leadingAnchor : self.layoutGuide.leadingAnchor
+				anchorForPush = shouldOverlap ? self.containerView.leadingAnchor : self.layoutGuide.leadingAnchor
+				centerXAnchor = self.shouldPush ? anchorForPush : self.layoutGuide.leadingAnchor
 			} else {
-				centerXAnchor = self.shouldPush ? self.containerView.trailingAnchor : self.layoutGuide.trailingAnchor
+				anchorForPush = shouldOverlap ? self.containerView.trailingAnchor : self.layoutGuide.trailingAnchor
+				centerXAnchor = self.shouldPush ? anchorForPush : self.layoutGuide.trailingAnchor
 			}
 			constraint = self.fromView.centerXAnchor.constraint(equalTo: centerXAnchor)
 		case .up, .down:
-			let centerYAnchor: NSLayoutYAxisAnchor
+			let (anchorForPush, centerYAnchor): (NSLayoutYAxisAnchor, NSLayoutYAxisAnchor)
 			if self.direction.isLeftOrUp {
-				centerYAnchor = self.shouldPush ? self.containerView.centerYAnchor : self.layoutGuide.topAnchor
+				anchorForPush = shouldOverlap ? self.containerView.centerYAnchor : self.layoutGuide.topAnchor
+				centerYAnchor = self.shouldPush ? anchorForPush : self.layoutGuide.topAnchor
 			} else {
-				centerYAnchor = self.shouldPush ? self.containerView.centerYAnchor : self.layoutGuide.bottomAnchor
+				anchorForPush = shouldOverlap ? self.containerView.centerYAnchor : self.layoutGuide.bottomAnchor
+				centerYAnchor = self.shouldPush ? anchorForPush : self.layoutGuide.bottomAnchor
 			}
 			constraint = self.fromView.centerYAnchor.constraint(equalTo: centerYAnchor)
 		}
@@ -278,18 +300,22 @@ extension DefaultAnimator {
 			//
 			gesture.action = { [weak self] in
 				guard let animator = self else { return }
+				let signValue: CGFloat = animator.direction.isLeftOrUp ? -1 : 1
+				let isDirectionHorizontal = animator.direction == .left || animator.direction == .right
 				switch $0.state {
 				case .began:
 					animator.propertyAnimator.pauseAnimation()
 					animator.progressWhenInterrupted = animator.propertyAnimator.fractionComplete
 				case .changed:
-					let translation = $0.translation(in: animator.containerView)
-					let width = animator.containerView.frame.width
-					let progress = translation.x / width + animator.progressWhenInterrupted
+					let point = $0.translation(in: animator.containerView)
+					let frame = animator.containerView.frame
+					let size = isDirectionHorizontal ? frame.width : frame.height
+					let translation = signValue * (isDirectionHorizontal ? point.x : point.y)
+					let progress = translation / size + animator.progressWhenInterrupted
 					animator.propertyAnimator.fractionComplete = progress
 				default:
 					let point = $0.velocity(in: animator.containerView)
-					let velocity = animator.direction == .left || animator.direction == .right ? point.x : point.y
+					let velocity = signValue * (isDirectionHorizontal ? point.x : point.y)
 					let progress = animator.propertyAnimator.fractionComplete
 					let shouldReverse = progress < 0.5 && velocity < 100 || velocity < -100
 					animator.propertyAnimator.isReversed = shouldReverse
