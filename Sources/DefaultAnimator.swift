@@ -257,7 +257,7 @@ extension DefaultAnimator {
 				self.toView.removeFromSuperview()
 				self.transition.complete(at: .start)
 			case .end:
-				if self.shouldPush {
+				if self.shouldPush && self.context.isInteractive {
 					self.toView.addGestureRecognizer(PanGestureRecognizer(with: action))
 				} else if self.shouldPop, let gesture = self.gestureInView(forKey: .from) {
 					self.fromView.removeGestureRecognizer(gesture)
