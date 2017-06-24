@@ -10,6 +10,7 @@
 		30F108A6CA04CB09E0CD6042 /* Pods_project_RxContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75C65F0DCFC605B094DC68D0 /* Pods_project_RxContainer.framework */; };
 		91907F1CDADFDEDC5A291EBC /* Pods_RxContainerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 639104FE3A29CE833494DFF5 /* Pods_RxContainerTests.framework */; };
 		C61527F61EF67DB2007A9DA0 /* RotationOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61527F41EF67C91007A9DA0 /* RotationOperation.swift */; };
+		C63DDF0F1EFED6E8001FFC58 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C63DDF0E1EFED6E8001FFC58 /* Functions.swift */; };
 		C6AAE1C51EF06B730076A934 /* TransitionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6AAE1C41EF06B730076A934 /* TransitionOperation.swift */; };
 		C6C392521EE44A7D008F743A /* RxContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = C6C392501EE44A7D008F743A /* RxContainer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C6C392631EE4552D008F743A /* RxContainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C3924D1EE44A7D008F743A /* RxContainer.framework */; };
@@ -45,6 +46,7 @@
 		79E274E7859BF3F97153DAF5 /* Pods-project-RxContainer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-project-RxContainer.release.xcconfig"; path = "Pods/Target Support Files/Pods-project-RxContainer/Pods-project-RxContainer.release.xcconfig"; sourceTree = "<group>"; };
 		9946CF7DC1EBE1744C357FB0 /* Pods-RxContainerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxContainerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RxContainerTests/Pods-RxContainerTests.release.xcconfig"; sourceTree = "<group>"; };
 		C61527F41EF67C91007A9DA0 /* RotationOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationOperation.swift; sourceTree = "<group>"; };
+		C63DDF0E1EFED6E8001FFC58 /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		C6AAE1C41EF06B730076A934 /* TransitionOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionOperation.swift; sourceTree = "<group>"; };
 		C6C3924D1EE44A7D008F743A /* RxContainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RxContainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6C392501EE44A7D008F743A /* RxContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RxContainer.h; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				C6D255271EEFDE2A00A0BECF /* Delegate.swift */,
 				C6C392741EE47C6A008F743A /* Event.swift */,
 				C6ED83A01EF017B7009D5C6F /* Extensions.swift */,
+				C63DDF0E1EFED6E8001FFC58 /* Functions.swift */,
 				C6C392721EE47BF8008F743A /* Operation.swift */,
 				C6F7F0E71EF85069003E8071 /* Option.swift */,
 				C6C60D101EF9600900359EEB /* PanGestureRecognizer.swift */,
@@ -377,6 +380,7 @@
 				C6ED839F1EEFFEDB009D5C6F /* DefaultAnimator.swift in Sources */,
 				C6ED83A11EF017B7009D5C6F /* Extensions.swift in Sources */,
 				C6D255281EEFDE2A00A0BECF /* Delegate.swift in Sources */,
+				C63DDF0F1EFED6E8001FFC58 /* Functions.swift in Sources */,
 				C6C392771EE47C74008F743A /* Transition.swift in Sources */,
 				C6C60D111EF9600900359EEB /* PanGestureRecognizer.swift in Sources */,
 				C6F7F0E81EF85069003E8071 /* Option.swift in Sources */,
