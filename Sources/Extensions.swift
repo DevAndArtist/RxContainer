@@ -32,4 +32,8 @@ extension Bool {
 	func whenTrue(execute closure: () -> Void) {
 		if self { closure() }
 	}
+	///
+	func whenTrue(execute closure: @autoclosure () -> Void) {
+		if self { closure() }
+	}
 }

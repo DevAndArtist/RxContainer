@@ -109,6 +109,14 @@ public final class DefaultAnimator : Animator {
 extension DefaultAnimator {
 
 	///
+	func deactivateAndRemoveSavedConstraint() {
+		if let constraintToDeactivate = self.constraintToDeactivate {
+			NSLayoutConstraint.deactivate([constraintToDeactivate])
+			self.constraintToDeactivate = nil
+		}
+	}
+
+	///
 	private func setupLayoutGuide() {
 		self.containerView.addLayoutGuide(self.layoutGuide)
 		let constraints: [NSLayoutConstraint] = [
@@ -222,15 +230,12 @@ extension DefaultAnimator {
 			constraint = self.fromView.centerYAnchor.constraint(equalTo: centerYAnchor)
 		}
 		constraint.isActive = true
-		//
-		if let constraintToDeactivate = self.constraintToDeactivate {
-			NSLayoutConstraint.deactivate([constraintToDeactivate])
-		}
-		//
-		if self.shouldPop {
-			self.toView.isUserInteractionEnabled = false
-		}
-
+		// First deactivate the constraint for the toView, so that the animation can be generated.
+		self.deactivateAndRemoveSavedConstraint()
+		// Now safe the constraint for the fromView, which should be deactivated on completion.
+		self.constraintToDeactivate = constraint
+		// Disallow touches on the toView while pop transition is executing
+		self.shouldPop.whenTrue(execute: self.toView.isUserInteractionEnabled = false)
 		return {
 			self.containerView.layoutIfNeeded()
 			self.overlayView.alpha = self.shouldPush ? 1 : 0
@@ -241,12 +246,11 @@ extension DefaultAnimator {
 	///
 	private func completeTransition(at position: UIViewAnimatingPosition) {
 		UIView.performWithoutAnimation {
-			self.constraintToDeactivate = nil
+			self.deactivateAndRemoveSavedConstraint()
 			self.overlayView.removeFromSuperview()
 			self.containerView.removeLayoutGuide(self.layoutGuide)
 			//
-			self.toView.isUserInteractionEnabled = true
-			self.fromView.isUserInteractionEnabled = true
+			self.shouldPop.whenTrue(execute: self.toView.isUserInteractionEnabled = true)
 			//
 			let containerViewController = self.transition.containerViewController
 			let action: (UIPanGestureRecognizer) -> Void = { [weak containerViewController] in
@@ -257,12 +261,14 @@ extension DefaultAnimator {
 			case .start:
 				if self.shouldPop {
 					self.gestureInView(forKey: .from)?.action = action
+				} else if self.shouldPush, let gesture = self.gestureInView(forKey: .to) {
+					self.toView.removeGestureRecognizer(gesture)
 				}
 				self.toView.removeFromSuperview()
 				self.transition.complete(at: .start)
 			case .end:
 				if self.shouldPush && self.context.isInteractive {
-					self.toView.addGestureRecognizer(PanGestureRecognizer(with: action))
+					self.gestureInView(forKey: .to)?.action = action
 				} else if self.shouldPop, let gesture = self.gestureInView(forKey: .from) {
 					self.fromView.removeGestureRecognizer(gesture)
 				}
@@ -295,35 +301,44 @@ extension DefaultAnimator {
 			self.propertyAnimator.addCompletion(self.completeTransition)
 			self.propertyAnimator.startAnimation()
 			//
-			guard self.shouldPop && self.context.isInteractive else { return }
-			guard let gesture = self.gestureInView(forKey: .from) else { return }
-			//
-			gesture.action = { [weak self] in
+			guard self.context.isInteractive else { return }
+			let action: (UIPanGestureRecognizer) -> Void = { [weak self] in
 				guard let animator = self else { return }
 				let signValue: CGFloat = animator.direction.isLeftOrUp ? -1 : 1
 				let isDirectionHorizontal = animator.direction == .left || animator.direction == .right
+				let propertyAnimator = animator.propertyAnimator
 				switch $0.state {
 				case .began:
-					animator.propertyAnimator.pauseAnimation()
-					animator.progressWhenInterrupted = animator.propertyAnimator.fractionComplete
+					propertyAnimator.pauseAnimation()
+					animator.progressWhenInterrupted = propertyAnimator.fractionComplete
 				case .changed:
-					if animator.propertyAnimator.isRunning {
-						animator.propertyAnimator.pauseAnimation()
-					}
+					propertyAnimator.isRunning.whenTrue(execute: propertyAnimator.pauseAnimation)
 					let point = $0.translation(in: animator.containerView)
 					let frame = animator.containerView.frame
 					let size = isDirectionHorizontal ? frame.width : frame.height
 					let translation = signValue * (isDirectionHorizontal ? point.x : point.y)
 					let progress = translation / size + animator.progressWhenInterrupted
-					animator.propertyAnimator.fractionComplete = progress
+					propertyAnimator.fractionComplete = progress
 				default:
 					let point = $0.velocity(in: animator.containerView)
 					let velocity = signValue * (isDirectionHorizontal ? point.x : point.y)
-					let progress = animator.propertyAnimator.fractionComplete
+					let progress = propertyAnimator.fractionComplete
 					let shouldReverse = progress < 0.5 && velocity < 100 || velocity < -100
-					animator.propertyAnimator.isReversed = shouldReverse
-					animator.propertyAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
+					propertyAnimator.isReversed = shouldReverse
+					propertyAnimator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
 				}
+			}
+			// If there was an interactive push, then it is assumed that the fromView will have
+			// a gesture recognizer already attatched to it. Otherwise the push was animated or 
+			// immediate, which means we have to attatch a new gesture to fromView to make the
+			// pop transition interruptible.
+			// 
+			// On the other hand the interactive push will attatch a gesture to the toView.
+			if self.shouldPop, let gesture = self.gestureInView(forKey: .from) {
+				gesture.action = action
+			} else {
+				let view = self.shouldPop ? self.fromView : self.toView
+				view.addGestureRecognizer(PanGestureRecognizer(with: action))
 			}
 		} else {
 			UIView.performWithoutAnimation(animation)
