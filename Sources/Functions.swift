@@ -14,7 +14,7 @@ prefix func ! <T>(closure: @escaping (T) -> Bool) -> (T) -> Bool {
 }
 
 /// Default function for any transition.
-func animator(for transition: Transition) -> Animator {
+public func animator(for transition: Transition) -> Animator {
 	//
 	let direction: DefaultAnimator.Direction = transition.context.kind == .push ? .left : .right
 	// Get an animator for the transition
