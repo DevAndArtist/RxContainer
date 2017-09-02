@@ -12,8 +12,7 @@ import UIKit
 ///   - Once protocol nesting is supported this protocol will be nested as `Animator` inside
 ///     `ContainerViewController`.
 ///   - Once `open/public protocol` inconsistency is resolved this protocol will become `open`.
-/* open */ public protocol Animator : class {
-
+/* open */ public protocol Animator : AnyObject {
 	///
 	var transition: Transition { get }
 
