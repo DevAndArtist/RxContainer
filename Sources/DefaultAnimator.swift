@@ -151,7 +151,7 @@ extension DefaultAnimator {
 			lowerPriorityConstraints.forEach {
 				// Lower the priority of these constraints, so we don't have to remove them.
 				// Other constraints with higher priorty will take over them when needed.
-				$0.priority = UILayoutPriorityDefaultHigh
+				$0.priority = UILayoutPriority.defaultHigh
 				constraints.append($0)
 			}
 			NSLayoutConstraint.activate(constraints)
