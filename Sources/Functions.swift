@@ -18,8 +18,6 @@ public func animator(for transition: Transition) -> Animator {
 	//
 	let direction: DefaultAnimator.Direction = transition.context.kind == .push ? .left : .right
 	// Get an animator for the transition
-	return transition
-		.containerViewController
-		.delegate?
-		.animator(for: transition) ?? DefaultAnimator(for: transition, withDirection: direction)
+	let animatorFromDelegate = transition.containerViewController.delegate?.animator(for: transition)
+	return animatorFromDelegate ?? DefaultAnimator(for: transition, withDirection: direction)
 }
