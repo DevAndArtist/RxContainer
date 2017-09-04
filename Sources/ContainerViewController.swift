@@ -88,7 +88,12 @@ open class ContainerViewController : UIViewController {
 		self.init(viewControllers)
 	}
 	
+	/// Initializes and returns a newly created container view controller.
 	///
+	/// This is a convenience method for initializing the receiver and
+	/// pushing view controllers onto the view controller stack. Every
+	/// view controller stack must have at least one view controller to
+	/// act as the root.
 	public convenience init(_ viewControllers: [UIViewController]) {
 		self.init()
 		self.viewControllers = viewControllers
