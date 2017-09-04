@@ -10,16 +10,17 @@ import RxContainer
 import UIKit
 
 class ViewController : UIViewController {
+	
+	let containerViewController = ContainerViewController()
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		self.view.backgroundColor = .orange
+		view.backgroundColor = .orange
 
-		let containerViewController = ContainerViewController()
-		self.addChildViewController(containerViewController)
+		addChildViewController(containerViewController)
 		let containerView: UIView = containerViewController.view
 		containerView.frame = CGRect(x: 0, y: 0, width: 150, height: 200)
-		containerView.center = self.view.center
+		containerView.center = view.center
 		// Disable mask to see the animations but create a border
 		containerView.layer.masksToBounds = false
 		containerView.layer.borderWidth = 2
@@ -30,46 +31,55 @@ class ViewController : UIViewController {
 			.flexibleLeftMargin, .flexibleRightMargin
 		]
 		containerView.backgroundColor = .purple
-		self.view.addSubview(containerView)
+		view.addSubview(containerView)
 		containerViewController.didMove(toParentViewController: self)
-
+		
+		startTransitions()
+	}
+	
+	func startTransitions() {
 		let firstVC = UIViewController()
 		firstVC.view.backgroundColor = .green
-
+		
 		let secondVC = UIViewController()
 		secondVC.view.backgroundColor = .yellow
-
+		
 		let thirdVC = UIViewController()
 		thirdVC.view.backgroundColor = .magenta
-
+		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-			containerViewController.push(firstVC) // Without animation
-			containerViewController.push(secondVC) // First transition
-			containerViewController.push(thirdVC) // Second transition after the first is done
+			self.containerViewController.push(firstVC) // Without animation
+			self.containerViewController.push(secondVC) // First transition
+			self.containerViewController.push(thirdVC) // Second transition after the first is done
 		}
-
+		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-			containerViewController.pop() // 3rd transition
-			containerViewController.pop() // 4th transition
-			containerViewController.pop() // no-op
+			self.containerViewController.pop() // 3rd transition
+			self.containerViewController.pop() // 4th transition
+			self.containerViewController.pop() // no-op
 		}
-
+		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 16) {
 			// Push transition
-			containerViewController.setViewControllers([firstVC, secondVC, thirdVC])
+			self.containerViewController.setViewControllers([firstVC, secondVC, thirdVC])
 		}
-
+		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 24) {
-			containerViewController.pop()
-			containerViewController.pop()
+			self.containerViewController.pop()
+			self.containerViewController.pop()
 		}
-
+		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
-			containerViewController.setViewControllers([firstVC, secondVC, thirdVC])
+			self.containerViewController.setViewControllers([firstVC, secondVC, thirdVC])
 		}
-
+		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 34) {
-			containerViewController.popToRootViewController()
+			self.containerViewController.popToRootViewController()
+		}
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 38) {
+			self.containerViewController.push(secondVC, option: .immediate)
+			self.containerViewController.push(thirdVC, option: .interactive)
 		}
 	}
 }
