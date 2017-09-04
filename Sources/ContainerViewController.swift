@@ -258,11 +258,14 @@ extension ContainerViewController {
 
 	///
 	@discardableResult
-	open func popToRootViewController(option: Option = .animated) -> [UIViewController]? {
+	open func popToRootViewController(
+		option: Option = .animated,
+		with animator: (Transition) -> Animator = RxContainer.animator(for:)
+	) -> [UIViewController]? {
 		// Return `nil` if there is no root view controller yet
 		guard let rootViewController = rootViewController else { return nil }
 		// Use the `pop(to:animated)` method to finish the job
-		return pop(to: rootViewController, option: option)
+		return pop(to: rootViewController, option: option, with: animator)
 	}
 
 	///

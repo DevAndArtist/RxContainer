@@ -102,22 +102,30 @@ open class ContainerViewController : UIViewController {
     required public init?(coder aDecoder: NSCoder)
 
     ///
-    open func push(_ viewController: UIViewController, option: Option = .animated)
+    open func push(_ viewController: UIViewController, 
+                   option: Option = .animated, 
+                   with animator: (Transition) -> Animator = RxContainer.animator(for:))
     
     ///
     @discardableResult
-    open func pop(option: Option = .animated) -> UIViewController?
+    open func pop(option: Option = .animated, 
+                  with animator: (Transition) -> Animator = RxContainer.animator(for:)) -> UIViewController?
     
     ///
     @discardableResult
-    open func pop(to viewController: UIViewController, option: Option = .animated) -> [UIViewController]?
+    open func pop(to viewController: UIViewController, 
+                  option: Option = .animated,
+                  with animator: (Transition) -> Animator = RxContainer.animator(for:)) -> [UIViewController]?
     
     ///
     @discardableResult
-    open func popToRootViewController(option: Option = .animated) -> [UIViewController]?
+    open func popToRootViewController(option: Option = .animated,
+                                      with animator: (Transition) -> Animator = RxContainer.animator(for:)) -> [UIViewController]?
     
     ///
-    open func setViewControllers(_ viewControllers: [UIViewController], option: Option = .animated)
+    open func setViewControllers(_ viewControllers: [UIViewController], 
+                                 option: Option = .animated,
+                                 with animator: (Transition) -> Animator = RxContainer.animator(for:))
 }
 ```
 
@@ -209,5 +217,5 @@ public final class DefaultAnimator : Animator {
 }
 
 /// Default function for any transition.
-public func animator(for transition: RxContainer.Transition) -> Animator
+public func animator(for transition: Transition) -> Animator
 ```
