@@ -1,6 +1,6 @@
 PODS:
   - Reveal-SDK (10)
-  - RxContainer (0.6.1):
+  - RxContainer (0.6.2):
     - RxSwift (~> 4.0.0-alpha.1)
   - RxSwift (4.0.0-alpha.1)
   - SwiftLint (0.22.0)
@@ -17,7 +17,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Reveal-SDK: 7869ddf1f902cabbb07a1f0dd06bd25861a126f7
-  RxContainer: 01502ec37a543b3e3bcaa9715f93c8763621e117
+  RxContainer: 3a3b80d0f1767007b683fe5a23c00de18d6284a0
   RxSwift: 62bea72da2c1b2653320c516267c2b8a347c02b6
   SwiftLint: 1134786caedd2caab0560d2f36b76414a5a56808
 
