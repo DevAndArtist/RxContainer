@@ -9,17 +9,30 @@
 import UIKit
 
 final class PanGestureRecognizer : UIPanGestureRecognizer {
+	
+	//==========-----------------------------==========//
+	//=====----- Private/Internal properties -----=====//
+	//==========-----------------------------==========//
 
-	var action: ( /* @escaping */ (UIPanGestureRecognizer) -> Void)?
+	///
+	var action: ((UIPanGestureRecognizer) -> Void)?
+	
+	//==========-------------==========//
+	//=====----- Initializer -----=====//
+	//==========-------------==========//
 
+	///
 	init(with action: ( /* @escaping */ (UIPanGestureRecognizer) -> Void)? = nil) {
 		self.action = action
 		super.init(target: nil, action: nil)
-		self.maximumNumberOfTouches = 1
-		self.addTarget(self, action: #selector(self.handlePan(_:)))
+		maximumNumberOfTouches = 1
+		addTarget(self, action: #selector(handlePan(_:)))
 	}
+}
 
+extension PanGestureRecognizer {
+	///
 	@objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
-		self.action?(gesture)
+		action?(gesture)
 	}
 }

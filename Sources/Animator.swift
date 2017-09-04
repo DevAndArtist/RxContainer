@@ -8,11 +8,8 @@
 
 import UIKit
 
-/// WARNING: Do not use this protocol directly, instead use `ContainerViewController.Animator`.
-///   - Once protocol nesting is supported this protocol will be nested as `Animator` inside
-///     `ContainerViewController`.
-///   - Once `open/public protocol` inconsistency is resolved this protocol will become `open`.
-/* open */ public protocol Animator : AnyObject {
+///
+public protocol Animator : AnyObject {
 	///
 	var transition: Transition { get }
 
@@ -24,15 +21,15 @@ import UIKit
 }
 
 extension Animator {
-
 	/// This is a `no-op` implementation, re-implement this method
 	/// if you need to perform work after the transition completed.
-	public func transition(completed: Bool) { /* no-op */ }
+	public /* default */ func transition(completed: Bool) { /* no-op */ }
 }
 
 extension Animator {
+	///
 	func add(operation: TransitionOperation? = nil, completion: @escaping () -> Void) {
-		self.transition.transitionCompletion = { [unowned self, weak operation] in
+		transition.transitionCompletion = { [unowned self, weak operation] in
 			// Finish transition work
 			($0 == .end).whenTrue(execute: completion)
 			// Notify the animator about completion

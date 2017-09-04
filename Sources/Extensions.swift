@@ -9,7 +9,6 @@
 import UIKit
 
 extension UIViewAutoresizing {
-
 	///
 	static var complete: UIViewAutoresizing {
 		return [
@@ -24,7 +23,6 @@ extension UIViewAutoresizing {
 }
 
 extension Bool {
-
 	///
 	func whenTrue(execute closure: () -> Void) {
 		if self { closure() }

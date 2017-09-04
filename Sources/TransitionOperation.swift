@@ -10,15 +10,23 @@ import UIKit
 
 ///
 final class TransitionOperation : Operation {
+	
+	//==========-----------------------------==========//
+	//=====----- Private/Internal properties -----=====//
+	//==========-----------------------------==========//
+	
+	///
+	private let animator: Animator
 
 	///
-	let animator: Animator
+	private var isCurrentlyExecuting = false
 
 	///
-	private var _isExecuting = false
-
-	///
-	private var _isFinished = false
+	private var didFinished = false
+	
+	//==========----------------------------==========//
+	//=====----- Overriden super properties -----=====//
+	//==========----------------------------==========//
 
 	///
 	override var isAsynchronous: Bool {
@@ -27,38 +35,44 @@ final class TransitionOperation : Operation {
 
 	///
 	override var isExecuting: Bool {
-		get { return _isExecuting }
+		get { return isCurrentlyExecuting }
 		set {
 			let key = "isExecuting"
-			self.willChangeValue(forKey: key)
-			self._isExecuting = newValue
-			self.didChangeValue(forKey: key)
+			willChangeValue(forKey: key)
+			isCurrentlyExecuting = newValue
+			didChangeValue(forKey: key)
 		}
 	}
 
 	///
 	override var isFinished: Bool {
-		get { return _isFinished }
+		get { return didFinished }
 		set {
 			let key = "isFinished"
-			self.willChangeValue(forKey: key)
-			self._isFinished = newValue
-			self.didChangeValue(forKey: key)
+			willChangeValue(forKey: key)
+			didFinished = newValue
+			didChangeValue(forKey: key)
 		}
 	}
+	
+	//==========-------------==========//
+	//=====----- Initializer -----=====//
+	//==========-------------==========//
 
 	///
 	init(with animator: Animator) {
 		self.animator = animator
 	}
+}
 
+extension TransitionOperation {
 	///
 	override func start() {
-		self.isExecuting = true
-		// The operation will only terminate if the animator called 
+		isExecuting = true
+		// The operation will only terminate if the animator called
 		// `transition.complete(_:)` correctly, which will trigger
-		// the `transitionCompletion` block that contains 
+		// the `transitionCompletion` block that contains
 		// `operation.isFinished = true`
-		self.animator.animate()
+		animator.animate()
 	}
 }

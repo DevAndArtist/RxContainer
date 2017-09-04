@@ -10,40 +10,29 @@ import UIKit
 
 ///
 public final class DefaultAnimator : Animator {
+	
+	//==========-----------------------------==========//
+	//=====----- Private/Internal properties -----=====//
+	//==========-----------------------------==========//
+	
+	///
+	private lazy var context = transition.context
 
 	///
-	public enum Direction {
-		case left, right, up, down
-
-		var isLeftOrUp: Bool {
-			return self == .left || self == .up
-		}
+	private var additionalAnimation: ((Transition.Context) -> Void)? {
+		return transition.additionalAnimation
 	}
 
 	///
-	public enum Style {
-		case overlap, slide
-	}
-
-	//
-	///
-	fileprivate private(set) lazy var context: Transition.Context = self.transition.context
-
-	///
-	fileprivate var optionalAnimation: ((Transition.Context) -> Void)? {
-		return self.transition.animation
+	private var additionalCompletion: ((Transition.Context) -> Void)? {
+		return transition.additionalCompletion
 	}
 
 	///
-	fileprivate var optionalCompletion: ((Transition.Context) -> Void)? {
-		return self.transition.completion
-	}
+	private let layoutGuide = UILayoutGuide()
 
 	///
-	fileprivate let layoutGuide = UILayoutGuide()
-
-	///
-	fileprivate let overlayView: UIView = {
+	private let overlayView: UIView = {
 		let view = UIView()
 		view.backgroundColor = UIColor.black.withAlphaComponent(0.15)
 		view.isUserInteractionEnabled = false
@@ -51,42 +40,45 @@ public final class DefaultAnimator : Animator {
 	}()
 
 	///
-	fileprivate private(set) lazy var containerView: UIView = self.context.containerView
+	private lazy var containerView: UIView = context.containerView
 
 	///
-	fileprivate private(set) lazy var fromView: UIView = self.context.view(forKey: .from)
+	private lazy var fromView = context.view(forKey: .from)
 
 	///
-	fileprivate private(set) lazy var toView: UIView = self.context.view(forKey: .to)
+ 	private lazy var toView = context.view(forKey: .to)
 
 	///
-	fileprivate private(set) lazy var shouldPush: Bool = self.context.kind == .push
+	private lazy var shouldPush = context.kind == .push
 
 	///
-	fileprivate var shouldPop: Bool { return !self.shouldPush }
+	private var shouldPop: Bool { return !shouldPush }
 
 	///
-	fileprivate var views: [UIView] {
+	private var views: [UIView] {
 		// Return in correct order depending on the kind of the transition context
-		if self.shouldPush {
-			return [self.fromView, self.overlayView, self.toView]
+		if shouldPush {
+			return [fromView, overlayView, toView]
 		}
-		return [self.toView, self.overlayView, self.fromView]
+		return [toView, overlayView, fromView]
 	}
 
 	///
-	fileprivate let factor = CGFloat(0.3)
+	private let factor = CGFloat(0.3)
 
 	///
-	fileprivate var constraintToDeactivate: NSLayoutConstraint?
+	private var constraintToDeactivate: NSLayoutConstraint?
 
 	///
-	fileprivate let propertyAnimator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut)
+	private let propertyAnimator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut)
 
 	///
-	fileprivate var progressWhenInterrupted = CGFloat(0)
+	private var progressWhenInterrupted = CGFloat(0)
 
-	//
+	//==========------------------------==========//
+	//=====----- Open/Public properties -----=====//
+	//==========------------------------==========//
+	
 	///
 	public let transition: Transition
 
@@ -95,6 +87,10 @@ public final class DefaultAnimator : Animator {
 
 	///
 	public let style: Style
+	
+	//==========-------------==========//
+	//=====----- Initializer -----=====//
+	//==========-------------==========//
 
 	///
 	public init(for transition: Transition,
@@ -107,199 +103,19 @@ public final class DefaultAnimator : Animator {
 }
 
 extension DefaultAnimator {
-
-	///
-	func deactivateAndRemoveSavedConstraint() {
-		if let constraintToDeactivate = self.constraintToDeactivate {
-			NSLayoutConstraint.deactivate([constraintToDeactivate])
-			self.constraintToDeactivate = nil
-		}
-	}
-
-	///
-	private func setupLayoutGuide() {
-		self.containerView.addLayoutGuide(self.layoutGuide)
-		let constraints: [NSLayoutConstraint] = [
-			self.layoutGuide.widthAnchor.constraint(equalTo: self.containerView.widthAnchor, multiplier: 2),
-			self.layoutGuide.heightAnchor.constraint(equalTo: self.containerView.heightAnchor, multiplier: 2),
-			self.layoutGuide.centerXAnchor.constraint(equalTo: self.containerView.centerXAnchor),
-			self.layoutGuide.centerYAnchor.constraint(equalTo: self.containerView.centerYAnchor)
-		]
-		NSLayoutConstraint.activate(constraints)
-	}
-
-	///
-	private func setupViews() {
-		//
-		self.views.forEach {
-			$0.translatesAutoresizingMaskIntoConstraints = false
-			self.containerView.addSubview($0)
-
-			var constraints: [NSLayoutConstraint] = [
-				$0.widthAnchor.constraint(equalTo: self.containerView.widthAnchor),
-				$0.heightAnchor.constraint(equalTo: self.containerView.heightAnchor)
-			]
-
-			let lowerPriorityConstraints: [NSLayoutConstraint] = [
-				$0.centerXAnchor.constraint(equalTo: self.containerView.centerXAnchor),
-				$0.centerYAnchor.constraint(equalTo: self.containerView.centerYAnchor),
-				$0.topAnchor.constraint(equalTo: self.containerView.topAnchor),
-				$0.bottomAnchor.constraint(equalTo: self.containerView.bottomAnchor),
-				$0.leadingAnchor.constraint(equalTo: self.containerView.leadingAnchor),
-				$0.trailingAnchor.constraint(equalTo: self.containerView.trailingAnchor)
-			]
-			lowerPriorityConstraints.forEach {
-				// Lower the priority of these constraints, so we don't have to remove them.
-				// Other constraints with higher priorty will take over them when needed.
-				$0.priority = UILayoutPriority.defaultHigh
-				constraints.append($0)
-			}
-			NSLayoutConstraint.activate(constraints)
-		}
-		// Remove the overlay view from the slide transition
-		(self.style == .slide).whenTrue(execute: self.overlayView.removeFromSuperview)
-	}
-
-	///
-	private func preTransitionState() {
-		//
-		self.setupLayoutGuide()
-		self.setupViews()
-		//
-		let shouldOverlap = self.style == .overlap
-		//
-		let constraint: NSLayoutConstraint
-		switch self.direction {
-		case .left, .right:
-			let (anchorForPop, centerXAnchor): (NSLayoutXAxisAnchor, NSLayoutXAxisAnchor)
-			if self.direction.isLeftOrUp {
-				anchorForPop = shouldOverlap ? self.containerView.trailingAnchor : self.layoutGuide.trailingAnchor
-				centerXAnchor = self.shouldPush ? self.layoutGuide.trailingAnchor : anchorForPop
-			} else {
-				anchorForPop = shouldOverlap ? self.containerView.leadingAnchor : self.layoutGuide.leadingAnchor
-				centerXAnchor = self.shouldPush ? self.layoutGuide.leadingAnchor : anchorForPop
-			}
-			constraint = self.toView.centerXAnchor.constraint(equalTo: centerXAnchor)
-		case .up, .down:
-			let (anchorForPop, centerYAnchor): (NSLayoutYAxisAnchor, NSLayoutYAxisAnchor)
-			if self.direction.isLeftOrUp {
-				anchorForPop = shouldOverlap ? self.containerView.centerYAnchor : self.layoutGuide.bottomAnchor
-				centerYAnchor = self.shouldPush ? self.layoutGuide.bottomAnchor : anchorForPop
-			} else {
-				anchorForPop = shouldOverlap ? self.containerView.centerYAnchor : self.layoutGuide.topAnchor
-				centerYAnchor = self.shouldPush ? self.layoutGuide.topAnchor : anchorForPop
-			}
-			constraint = self.toView.centerYAnchor.constraint(equalTo: centerYAnchor)
-		}
-		constraint.isActive = true
-		self.constraintToDeactivate = constraint
-		//
-		self.overlayView.alpha = self.shouldPush ? 0 : 1
-		// Force update
-		self.containerView.layoutIfNeeded()
-	}
-
-	///
-	private func postTransitionState() -> () -> Void {
-		//
-		let shouldOverlap = self.style == .overlap
-		//
-		let constraint: NSLayoutConstraint
-		switch self.direction {
-		case .left, .right:
-			let (anchorForPush, centerXAnchor): (NSLayoutXAxisAnchor, NSLayoutXAxisAnchor)
-			if self.direction.isLeftOrUp {
-				anchorForPush = shouldOverlap ? self.containerView.leadingAnchor : self.layoutGuide.leadingAnchor
-				centerXAnchor = self.shouldPush ? anchorForPush : self.layoutGuide.leadingAnchor
-			} else {
-				anchorForPush = shouldOverlap ? self.containerView.trailingAnchor : self.layoutGuide.trailingAnchor
-				centerXAnchor = self.shouldPush ? anchorForPush : self.layoutGuide.trailingAnchor
-			}
-			constraint = self.fromView.centerXAnchor.constraint(equalTo: centerXAnchor)
-		case .up, .down:
-			let (anchorForPush, centerYAnchor): (NSLayoutYAxisAnchor, NSLayoutYAxisAnchor)
-			if self.direction.isLeftOrUp {
-				anchorForPush = shouldOverlap ? self.containerView.centerYAnchor : self.layoutGuide.topAnchor
-				centerYAnchor = self.shouldPush ? anchorForPush : self.layoutGuide.topAnchor
-			} else {
-				anchorForPush = shouldOverlap ? self.containerView.centerYAnchor : self.layoutGuide.bottomAnchor
-				centerYAnchor = self.shouldPush ? anchorForPush : self.layoutGuide.bottomAnchor
-			}
-			constraint = self.fromView.centerYAnchor.constraint(equalTo: centerYAnchor)
-		}
-		constraint.isActive = true
-		// First deactivate the constraint for the toView, so that the animation can be generated.
-		self.deactivateAndRemoveSavedConstraint()
-		// Now safe the constraint for the fromView, which should be deactivated on completion.
-		self.constraintToDeactivate = constraint
-		// Disallow touches on the toView while pop transition is executing
-		self.shouldPop.whenTrue(execute: self.toView.isUserInteractionEnabled = false)
-		return {
-			self.containerView.layoutIfNeeded()
-			self.overlayView.alpha = self.shouldPush ? 1 : 0
-			self.optionalAnimation?(self.context)
-		}
-	}
-
-	///
-	private func completeTransition(at position: UIViewAnimatingPosition) {
-		UIView.performWithoutAnimation {
-			self.deactivateAndRemoveSavedConstraint()
-			self.overlayView.removeFromSuperview()
-			self.containerView.removeLayoutGuide(self.layoutGuide)
-			//
-			self.shouldPop.whenTrue(execute: self.toView.isUserInteractionEnabled = true)
-			//
-			let containerViewController = self.transition.containerViewController
-			let action: (UIPanGestureRecognizer) -> Void = { [weak containerViewController] in
-				if $0.state == .began { containerViewController?.pop(option: .interactive) }
-			}
-			//
-			switch position {
-			case .start:
-				if self.shouldPop {
-					self.gestureInView(forKey: .from)?.action = action
-				} else if self.shouldPush, let gesture = self.gestureInView(forKey: .to) {
-					self.toView.removeGestureRecognizer(gesture)
-				}
-				self.toView.removeFromSuperview()
-				self.transition.complete(at: .start)
-			case .end:
-				if self.shouldPush && self.context.isInteractive {
-					self.gestureInView(forKey: .to)?.action = action
-				} else if self.shouldPop, let gesture = self.gestureInView(forKey: .from) {
-					self.fromView.removeGestureRecognizer(gesture)
-				}
-				self.fromView.removeFromSuperview()
-				self.optionalCompletion?(self.context)
-				self.transition.complete(at: .end)
-			case .current:
-				fatalError("Transition should not stop somewhere in between")
-			}
-		}
-	}
-
-	///
-	private func gestureInView(forKey key: Transition.Context.Key) -> PanGestureRecognizer? {
-		return self.context.view(forKey: key)
-		                   .gestureRecognizers?
-		                   .flatMap { $0 as? PanGestureRecognizer }
-		                   .first
-	}
-
 	///
 	public func animate() {
 		//
-		UIView.performWithoutAnimation(self.preTransitionState)
+		UIView.performWithoutAnimation(preTransitionState)
 		//
-		let animation = self.postTransitionState()
+		let animation = postTransitionState()
 		//
-		if self.context.isAnimated {
-			self.propertyAnimator.addAnimations(animation)
-			self.propertyAnimator.addCompletion(self.completeTransition)
-			self.propertyAnimator.startAnimation()
+		if context.isAnimated {
+			propertyAnimator.addAnimations(animation)
+			propertyAnimator.addCompletion(completeTransition)
+			propertyAnimator.startAnimation()
 			//
-			guard self.context.isInteractive else { return }
+			guard context.isInteractive else { return }
 			let action: (UIPanGestureRecognizer) -> Void = { [weak self] in
 				guard let animator = self else { return }
 				let signValue: CGFloat = animator.direction.isLeftOrUp ? -1 : 1
@@ -327,20 +143,219 @@ extension DefaultAnimator {
 				}
 			}
 			// If there was an interactive push, then it is assumed that the fromView will have
-			// a gesture recognizer already attatched to it. Otherwise the push was animated or 
+			// a gesture recognizer already attatched to it. Otherwise the push was animated or
 			// immediate, which means we have to attatch a new gesture to fromView to make the
 			// pop transition interruptible.
-			// 
+			//
 			// On the other hand the interactive push will attatch a gesture to the toView.
-			if self.shouldPop, let gesture = self.gestureInView(forKey: .from) {
+			if shouldPop, let gesture = gestureInView(forKey: .from) {
 				gesture.action = action
 			} else {
-				let view = self.shouldPop ? self.fromView : self.toView
+				let view = shouldPop ? fromView : toView
 				view.addGestureRecognizer(PanGestureRecognizer(with: action))
 			}
 		} else {
 			UIView.performWithoutAnimation(animation)
-			self.completeTransition(at: .end)
+			completeTransition(at: .end)
 		}
+	}
+}
+
+extension DefaultAnimator {
+	///
+	private func deactivateAndRemoveSavedConstraint() {
+		if let constraint = constraintToDeactivate {
+			NSLayoutConstraint.deactivate([constraint])
+			constraintToDeactivate = nil
+		}
+	}
+
+	///
+	private func setupLayoutGuide() {
+		containerView.addLayoutGuide(layoutGuide)
+		let constraints = [
+			layoutGuide.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 2),
+			layoutGuide.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 2),
+			layoutGuide.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+			layoutGuide.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+		]
+		NSLayoutConstraint.activate(constraints)
+	}
+
+	///
+	private func setupViews() {
+		//
+		views.forEach {
+			$0.translatesAutoresizingMaskIntoConstraints = false
+			containerView.addSubview($0)
+
+			var constraints: [NSLayoutConstraint] = [
+				$0.widthAnchor.constraint(equalTo: containerView.widthAnchor),
+				$0.heightAnchor.constraint(equalTo: containerView.heightAnchor)
+			]
+
+			let lowerPriorityConstraints: [NSLayoutConstraint] = [
+				$0.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+				$0.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+				$0.topAnchor.constraint(equalTo: containerView.topAnchor),
+				$0.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+				$0.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+				$0.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+			]
+			lowerPriorityConstraints.forEach {
+				// Lower the priority of these constraints, so we don't have to remove them.
+				// Other constraints with higher priorty will take over them when needed.
+				$0.priority = UILayoutPriority.defaultHigh
+				constraints.append($0)
+			}
+			NSLayoutConstraint.activate(constraints)
+		}
+		// Remove the overlay view from the slide transition
+		(style == .slide).whenTrue(execute: overlayView.removeFromSuperview)
+	}
+
+	///
+	private func preTransitionState() {
+		//
+		setupLayoutGuide()
+		setupViews()
+		//
+		let shouldOverlap = style == .overlap
+		//
+		let constraint: NSLayoutConstraint
+		switch direction {
+		case .left, .right:
+			let (anchorForPop, centerXAnchor): (NSLayoutXAxisAnchor, NSLayoutXAxisAnchor)
+			if direction.isLeftOrUp {
+				anchorForPop = shouldOverlap ? containerView.trailingAnchor : layoutGuide.trailingAnchor
+				centerXAnchor = shouldPush ? layoutGuide.trailingAnchor : anchorForPop
+			} else {
+				anchorForPop = shouldOverlap ? containerView.leadingAnchor : layoutGuide.leadingAnchor
+				centerXAnchor = shouldPush ? layoutGuide.leadingAnchor : anchorForPop
+			}
+			constraint = toView.centerXAnchor.constraint(equalTo: centerXAnchor)
+		case .up, .down:
+			let (anchorForPop, centerYAnchor): (NSLayoutYAxisAnchor, NSLayoutYAxisAnchor)
+			if direction.isLeftOrUp {
+				anchorForPop = shouldOverlap ? containerView.centerYAnchor : layoutGuide.bottomAnchor
+				centerYAnchor = shouldPush ? layoutGuide.bottomAnchor : anchorForPop
+			} else {
+				anchorForPop = shouldOverlap ? containerView.centerYAnchor : layoutGuide.topAnchor
+				centerYAnchor = shouldPush ? layoutGuide.topAnchor : anchorForPop
+			}
+			constraint = toView.centerYAnchor.constraint(equalTo: centerYAnchor)
+		}
+		constraint.isActive = true
+		constraintToDeactivate = constraint
+		//
+		overlayView.alpha = shouldPush ? 0 : 1
+		// Force update
+		containerView.layoutIfNeeded()
+	}
+
+	///
+	private func postTransitionState() -> () -> Void {
+		//
+		let shouldOverlap = style == .overlap
+		//
+		let constraint: NSLayoutConstraint
+		switch direction {
+		case .left, .right:
+			let (anchorForPush, centerXAnchor): (NSLayoutXAxisAnchor, NSLayoutXAxisAnchor)
+			if direction.isLeftOrUp {
+				anchorForPush = shouldOverlap ? containerView.leadingAnchor : layoutGuide.leadingAnchor
+				centerXAnchor = shouldPush ? anchorForPush : layoutGuide.leadingAnchor
+			} else {
+				anchorForPush = shouldOverlap ? containerView.trailingAnchor : layoutGuide.trailingAnchor
+				centerXAnchor = shouldPush ? anchorForPush : layoutGuide.trailingAnchor
+			}
+			constraint = fromView.centerXAnchor.constraint(equalTo: centerXAnchor)
+		case .up, .down:
+			let (anchorForPush, centerYAnchor): (NSLayoutYAxisAnchor, NSLayoutYAxisAnchor)
+			if direction.isLeftOrUp {
+				anchorForPush = shouldOverlap ? containerView.centerYAnchor : layoutGuide.topAnchor
+				centerYAnchor = shouldPush ? anchorForPush : layoutGuide.topAnchor
+			} else {
+				anchorForPush = shouldOverlap ? containerView.centerYAnchor : layoutGuide.bottomAnchor
+				centerYAnchor = shouldPush ? anchorForPush : layoutGuide.bottomAnchor
+			}
+			constraint = fromView.centerYAnchor.constraint(equalTo: centerYAnchor)
+		}
+		constraint.isActive = true
+		// First deactivate the constraint for the toView, so that the animation can be generated.
+		deactivateAndRemoveSavedConstraint()
+		// Now safe the constraint for the fromView, which should be deactivated on completion.
+		constraintToDeactivate = constraint
+		// Disallow touches on the toView while pop transition is executing
+		shouldPop.whenTrue(execute: toView.isUserInteractionEnabled = false)
+		return {
+			self.containerView.layoutIfNeeded()
+			self.overlayView.alpha = self.shouldPush ? 1 : 0
+			self.additionalAnimation?(self.context)
+		}
+	}
+
+	///
+	private func completeTransition(at position: UIViewAnimatingPosition) {
+		UIView.performWithoutAnimation {
+			deactivateAndRemoveSavedConstraint()
+			overlayView.removeFromSuperview()
+			containerView.removeLayoutGuide(layoutGuide)
+			//
+			shouldPop.whenTrue(execute: toView.isUserInteractionEnabled = true)
+			//
+			let containerViewController = transition.containerViewController
+			let action: (UIPanGestureRecognizer) -> Void = { [weak containerViewController] in
+				if $0.state == .began { containerViewController?.pop(option: .interactive) }
+			}
+			//
+			switch position {
+			case .start:
+				if shouldPop {
+					gestureInView(forKey: .from)?.action = action
+				} else if shouldPush, let gesture = gestureInView(forKey: .to) {
+					toView.removeGestureRecognizer(gesture)
+				}
+				toView.removeFromSuperview()
+				transition.complete(at: .start)
+			case .end:
+				if shouldPush && context.isInteractive {
+					gestureInView(forKey: .to)?.action = action
+				} else if shouldPop, let gesture = gestureInView(forKey: .from) {
+					fromView.removeGestureRecognizer(gesture)
+				}
+				fromView.removeFromSuperview()
+				additionalCompletion?(context)
+				transition.complete(at: .end)
+			case .current:
+				fatalError("Transition should not stop somewhere in between")
+			}
+		}
+	}
+
+	///
+	private func gestureInView(forKey key: Transition.Context.Key) -> PanGestureRecognizer? {
+		return context.view(forKey: key).gestureRecognizers?.flatMap { $0 as? PanGestureRecognizer }.first
+	}
+}
+
+extension DefaultAnimator {
+	///
+	public enum Direction {
+		case left, right, up, down
+		
+		//==========-----------------------------==========//
+		//=====----- Private/Internal properties -----=====//
+		//==========-----------------------------==========//
+		
+		///
+		var isLeftOrUp: Bool {
+			return self == .left || self == .up
+		}
+	}
+	
+	///
+	public enum Style {
+		case overlap, slide
 	}
 }

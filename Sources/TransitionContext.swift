@@ -9,24 +9,23 @@
 import UIKit
 
 extension Transition {
-
 	///
 	public struct Context {
+		
+		//==========-----------------------------==========//
+		//=====----- Private/Internal properties -----=====//
+		//==========-----------------------------==========//
 
 		///
-		public enum Key { case from, to }
-
-		///
-		public enum Kind { case push, pop }
-
-		// internal properties
-		///
-		let fromViewController: UIViewController
+		private let fromViewController: UIViewController
 		
 		///
-		let toViewController: UIViewController
+		private let toViewController: UIViewController
+		
+		//==========------------------------==========//
+		//=====----- Open/Public properties -----=====//
+		//==========------------------------==========//
 
-		// public properties
 		///
 		public let kind: Kind
 
@@ -38,6 +37,10 @@ extension Transition {
 
 		///
 		public let isInteractive: Bool
+		
+		//==========-------------==========//
+		//=====----- Initializer -----=====//
+		//==========-------------==========//
 
 		///
 		init(kind: Kind,
@@ -53,20 +56,30 @@ extension Transition {
 			self.isAnimated = option.isAnimated
 			self.isInteractive = option.isInteractive
 		}
+	}
+}
 
-		///
-		public func viewController(forKey key: Key) -> UIViewController {
-			switch key {
-			case .from:
-				return self.fromViewController
-			case .to:
-				return self.toViewController
-			}
-		}
-
-		///
-		public func view(forKey key: Key) -> UIView {
-			return self.viewController(forKey: key).view
+extension Transition.Context {
+	///
+	public func viewController(forKey key: Key) -> UIViewController {
+		switch key {
+		case .from:
+			return fromViewController
+		case .to:
+			return toViewController
 		}
 	}
+	
+	///
+	public func view(forKey key: Key) -> UIView {
+		return viewController(forKey: key).view
+	}
+}
+
+extension Transition.Context {
+	///
+	public enum Key { case from, to }
+	
+	///
+	public enum Kind { case push, pop }
 }

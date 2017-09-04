@@ -9,27 +9,36 @@
 import UIKit
 
 extension ContainerViewController {
-
 	///
 	public struct Operation {
-
-		///
-		public enum Kind {
-			case push(UIViewController)
-			case pop(UIViewController)
-			case set([UIViewController])
-		}
-
+		
+		//==========------------------------==========//
+		//=====----- Open/Public properties -----=====//
+		//==========------------------------==========//
+		
 		///
 		public let kind: Kind
 
 		///
 		public let isAnimated: Bool
+		
+		//==========-------------==========//
+		//=====----- Initializer -----=====//
+		//==========-------------==========//
 
 		///
 		init(kind: Kind, isAnimated: Bool) {
 			self.kind = kind
 			self.isAnimated = isAnimated
 		}
+	}
+}
+
+extension ContainerViewController.Operation {
+	///
+	public enum Kind {
+		case push(UIViewController)
+		case pop(UIViewController)
+		case set([UIViewController])
 	}
 }

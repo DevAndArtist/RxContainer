@@ -10,39 +10,55 @@ import UIKit
 
 public final class Transition {
 
-	public enum CompletionPosition {
-		case start, end
-	}
-
-	var transitionCompletion: ( /* @escaping */ (CompletionPosition) -> Void)?
-
+	//==========-----------------------------==========//
+	//=====----- Private/Internal properties -----=====//
+	//==========-----------------------------==========//
+	
 	///
-	public private(set) var animation: ( /* @escaping */ (Context) -> Void)?
-
-	///
-	public private(set) var completion: ( /* @escaping */ (Context) -> Void)?
+	var transitionCompletion: ((CompletionPosition) -> Void)?
+	
+	//==========------------------------==========//
+	//=====----- Open/Public properties -----=====//
+	//==========------------------------==========//
 
 	///
 	public let context: Context
 
 	///
 	public let containerViewController: ContainerViewController
+	
+	///
+	public private(set) var additionalAnimation: ((Context) -> Void)?
+	
+	///
+	public private(set) var additionalCompletion: ((Context) -> Void)?
+	
+	//==========-------------==========//
+	//=====----- Initializer -----=====//
+	//==========-------------==========//
 
 	///
 	init(with context: Context, on containerViewController: ContainerViewController) {
 		self.context = context
 		self.containerViewController = containerViewController
 	}
+}
 
+extension Transition {
 	///
 	public func animateAlongside(_ animation: ( /* @escaping */ (Context) -> Void)?,
 	                             completion: ( /* @escaping */ (Context) -> Void)? = nil) {
-		self.animation = animation
-		self.completion = completion
+		additionalAnimation = animation
+		additionalCompletion = completion
 	}
-
+	
 	///
 	public func complete(at position: CompletionPosition) {
-		self.transitionCompletion?(position)
+		transitionCompletion?(position)
 	}
+}
+
+extension Transition {
+	///
+	public enum CompletionPosition { case start, end }
 }

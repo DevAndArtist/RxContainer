@@ -10,12 +10,20 @@ import UIKit
 
 ///
 final class RotationOperation : Operation {
+	
+	//==========-----------------------------==========//
+	//=====----- Private/Internal properties -----=====//
+	//==========-----------------------------==========//
 
 	///
-	private var _isExecuting = false
+	private var isCurrentlyExecuting = false
 
 	///
-	private var _isFinished = false
+	private var didFinished = false
+	
+	//==========----------------------------==========//
+	//=====----- Overriden super properties -----=====//
+	//==========----------------------------==========//
 
 	///
 	override var isAsynchronous: Bool {
@@ -24,28 +32,30 @@ final class RotationOperation : Operation {
 
 	///
 	override var isExecuting: Bool {
-		get { return _isExecuting }
+		get { return isCurrentlyExecuting }
 		set {
 			let key = "isExecuting"
-			self.willChangeValue(forKey: key)
-			self._isExecuting = newValue
-			self.didChangeValue(forKey: key)
+			willChangeValue(forKey: key)
+			isCurrentlyExecuting = newValue
+			didChangeValue(forKey: key)
 		}
 	}
 
 	///
 	override var isFinished: Bool {
-		get { return _isFinished }
+		get { return didFinished }
 		set {
 			let key = "isFinished"
-			self.willChangeValue(forKey: key)
-			self._isFinished = newValue
-			self.didChangeValue(forKey: key)
+			willChangeValue(forKey: key)
+			didFinished = newValue
+			didChangeValue(forKey: key)
 		}
 	}
+}
 
+extension RotationOperation {
 	///
 	override func start() {
-		self.isExecuting = true
+		isExecuting = true
 	}
 }

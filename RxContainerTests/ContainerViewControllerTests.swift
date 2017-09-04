@@ -16,11 +16,11 @@ class ContainerViewControllerTests : XCTestCase {
     
     override func setUp() {
         super.setUp()
-		self.containerViewController = ContainerViewController()
+		containerViewController = ContainerViewController()
     }
 
 	func testIfStackIsEmptyAtInit() {
-		XCTAssertTrue(self.containerViewController.viewControllers.isEmpty,
+		XCTAssertTrue(containerViewController.viewControllers.isEmpty,
 		              "View controller stack should be empty at init")
 	}
 
@@ -29,10 +29,10 @@ class ContainerViewControllerTests : XCTestCase {
 		let firstVC = UIViewController()
 		let secondVC = UIViewController()
 		// Instantiate a new container view controller and pass both VC's to it's variadic init
-		self.containerViewController = ContainerViewController(firstVC, secondVC)
+		containerViewController = ContainerViewController(firstVC, secondVC)
 		// Test if the stack is equal the following array
 		let viewControllers = [firstVC, secondVC]
-		XCTAssertTrue(self.containerViewController.viewControllers == viewControllers,
+		XCTAssertTrue(containerViewController.viewControllers == viewControllers,
 		              "View controller stack should be equal to the array")
 	}
 
@@ -40,21 +40,21 @@ class ContainerViewControllerTests : XCTestCase {
 		// Create a view controller stack of two VC's
 		let viewControllers = [UIViewController(), UIViewController()]
 		// Set the whole stack on the current container view controller
-		self.containerViewController.setViewControllers(viewControllers)
+		containerViewController.setViewControllers(viewControllers)
 		// Test for equality
-		XCTAssertTrue(self.containerViewController.viewControllers == viewControllers,
+		XCTAssertTrue(containerViewController.viewControllers == viewControllers,
 		              "View controller stack should be equal to the array")
 	}
 
 	func testCanAnimateTransition() {
-		XCTAssertFalse(self.containerViewController.canAnimateTransition(),
+		XCTAssertFalse(containerViewController.canAnimateTransition(),
 		              "View controller stack is empty and therefore there cannot be an animated transition.")
 		// Create a view controller stack of two VC's
 		let viewControllers = [UIViewController(), UIViewController()]
 		// Set the whole stack on the current container view controller
-		self.containerViewController.setViewControllers(viewControllers)
+		containerViewController.setViewControllers(viewControllers)
 		// Test when the stack is not empty
-		XCTAssertTrue(self.containerViewController.canAnimateTransition(),
+		XCTAssertTrue(containerViewController.canAnimateTransition(),
 		              "View controller stack is not empty and therefore an animated transition can occur.")
 	}
 
@@ -69,8 +69,8 @@ class ContainerViewControllerTests : XCTestCase {
 		//
 		var viewControllers1EventOccured = false
 		// Register pseudo delegate before calling the `set` method
-		self.containerViewController
-			.events
+		containerViewController
+			.event
 			.subscribe(onNext: {
 				// Test the event for `viewControllers2`
 				if $0.position == .start {
@@ -88,16 +88,16 @@ class ContainerViewControllerTests : XCTestCase {
 				}
 			})
 			.disposed(by: disposeBag)
-
-		XCTAssertTrue(self.containerViewController.viewControllers.isEmpty)
+		
+		XCTAssertTrue(containerViewController.viewControllers.isEmpty)
 		// Set the whole stack on the current container view controller
-		self.containerViewController.setViewControllers(viewControllers1)
+		containerViewController.setViewControllers(viewControllers1)
 		XCTAssertFalse(viewControllers1EventOccured,
 		               "A wrong set event occured.")
-		XCTAssertTrue(self.containerViewController.viewControllers == viewControllers1,
+		XCTAssertTrue(containerViewController.viewControllers == viewControllers1,
 		              "View controller stack was not set correctly without an event.")
 		// Re-set the whole stack on the current container view controller
-		self.containerViewController.setViewControllers(viewControllers2)
+		containerViewController.setViewControllers(viewControllers2)
 		XCTAssertTrue(endCalledLast,
 		              "View controller stack was not set correctly after the set event.")
 	}
