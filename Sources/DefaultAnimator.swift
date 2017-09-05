@@ -184,17 +184,26 @@ extension DefaultAnimator {
 
 	///
 	private func setupViews() {
+		// Grad the current constraints from `containerView` only once
+		let firstSet = Set(containerView.constraints)
 		//
 		views.forEach {
+			let currentView = $0
+			let secondSet = Set(currentView.constraints)
+			let oldConstraints = Array(firstSet.union(secondSet)).filter {
+				($0.firstItem === currentView && $0.secondItem === containerView) ||
+				($0.secondItem === currentView && $0.firstItem === containerView)
+			}
+			NSLayoutConstraint.deactivate(oldConstraints)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			containerView.addSubview($0)
 
-			var constraints: [NSLayoutConstraint] = [
+			var constraints = [
 				$0.widthAnchor.constraint(equalTo: containerView.widthAnchor),
 				$0.heightAnchor.constraint(equalTo: containerView.heightAnchor)
 			]
 
-			let lowerPriorityConstraints: [NSLayoutConstraint] = [
+			let lowerPriorityConstraints = [
 				$0.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
 				$0.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
 				$0.topAnchor.constraint(equalTo: containerView.topAnchor),
