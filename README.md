@@ -74,9 +74,6 @@ open class ContainerViewController : UIViewController {
     open var topViewController: UIViewController? { get }
 
     ///
-    open var event: RxSwift.Observable<ContainerViewController.Event> { get }
-
-    ///
     open weak var delegate: Delegate?
 
     /// Initializes and returns a newly created container view controller.
@@ -129,6 +126,15 @@ open class ContainerViewController : UIViewController {
 }
 ```
 
+#### Reactive extension:
+
+```swift
+extension Reactive where Base : ContainerViewController {
+	///
+	public var event: Signal<ContainerViewController.Event>
+}
+```
+
 ##### Transition:
 
 ```swift 
@@ -174,6 +180,9 @@ public final class Transition {
     public let context: Context
     
     ///
+    public func animateAlongside(_ animation: ((Context) -> Void)?)
+    
+    ///
     public func animateAlongside(_ animation: ((Context) -> Void)?, 
                                  completion: ((Context) -> Void)? = default)
 
@@ -204,13 +213,28 @@ public final class DefaultAnimator : Animator {
     public enum Direction { case left, right, up, down }
 
     ///
+    public enum Style { case overlap, slide }    
+    
+    ///
+    public enum Order { case normal, reversed }
+
+    ///
     public let transition: Transition
 
     ///
     public let direction: Direction
+    
+    ///
+    public let style: Style
 
     ///
-    public init(for transition: Transition, withDirection direction: Direction)
+    public let order: Order
+
+    ///
+    public init(for transition: Transition,
+	            withDirection direction: Direction,
+	            style: Style = .overlap,
+	            order: Order = .normal)
 
     ///
     public func animate()

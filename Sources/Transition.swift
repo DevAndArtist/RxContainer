@@ -46,6 +46,10 @@ public final class Transition {
 
 extension Transition {
 	///
+	public func animateAlongside(_ animation: ( /* @escaping */ (Context) -> Void)?) {
+		additionalAnimation = animation
+	}
+
 	public func animateAlongside(_ animation: ( /* @escaping */ (Context) -> Void)?,
 	                             completion: ( /* @escaping */ (Context) -> Void)? = nil) {
 		additionalAnimation = animation

@@ -6,6 +6,7 @@
 //  Copyright © 2017 RxSwiftCommunity. All rights reserved.
 //
 
+import RxCocoa
 import RxSwift
 import UIKit
 
@@ -19,7 +20,7 @@ open class ContainerViewController : UIViewController {
 	private var viewControllerStack = [UIViewController]()
 	
 	///
-	private let eventsSubject = PublishSubject<ContainerViewController.Event>()
+	fileprivate let rxEvent = PublishRelay<ContainerViewController.Event>()
 
 	///
 	private let transitionQueue: OperationQueue = {
@@ -60,13 +61,6 @@ open class ContainerViewController : UIViewController {
 	}
 
 	///
-	open var event: Observable<ContainerViewController.Event> {
-		return eventsSubject
-			.asObservable()
-			.observeOn(MainScheduler.instance)
-	}
-
-	///
 	open weak var delegate: Delegate?
 	
 	//==========-------------==========//
@@ -102,11 +96,6 @@ open class ContainerViewController : UIViewController {
 	///
 	public required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
-	}
-
-	deinit {
-		// Complete the subject sequence
-		eventsSubject.onCompleted()
 	}
 }
 
@@ -353,12 +342,12 @@ extension ContainerViewController {
 	private func sendEvents(for operation: Operation, stackManipulation: () -> Void) {
 		// Create and fire a new event
 		var event = Event(operation: operation, position: .start, containerViewController: self)
-		eventsSubject.onNext(event)
+		rxEvent.accept(event)
 		// Alter the stack
 		stackManipulation()
 		// Alter the event position to `.end` before firing a new one
 		event.position = .end
-		eventsSubject.onNext(event)
+		rxEvent.accept(event)
 	}
 
 	///
@@ -386,5 +375,12 @@ extension ContainerViewController {
 	/// view controller stack is empty as is about to be set.
 	func canAnimateTransition() -> Bool {
 		return !viewControllerStack.isEmpty
+	}
+}
+
+extension Reactive where Base : ContainerViewController {
+	///
+	public var event: Signal<ContainerViewController.Event> {
+		return base.rxEvent.asSignal()
 	}
 }

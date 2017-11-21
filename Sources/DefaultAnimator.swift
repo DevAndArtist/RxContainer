@@ -49,7 +49,7 @@ public final class DefaultAnimator : Animator {
  	private lazy var toView = context.view(forKey: .to)
 
 	///
-	private lazy var shouldPush = context.kind == .push
+	private lazy var shouldPush = context.kind == (order == .normal ? .push : .pop)
 
 	///
 	private var shouldPop: Bool { return !shouldPush }
@@ -87,6 +87,9 @@ public final class DefaultAnimator : Animator {
 
 	///
 	public let style: Style
+
+	///
+	public let order: Order
 	
 	//==========-------------==========//
 	//=====----- Initializer -----=====//
@@ -95,10 +98,12 @@ public final class DefaultAnimator : Animator {
 	///
 	public init(for transition: Transition,
 	            withDirection direction: Direction,
-	            style: Style = .overlap) {
+	            style: Style = .overlap,
+	            order: Order = .normal) {
 		self.transition = transition
 		self.direction = direction
 		self.style = style
+		self.order = order
 	}
 }
 
@@ -184,26 +189,17 @@ extension DefaultAnimator {
 
 	///
 	private func setupViews() {
-		// Grad the current constraints from `containerView` only once
-		let firstSet = Set(containerView.constraints)
 		//
 		views.forEach {
-			let currentView = $0
-			let secondSet = Set(currentView.constraints)
-			let oldConstraints = Array(firstSet.union(secondSet)).filter {
-				($0.firstItem === currentView && $0.secondItem === containerView) ||
-				($0.secondItem === currentView && $0.firstItem === containerView)
-			}
-			NSLayoutConstraint.deactivate(oldConstraints)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			containerView.addSubview($0)
 
-			var constraints = [
+			var constraints: [NSLayoutConstraint] = [
 				$0.widthAnchor.constraint(equalTo: containerView.widthAnchor),
 				$0.heightAnchor.constraint(equalTo: containerView.heightAnchor)
 			]
 
-			let lowerPriorityConstraints = [
+			let lowerPriorityConstraints: [NSLayoutConstraint] = [
 				$0.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
 				$0.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
 				$0.topAnchor.constraint(equalTo: containerView.topAnchor),
@@ -214,7 +210,7 @@ extension DefaultAnimator {
 			lowerPriorityConstraints.forEach {
 				// Lower the priority of these constraints, so we don't have to remove them.
 				// Other constraints with higher priorty will take over them when needed.
-				$0.priority = UILayoutPriority.defaultHigh
+				$0.priority = .defaultLow
 				constraints.append($0)
 			}
 			NSLayoutConstraint.activate(constraints)
@@ -366,5 +362,10 @@ extension DefaultAnimator {
 	///
 	public enum Style {
 		case overlap, slide
+	}
+
+	///
+	public enum Order {
+		case normal, reversed
 	}
 }
