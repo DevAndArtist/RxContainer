@@ -201,8 +201,8 @@ open protocol Animator : AnyObject {
     ///
     func animate()
     
-    // Default implementation
-    func transition(completed: Bool) { /* no-op */}
+    // Default implementation (no-op)
+    func transition(completed: Bool)
 }
 ```
 ##### DefaultAnimator:
