@@ -97,9 +97,7 @@ open class ContainerViewController : UIViewController {
 	public required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 	}
-}
 
-extension ContainerViewController {
 	///
 	open override func viewDidLoad() {
 		super.viewDidLoad()
@@ -140,9 +138,7 @@ extension ContainerViewController {
 		// Subclasses should not rotate when a transition is executing
 		return !transitionQueue.operations.contains { ($0 as? TransitionOperation)?.isExecuting ?? false }
 	}
-}
 
-extension ContainerViewController {
 	///
 	open func push(_ viewController: UIViewController,
 	               option: Option = .animated,
