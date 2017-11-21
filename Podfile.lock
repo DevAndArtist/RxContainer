@@ -1,15 +1,19 @@
 PODS:
-  - RxSwift (3.5.0)
-  - SwiftLint (0.19.0)
+  - RxCocoa (4.0.0):
+    - RxSwift (~> 4.0)
+  - RxSwift (4.0.0)
+  - SwiftLint (0.24.0)
 
 DEPENDENCIES:
-  - RxSwift (~> 3.0)
+  - RxCocoa
+  - RxSwift
   - SwiftLint
 
 SPEC CHECKSUMS:
-  RxSwift: 18ee9d78b45edb3b0b7e79916b47a116e6dbc842
-  SwiftLint: 3537a05b34060e78e7510f04fb7537d738247803
+  RxCocoa: d62846ca96495d862fa4c59ea7d87e5031d7340e
+  RxSwift: fd680d75283beb5e2559486f3c0ff852f0d35334
+  SwiftLint: a014c92b4664e8b13f380f8640a51bb1733778ba
 
-PODFILE CHECKSUM: 9e91ec88a77955d4ddd500b7069e35532d4b72f9
+PODFILE CHECKSUM: 7cc5b8362abdc4f514a512b4df30cb9b6bc52f0f
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.3.1

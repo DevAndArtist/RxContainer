@@ -9,13 +9,13 @@
 import UIKit
 
 extension ContainerViewController {
-
 	///
 	public struct Event {
-
-		///
-		public enum Position { case start, end }
-
+		
+		//==========------------------------==========//
+		//=====----- Open/Public properties -----=====//
+		//==========------------------------==========//
+		
 		///
 		public let operation: Operation
 
@@ -24,6 +24,10 @@ extension ContainerViewController {
 
 		///
 		public let containerViewController: ContainerViewController
+		
+		//==========-------------==========//
+		//=====----- Initializer -----=====//
+		//==========-------------==========//
 
 		///
 		init(operation: Operation, position: Position, containerViewController: ContainerViewController) {
@@ -32,4 +36,9 @@ extension ContainerViewController {
 			self.containerViewController = containerViewController
 		}
 	}
+}
+
+extension ContainerViewController.Event {
+	///
+	public enum Position { case start, end }
 }

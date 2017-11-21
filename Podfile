@@ -8,7 +8,8 @@ abstract_target 'project' do
   # don't want to use dynamic frameworks
   use_frameworks!
 
-  pod 'RxSwift', '~> 3.0'
+  pod 'RxSwift'
+  pod 'RxCocoa'
   pod 'SwiftLint', :configurations => ['Debug']
 
   target 'RxContainer' do

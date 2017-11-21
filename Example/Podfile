@@ -8,8 +8,10 @@ target 'RxContainerExample' do
   # don't want to use dynamic frameworks
   use_frameworks!
 
-  pod 'RxSwift', '~> 3.0'
-  pod 'SwiftLint', :configurations => ['Debug']
+  pod 'RxSwift'
+  pod 'RxCocoa'
   pod 'RxContainer', :path => '../'
+  pod 'SwiftLint', :configurations => ['Debug']
+  pod 'Reveal-SDK', :configurations => ['Debug']
 
 end
