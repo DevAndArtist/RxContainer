@@ -2,10 +2,10 @@ PODS:
   - Reveal-SDK (13)
   - RxCocoa (4.1.0):
     - RxSwift (~> 4.0)
-  - RxContainer (0.8.2):
+  - RxContainer (0.8.3):
     - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
-  - RxSwift (4.1.0)
+  - RxSwift (4.1.1)
   - SwiftLint (0.24.1)
 
 DEPENDENCIES:
@@ -22,8 +22,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Reveal-SDK: ccc2b0f8014965ea448b7534a7c2c8da232b75e8
   RxCocoa: cc1fec49cdc8fabe645964de7c51c099a36c2aa8
-  RxContainer: f9ae1d65b62ec09767e81db87e3dba3d2cd50c38
-  RxSwift: 4219941c1244c88002901bd87a69d3aea9ae71f0
+  RxContainer: 7ec2d57c940f318b5967378e53afe4a6a571c556
+  RxSwift: c6e3b1c7b325c7d121cd4327e9d98b7ed746b570
   SwiftLint: 2e4b89feed5909c42c3735bbd6745f4345c4b772
 
 PODFILE CHECKSUM: cae8f3fbc53c5d738adbdd0b806bd898a9263510

@@ -170,6 +170,7 @@ open class ContainerViewController : UIViewController {
     option: Option = .animated,
     with animator: (Transition) -> Animator = RxContainer.animator(for:)
   ) {
+    loadViewIfNeeded()
     //
     guard let fromViewController = topViewController else {
       return performSetAfterInit([viewController])
@@ -214,6 +215,8 @@ open class ContainerViewController : UIViewController {
     //
     guard viewControllerStack.count > 1 else { return nil }
     //
+    loadViewIfNeeded()
+    //
     let endIndex = viewControllerStack.endIndex
     let fromViewController = viewControllerStack[endIndex - 1]
     let toViewController = viewControllerStack[endIndex - 2]
@@ -255,6 +258,8 @@ open class ContainerViewController : UIViewController {
     guard let position = viewControllerStack.index(of: viewController) else {
       fatalError("Cannot pop a view controller that is not on the stack")
     }
+    //
+    loadViewIfNeeded()
     // Get the top view controller from the stack
     let endIndex = viewControllerStack.endIndex
     let fromViewController = viewControllers[endIndex - 1]
@@ -303,6 +308,8 @@ open class ContainerViewController : UIViewController {
   ) -> [UIViewController]? {
     // Return `nil` if there is no root view controller yet
     guard let rootViewController = rootViewController else { return nil }
+    //
+    loadViewIfNeeded()
     // Use the `pop(to:animated)` method to finish the job
     return pop(to: rootViewController, option: option, with: animator)
   }
@@ -313,6 +320,7 @@ open class ContainerViewController : UIViewController {
     option: Option = .animated,
     with animator: (Transition) -> Animator = RxContainer.animator(for:)
   ) {
+    loadViewIfNeeded()
     // Ignore an empty stack
     if viewControllers.isEmpty { return }
     // Create new instances for consistency
@@ -430,6 +438,7 @@ extension ContainerViewController {
     guard let viewController = viewControllers.last else {
       fatalError("New view controller stack cannot be empty.")
     }
+    loadViewIfNeeded()
     // Alter the stack
     viewControllerStack = viewControllers
     //
@@ -441,10 +450,7 @@ extension ContainerViewController {
     containerView.addSubview(subview)
     // Just in case
     UIView.performWithoutAnimation {
-      // We can safely assume that `containerView` will have the same bounds
-      // once layouting is finished, but at this point it's not layouted yet
-      // so we have to use the bounds from `view`
-      subview.frame = view.bounds
+      subview.frame = containerView.bounds
     }
     // Finish without animation or transition
     viewController.didMove(toParentViewController: self)
