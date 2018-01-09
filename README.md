@@ -63,6 +63,9 @@ open class ContainerViewController : UIViewController {
     public enum Option {
         case animated, interactive, immediate
     }
+    
+    ///
+    open var containerView: UIView { get }
 
     ///
     open var viewControllers: [UIViewController]
@@ -99,30 +102,40 @@ open class ContainerViewController : UIViewController {
     required public init?(coder aDecoder: NSCoder)
 
     ///
-    open func push(_ viewController: UIViewController, 
-                   option: Option = .animated, 
-                   with animator: (Transition) -> Animator = RxContainer.animator(for:))
+    open func push(
+		_ viewController: UIViewController, 
+		option: Option = .animated, 
+		with animator: (Transition) -> Animator = RxContainer.animator(for:)
+	)
     
     ///
     @discardableResult
-    open func pop(option: Option = .animated, 
-                  with animator: (Transition) -> Animator = RxContainer.animator(for:)) -> UIViewController?
+    open func pop(
+    	option: Option = .animated, 
+		with animator: (Transition) -> Animator = RxContainer.animator(for:)
+	) -> UIViewController?
     
     ///
     @discardableResult
-    open func pop(to viewController: UIViewController, 
-                  option: Option = .animated,
-                  with animator: (Transition) -> Animator = RxContainer.animator(for:)) -> [UIViewController]?
+    open func pop(
+	    to viewController: UIViewController, 
+	    option: Option = .animated,
+	    with animator: (Transition) -> Animator = RxContainer.animator(for:)
+    ) -> [UIViewController]?
     
     ///
     @discardableResult
-    open func popToRootViewController(option: Option = .animated,
-                                      with animator: (Transition) -> Animator = RxContainer.animator(for:)) -> [UIViewController]?
+    open func popToRootViewController(
+    	option: Option = .animated,
+	    with animator: (Transition) -> Animator = RxContainer.animator(for:)
+    ) -> [UIViewController]?
     
     ///
-    open func setViewControllers(_ viewControllers: [UIViewController], 
-                                 option: Option = .animated,
-                                 with animator: (Transition) -> Animator = RxContainer.animator(for:))
+    open func setViewControllers(
+    	_ viewControllers: [UIViewController], 
+    	option: Option = .animated,
+    	with animator: (Transition) -> Animator = RxContainer.animator(for:)
+    )
 }
 ```
 
@@ -183,8 +196,10 @@ public final class Transition {
     public func animateAlongside(_ animation: ((Context) -> Void)?)
     
     ///
-    public func animateAlongside(_ animation: ((Context) -> Void)?, 
-                                 completion: ((Context) -> Void)? = default)
+    public func animateAlongside(
+    	_ animation: ((Context) -> Void)?, 
+    	completion: ((Context) -> Void)? = default
+    )
 
     ///
     public func complete(at position: CompletionPosition)
@@ -231,10 +246,12 @@ public final class DefaultAnimator : Animator {
     public let order: Order
 
     ///
-    public init(for transition: Transition,
-	            withDirection direction: Direction,
-	            style: Style = .overlap,
-	            order: Order = .normal)
+    public init(
+    	for transition: Transition,
+    	withDirection direction: Direction,
+		style: Style = .overlap,
+	 	order: Order = .normal
+	 )
 
     ///
     public func animate()
