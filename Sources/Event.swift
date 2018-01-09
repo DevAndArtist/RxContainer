@@ -9,36 +9,40 @@
 import UIKit
 
 extension ContainerViewController {
-	///
-	public struct Event {
-		
-		//==========------------------------==========//
-		//=====----- Open/Public properties -----=====//
-		//==========------------------------==========//
-		
-		///
-		public let operation: Operation
+  ///
+  public struct Event {
 
-		///
-		public internal(set) var position: Position
+    //==========------------------------==========//
+    //=====----- Open/Public properties -----=====//
+    //==========------------------------==========//
 
-		///
-		public let containerViewController: ContainerViewController
-		
-		//==========-------------==========//
-		//=====----- Initializer -----=====//
-		//==========-------------==========//
+    ///
+    public let operation: Operation
 
-		///
-		init(operation: Operation, position: Position, containerViewController: ContainerViewController) {
-			self.operation = operation
-			self.position = position
-			self.containerViewController = containerViewController
-		}
-	}
+    ///
+    public internal(set) var position: Position
+
+    ///
+    public let containerViewController: ContainerViewController
+
+    //==========-------------==========//
+    //=====----- Initializer -----=====//
+    //==========-------------==========//
+
+    ///
+    init(
+      operation: Operation,
+      position: Position,
+      containerViewController: ContainerViewController
+    ) {
+      self.operation = operation
+      self.position = position
+      self.containerViewController = containerViewController
+    }
+  }
 }
 
 extension ContainerViewController.Event {
-	///
-	public enum Position { case start, end }
+  ///
+  public enum Position { case start, end }
 }

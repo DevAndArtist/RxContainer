@@ -10,52 +10,52 @@ import UIKit
 
 ///
 final class RotationOperation : Operation {
-	
-	//==========-----------------------------==========//
-	//=====----- Private/Internal properties -----=====//
-	//==========-----------------------------==========//
 
-	///
-	private var isCurrentlyExecuting = false
+  //==========-----------------------------==========//
+  //=====----- Private/Internal properties -----=====//
+  //==========-----------------------------==========//
 
-	///
-	private var didFinished = false
-	
-	//==========----------------------------==========//
-	//=====----- Overriden super properties -----=====//
-	//==========----------------------------==========//
+  ///
+  private var isCurrentlyExecuting = false
 
-	///
-	override var isAsynchronous: Bool {
-		return true
-	}
+  ///
+  private var didFinished = false
 
-	///
-	override var isExecuting: Bool {
-		get { return isCurrentlyExecuting }
-		set {
-			let key = "isExecuting"
-			willChangeValue(forKey: key)
-			isCurrentlyExecuting = newValue
-			didChangeValue(forKey: key)
-		}
-	}
+  //==========----------------------------==========//
+  //=====----- Overriden super properties -----=====//
+  //==========----------------------------==========//
 
-	///
-	override var isFinished: Bool {
-		get { return didFinished }
-		set {
-			let key = "isFinished"
-			willChangeValue(forKey: key)
-			didFinished = newValue
-			didChangeValue(forKey: key)
-		}
-	}
+  ///
+  override var isAsynchronous: Bool {
+    return true
+  }
+
+  ///
+  override var isExecuting: Bool {
+    get { return isCurrentlyExecuting }
+    set {
+      let key = "isExecuting"
+      willChangeValue(forKey: key)
+      isCurrentlyExecuting = newValue
+      didChangeValue(forKey: key)
+    }
+  }
+
+  ///
+  override var isFinished: Bool {
+    get { return didFinished }
+    set {
+      let key = "isFinished"
+      willChangeValue(forKey: key)
+      didFinished = newValue
+      didChangeValue(forKey: key)
+    }
+  }
 }
 
 extension RotationOperation {
-	///
-	override func start() {
-		isExecuting = true
-	}
+  ///
+  override func start() {
+    isExecuting = true
+  }
 }

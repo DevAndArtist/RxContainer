@@ -9,22 +9,22 @@
 import UIKit
 
 extension ContainerViewController {
-	///
-	public enum Option {
-		case animated, interactive, immediate
-		
-		//==========-----------------------------==========//
-		//=====----- Private/Internal properties -----=====//
-		//==========-----------------------------==========//
+  ///
+  public enum Option {
+    case animated, interactive, immediate
 
-		///
-		var isInteractive: Bool {
-			return self == .interactive
-		}
-		
-		///
-		var isAnimated: Bool {
-			return self == .animated || isInteractive
-		}
-	}
+    //==========-----------------------------==========//
+    //=====----- Private/Internal properties -----=====//
+    //==========-----------------------------==========//
+
+    ///
+    var isInteractive: Bool {
+      return self == .interactive
+    }
+
+    ///
+    var isAnimated: Bool {
+      return self == .animated || isInteractive
+    }
+  }
 }

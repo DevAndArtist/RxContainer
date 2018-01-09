@@ -9,30 +9,33 @@
 import UIKit
 
 final class PanGestureRecognizer : UIPanGestureRecognizer {
-	
-	//==========-----------------------------==========//
-	//=====----- Private/Internal properties -----=====//
-	//==========-----------------------------==========//
 
-	///
-	var action: ((UIPanGestureRecognizer) -> Void)?
-	
-	//==========-------------==========//
-	//=====----- Initializer -----=====//
-	//==========-------------==========//
+  //==========-----------------------------==========//
+  //=====----- Private/Internal properties -----=====//
+  //==========-----------------------------==========//
 
-	///
-	init(with action: ( /* @escaping */ (UIPanGestureRecognizer) -> Void)? = nil) {
-		self.action = action
-		super.init(target: nil, action: nil)
-		maximumNumberOfTouches = 1
-		addTarget(self, action: #selector(handlePan(_:)))
-	}
+  ///
+  var action: ((UIPanGestureRecognizer) -> Void)?
+
+  //==========-------------==========//
+  //=====----- Initializer -----=====//
+  //==========-------------==========//
+
+  ///
+  init(
+    with action: ( /* @escaping */ (UIPanGestureRecognizer) -> Void)? = nil
+  ) {
+    self.action = action
+    super.init(target: nil, action: nil)
+    maximumNumberOfTouches = 1
+    addTarget(self, action: #selector(handlePan(_:)))
+  }
 }
 
 extension PanGestureRecognizer {
-	///
-	@objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
-		action?(gesture)
-	}
+  ///
+  @objc
+  private func handlePan(_ gesture: UIPanGestureRecognizer) {
+    action?(gesture)
+  }
 }

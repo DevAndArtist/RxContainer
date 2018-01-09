@@ -3,14 +3,18 @@ opt_in_rules:
   - closure_spacing
   - fatal_error_message
   - force_unwrapping
-  - implicitly_unwrapped_optional
   - sorted_imports
+  - operator_whitespace
   - operator_usage_whitespace
   - redundant_nil_coalescing
   - switch_case_on_newline
   - attributes
   - no_extension_access_modifier
-  - implicit_return
+  - explicit_init
+  - vertical_parameter_alignment_on_call
+  - overridden_super_call
+  - shorthand_operator
+  - for_where
 
 # rule identifiers to exclude from running
 disabled_rules: 
@@ -18,24 +22,52 @@ disabled_rules:
   - closure_parameter_position
   - opening_brace
   - file_length
+  - private_over_fileprivate
 
 # paths to ignore during linting
 excluded: 
   - Pods
   - Example/Pods
 
-nesting:
-  type_level: 3
-
 identifier_name:
+  # excluded via string array
   excluded: 
     - to
     - up
+
+line_length:
+  error: 80
+  warning: 80
+ 
+large_tuple: 4
+
+cyclomatic_complexity: 20
+
+nesting:
+  type_level: 2
 
 trailing_whitespace:
   ignores_empty_lines: true
   ignores_comments: true
 
+function_body_length:
+  warning: 60
+  error: 80
+
 attributes:
-  always_on_same_line: ["@IBAction", "@IBOutlet", "@IBInspectable", "@objc"]
-  always_on_line_above: ["@IBDesignable", "@UIApplicationMain", "@discardableResult"]
+  always_on_same_line: ["@IBAction", "@IBOutlet", "@IBInspectable"]
+  always_on_line_above: ["@IBDesignable", "@UIApplicationMain", "@discardableResult", "@objc"]
+
+custom_rules:
+
+  disallow_tabs:
+    name: "Tabs"
+    regex: "(\\t+)"
+    message: "Use whitespaces instead."
+    severity: error
+
+  whiespace_lines:
+    name: "Whitespace lines"
+    regex: "^\\s+\\n"
+    message: "Remove lines out of whitespaces."
+    severity: error

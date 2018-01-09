@@ -10,59 +10,65 @@ import UIKit
 
 public final class Transition {
 
-	//==========-----------------------------==========//
-	//=====----- Private/Internal properties -----=====//
-	//==========-----------------------------==========//
-	
-	///
-	var transitionCompletion: ((CompletionPosition) -> Void)?
-	
-	//==========------------------------==========//
-	//=====----- Open/Public properties -----=====//
-	//==========------------------------==========//
+  //==========-----------------------------==========//
+  //=====----- Private/Internal properties -----=====//
+  //==========-----------------------------==========//
 
-	///
-	public let context: Context
+  ///
+  var transitionCompletion: ((CompletionPosition) -> Void)?
 
-	///
-	public let containerViewController: ContainerViewController
-	
-	///
-	public private(set) var additionalAnimation: ((Context) -> Void)?
-	
-	///
-	public private(set) var additionalCompletion: ((Context) -> Void)?
-	
-	//==========-------------==========//
-	//=====----- Initializer -----=====//
-	//==========-------------==========//
+  //==========------------------------==========//
+  //=====----- Open/Public properties -----=====//
+  //==========------------------------==========//
 
-	///
-	init(with context: Context, on containerViewController: ContainerViewController) {
-		self.context = context
-		self.containerViewController = containerViewController
-	}
+  ///
+  public let context: Context
+
+  ///
+  public let containerViewController: ContainerViewController
+
+  ///
+  public private(set) var additionalAnimation: ((Context) -> Void)?
+
+  ///
+  public private(set) var additionalCompletion: ((Context) -> Void)?
+
+  //==========-------------==========//
+  //=====----- Initializer -----=====//
+  //==========-------------==========//
+
+  ///
+  init(
+    with context: Context, on containerViewController: ContainerViewController
+  ) {
+    self.context = context
+    self.containerViewController = containerViewController
+  }
 }
 
 extension Transition {
-	///
-	public func animateAlongside(_ animation: ( /* @escaping */ (Context) -> Void)?) {
-		additionalAnimation = animation
-	}
+  ///
+  public func animateAlongside(
+    _ animation: ( /* @escaping */ (Context) -> Void)?
+  ) {
+    additionalAnimation = animation
+  }
 
-	public func animateAlongside(_ animation: ( /* @escaping */ (Context) -> Void)?,
-	                             completion: ( /* @escaping */ (Context) -> Void)? = nil) {
-		additionalAnimation = animation
-		additionalCompletion = completion
-	}
-	
-	///
-	public func complete(at position: CompletionPosition) {
-		transitionCompletion?(position)
-	}
+  public func animateAlongside(
+    _ animation: ( /* @escaping */ (Context) -> Void)?,
+    completion: ( /* @escaping */ (Context) -> Void)? = nil
+  ) {
+    additionalAnimation = animation
+    additionalCompletion = completion
+  }
+
+  ///
+  public func complete(at position: CompletionPosition) {
+    transitionCompletion?(position)
+  }
 }
 
 extension Transition {
-	///
-	public enum CompletionPosition { case start, end }
+  ///
+  public enum CompletionPosition { case start, end }
 }

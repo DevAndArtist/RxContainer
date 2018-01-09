@@ -8,15 +8,16 @@
 
 import UIKit
 
-/// WARNING: Do not use this protocol directly, instead use `ContainerViewController.Delegate`.
-///   - Once protocol nesting is supported this protocol will be nested as `Animator` inside
-///     `ContainerViewController`.
+/// WARNING: Do not use this protocol directly, instead use
+/// `ContainerViewController.Delegate`.
+///   - Once protocol nesting is supported this protocol will be nested
+///     as `Animator` inside `ContainerViewController`.
 public protocol _Delegate : AnyObject {
-	///
-	func animator(for transition: Transition) -> Animator?
+  ///
+  func animator(for transition: Transition) -> Animator?
 }
 
 extension ContainerViewController {
-	///
-	public typealias Delegate = _Delegate
+  ///
+  public typealias Delegate = _Delegate
 }
