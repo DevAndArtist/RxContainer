@@ -440,7 +440,12 @@ extension ContainerViewController {
     subview.translatesAutoresizingMaskIntoConstraints = true
     containerView.addSubview(subview)
     // Just in case
-    UIView.performWithoutAnimation { subview.frame = containerView.bounds }
+    UIView.performWithoutAnimation {
+      // We can safely assume that `containerView` will have the same bounds
+      // once layouting is finished, but at this point it's not layouted yet
+      // so we have to use the bounds from `view`
+      subview.frame = view.bounds
+    }
     // Finish without animation or transition
     viewController.didMove(toParentViewController: self)
   }
