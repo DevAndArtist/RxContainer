@@ -103,38 +103,38 @@ open class ContainerViewController : UIViewController {
 
     ///
     open func push(
-		_ viewController: UIViewController, 
-		option: Option = .animated, 
-		with animator: (Transition) -> Animator = RxContainer.animator(for:)
-	)
+        _ viewController: UIViewController, 
+        option: Option = .animated, 
+        with animator: (Transition) -> Animator = RxContainer.animator(for:)
+    )
     
     ///
     @discardableResult
     open func pop(
-    	option: Option = .animated, 
-		with animator: (Transition) -> Animator = RxContainer.animator(for:)
-	) -> UIViewController?
+        option: Option = .animated, 
+        with animator: (Transition) -> Animator = RxContainer.animator(for:)
+    ) -> UIViewController?
     
     ///
     @discardableResult
     open func pop(
-	    to viewController: UIViewController, 
-	    option: Option = .animated,
-	    with animator: (Transition) -> Animator = RxContainer.animator(for:)
+        to viewController: UIViewController, 
+        option: Option = .animated,
+        with animator: (Transition) -> Animator = RxContainer.animator(for:)
     ) -> [UIViewController]?
     
     ///
     @discardableResult
     open func popToRootViewController(
-    	option: Option = .animated,
-	    with animator: (Transition) -> Animator = RxContainer.animator(for:)
+        option: Option = .animated,
+        with animator: (Transition) -> Animator = RxContainer.animator(for:)
     ) -> [UIViewController]?
     
     ///
     open func setViewControllers(
-    	_ viewControllers: [UIViewController], 
-    	option: Option = .animated,
-    	with animator: (Transition) -> Animator = RxContainer.animator(for:)
+        _ viewControllers: [UIViewController], 
+        option: Option = .animated,
+        with animator: (Transition) -> Animator = RxContainer.animator(for:)
     )
 }
 ```
@@ -197,8 +197,8 @@ public final class Transition {
     
     ///
     public func animateAlongside(
-    	_ animation: ((Context) -> Void)?, 
-    	completion: ((Context) -> Void)? = default
+        _ animation: ((Context) -> Void)?, 
+        completion: ((Context) -> Void)? = default
     )
 
     ///
@@ -247,11 +247,11 @@ public final class DefaultAnimator : Animator {
 
     ///
     public init(
-    	for transition: Transition,
-    	withDirection direction: Direction,
-		style: Style = .overlap,
-	 	order: Order = .normal
-	 )
+        for transition: Transition,
+        withDirection direction: Direction,
+        style: Style = .overlap,
+        order: Order = .normal
+    )
 
     ///
     public func animate()
