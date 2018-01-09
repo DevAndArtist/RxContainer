@@ -35,6 +35,9 @@ open class ContainerViewController : UIViewController {
 	//==========------------------------==========//
 	//=====----- Open/Public properties -----=====//
 	//==========------------------------==========//
+
+  ///
+  public let containerView = UIView()
 	
 	/// The view controllers currently on the view controller stack.
 	///
@@ -103,6 +106,17 @@ open class ContainerViewController : UIViewController {
 		super.viewDidLoad()
 		// Mask the view
 		view.layer.masksToBounds = true
+    //
+    containerView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(containerView)
+    let constraints = [
+      containerView.topAnchor.constraint(equalTo: view.topAnchor),
+      containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+      containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+    ]
+    NSLayoutConstraint.activate(constraints)
+    view.layoutIfNeeded()
 	}
 	
 	///
@@ -326,7 +340,7 @@ extension ContainerViewController {
 	                        with option: Option) -> Transition {
 		// Instantiate a new context
 		let context = Transition.Context(kind: kind,
-		                                 containerView: view,
+		                                 containerView: containerView,
 		                                 fromViewController: fromViewController,
 		                                 toViewController: toViewController,
 		                                 option: option)
@@ -360,9 +374,9 @@ extension ContainerViewController {
 		let subview: UIView = viewController.view
 		subview.autoresizingMask = .complete
 		subview.translatesAutoresizingMaskIntoConstraints = true
-		view.addSubview(subview)
+		containerView.addSubview(subview)
 		// Just in case
-		UIView.performWithoutAnimation { subview.frame = view.bounds }
+		UIView.performWithoutAnimation { subview.frame = containerView.bounds }
 		// Finish without animation or transition
 		viewController.didMove(toParentViewController: self)
 	}
