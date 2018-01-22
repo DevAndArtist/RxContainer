@@ -26,6 +26,7 @@
 		C6ED839F1EEFFEDB009D5C6F /* DefaultAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6ED839E1EEFFEDB009D5C6F /* DefaultAnimator.swift */; };
 		C6ED83A11EF017B7009D5C6F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6ED83A01EF017B7009D5C6F /* Extensions.swift */; };
 		C6F7F0E81EF85069003E8071 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F7F0E71EF85069003E8071 /* Option.swift */; };
+		CABC74722015B52B0024F255 /* NonAnimatingAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABC74712015B52B0024F255 /* NonAnimatingAnimator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		C6ED839E1EEFFEDB009D5C6F /* DefaultAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAnimator.swift; sourceTree = "<group>"; };
 		C6ED83A01EF017B7009D5C6F /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		C6F7F0E71EF85069003E8071 /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
+		CABC74712015B52B0024F255 /* NonAnimatingAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonAnimatingAnimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 				C6C392761EE47C74008F743A /* Transition.swift */,
 				C6D255291EEFF87900A0BECF /* TransitionContext.swift */,
 				C6AAE1C41EF06B730076A934 /* TransitionOperation.swift */,
+				CABC74712015B52B0024F255 /* NonAnimatingAnimator.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -403,6 +406,7 @@
 				C6C392731EE47BF8008F743A /* Operation.swift in Sources */,
 				C6C392751EE47C6A008F743A /* Event.swift in Sources */,
 				C6D2552A1EEFF87900A0BECF /* TransitionContext.swift in Sources */,
+				CABC74722015B52B0024F255 /* NonAnimatingAnimator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

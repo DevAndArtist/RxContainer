@@ -86,5 +86,12 @@ class ViewController : UIViewController {
       self.containerViewController.push(secondVC, option: .immediate)
       self.containerViewController.push(thirdVC, option: .interactive)
     }
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 42) {
+      self.containerViewController
+        .setViewControllers([firstVC], option: .immediate)
+      self.containerViewController.setViewControllers([firstVC])
+      self.containerViewController.pop(to: firstVC)
+    }
   }
 }

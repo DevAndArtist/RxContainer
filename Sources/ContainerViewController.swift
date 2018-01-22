@@ -325,6 +325,9 @@ open class ContainerViewController : UIViewController {
     if viewControllers.isEmpty { return }
     // Create new instances for consistency
     let (oldStack, newStack) = (viewControllerStack, viewControllers)
+    // If the new stack equals to the old stack we don't have to do anything.
+    // Therefore we should just return.
+    if oldStack == newStack { return }
     // Proceed with a transion if possible otherwise alter the stack directly
     // and drive with the default behaviour
     guard canAnimateTransition() else { return performSetAfterInit(newStack) }
@@ -338,10 +341,7 @@ open class ContainerViewController : UIViewController {
     let sendEvents = {
       // Send events and manipulate the stack
       self.sendEvents(
-        for: Operation(
-          kind: .set(newStack),
-          isAnimated: option.isAnimated
-        )
+        for: Operation(kind: .set(newStack), isAnimated: option.isAnimated)
       ) {
         self.viewControllerStack = newStack
       }
@@ -365,8 +365,14 @@ open class ContainerViewController : UIViewController {
     let newTransition = transition(
       kind, from: fromViewController, to: toViewController, with: option
     )
+    let transitionAnimator: Animator
+    if toViewController !== fromViewController {
+      transitionAnimator = animator(newTransition)
+    } else {
+      transitionAnimator = NonAnimatingAnimator(for: newTransition)
+    }
     // Start transition
-    startTransition(on: animator(newTransition)) {
+    startTransition(on: transitionAnimator) {
       option.isInteractive.whenTrue(execute: sendEvents)
       // Remove only distinct view controllers
       filteredOldStack.forEach { $0.removeFromParentViewController() }
