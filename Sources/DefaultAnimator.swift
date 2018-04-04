@@ -398,7 +398,7 @@ extension DefaultAnimator {
   ) -> PanGestureRecognizer? {
     return context.view(forKey: key)
       .gestureRecognizers?
-      .flatMap { $0 as? PanGestureRecognizer }
+      .compactMap { $0 as? PanGestureRecognizer }
       .first
   }
 }

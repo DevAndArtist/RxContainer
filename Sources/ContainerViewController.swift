@@ -129,7 +129,7 @@ open class ContainerViewController : UIViewController {
     let operation = RotationOperation()
     // Filter transitions which are not running
     let transitionOperations = transitionQueue.operations
-      .flatMap { $0 as? TransitionOperation }
+      .compactMap { $0 as? TransitionOperation }
       .filter { !$0.isExecuting }
     // Force other transitions to wait until the rotation is done
     transitionOperations.forEach { $0.addDependency(operation) }
