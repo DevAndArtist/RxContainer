@@ -26,6 +26,8 @@
 		C6ED839F1EEFFEDB009D5C6F /* DefaultAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6ED839E1EEFFEDB009D5C6F /* DefaultAnimator.swift */; };
 		C6ED83A11EF017B7009D5C6F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6ED83A01EF017B7009D5C6F /* Extensions.swift */; };
 		C6F7F0E81EF85069003E8071 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F7F0E71EF85069003E8071 /* Option.swift */; };
+		CA3E005B20DAA82E004B3D0B /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA3E005920DAA82E004B3D0B /* RxCocoa.framework */; };
+		CA3E005C20DAA82E004B3D0B /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA3E005A20DAA82E004B3D0B /* RxSwift.framework */; };
 		CABC74722015B52B0024F255 /* NonAnimatingAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABC74712015B52B0024F255 /* NonAnimatingAnimator.swift */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +68,8 @@
 		C6ED839E1EEFFEDB009D5C6F /* DefaultAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAnimator.swift; sourceTree = "<group>"; };
 		C6ED83A01EF017B7009D5C6F /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		C6F7F0E71EF85069003E8071 /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
+		CA3E005920DAA82E004B3D0B /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		CA3E005A20DAA82E004B3D0B /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		CABC74712015B52B0024F255 /* NonAnimatingAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonAnimatingAnimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -75,6 +79,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				30F108A6CA04CB09E0CD6042 /* Pods_project_RxContainer.framework in Frameworks */,
+				CA3E005B20DAA82E004B3D0B /* RxCocoa.framework in Frameworks */,
+				CA3E005C20DAA82E004B3D0B /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +110,8 @@
 		5C945C431B0836943FDFBDEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CA3E005920DAA82E004B3D0B /* RxCocoa.framework */,
+				CA3E005A20DAA82E004B3D0B /* RxSwift.framework */,
 				639104FE3A29CE833494DFF5 /* Pods_RxContainerTests.framework */,
 				75C65F0DCFC605B094DC68D0 /* Pods_project_RxContainer.framework */,
 			);
@@ -556,6 +564,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -579,6 +591,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;

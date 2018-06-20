@@ -26,6 +26,7 @@ disabled_rules:
 
 # paths to ignore during linting
 excluded: 
+  - Carthage
   - Pods
   - Example/Pods
 
