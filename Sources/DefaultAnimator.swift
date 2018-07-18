@@ -72,9 +72,7 @@ public final class DefaultAnimator : Animator {
   private var constraintToDeactivate: NSLayoutConstraint?
 
   ///
-  private let propertyAnimator = UIViewPropertyAnimator(
-    duration: 0.4, curve: .easeInOut
-  )
+  private let propertyAnimator: UIViewPropertyAnimator
 
   ///
   private var progressWhenInterrupted = CGFloat(0)
@@ -100,14 +98,22 @@ public final class DefaultAnimator : Animator {
   //==========-------------==========//
 
   ///
-  public init(for transition: Transition,
-              withDirection direction: Direction,
-              style: Style = .overlap,
-              order: Order = .normal) {
+  public init(
+    for transition: Transition,
+    withDirection direction: Direction,
+    style: Style = .overlap,
+    order: Order = .normal,
+    duration: TimeInterval = 0.4,
+    curve: UIViewAnimationCurve = .easeInOut
+  ) {
     self.transition = transition
     self.direction = direction
     self.style = style
     self.order = order
+    self.propertyAnimator = UIViewPropertyAnimator(
+      duration: duration,
+      curve: curve
+    )
   }
 }
 
