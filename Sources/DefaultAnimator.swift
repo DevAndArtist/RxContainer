@@ -16,7 +16,7 @@ public final class DefaultAnimator : Animator {
   //==========-----------------------------==========//
 
   ///
-  private lazy var context = transition.context
+  private lazy var context: Transition.Context = transition.context
 
   ///
   private var additionalAnimation: ((Transition.Context) -> Void)? {
@@ -43,15 +43,15 @@ public final class DefaultAnimator : Animator {
   private lazy var containerView: UIView = context.containerView
 
   ///
-  private lazy var fromView = context.view(forKey: .from)
+  private lazy var fromView: UIView = context.view(forKey: .from)
 
   ///
-   private lazy var toView = context.view(forKey: .to)
+  private lazy var toView: UIView = context.view(forKey: .to)
 
   ///
-  private lazy var shouldPush = context.kind == (
-    order == .normal ? .push : .pop
-  )
+  private lazy var shouldPush: Bool = {
+    context.kind == (order == .normal ? .push : .pop)
+  }()
 
   ///
   private var shouldPop: Bool { return !shouldPush }

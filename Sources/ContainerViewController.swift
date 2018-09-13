@@ -37,7 +37,7 @@ open class ContainerViewController : UIViewController {
   //==========------------------------==========//
 
   ///
-  open let containerView = UIView()
+  public let containerView = UIView()
 
   /// The view controllers currently on the view controller stack.
   ///

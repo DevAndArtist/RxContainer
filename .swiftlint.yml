@@ -23,6 +23,7 @@ disabled_rules:
   - opening_brace
   - file_length
   - private_over_fileprivate
+  - identifier_name
 
 # paths to ignore during linting
 excluded: 
@@ -30,11 +31,11 @@ excluded:
   - Pods
   - Example/Pods
 
-identifier_name:
+# identifier_name:
   # excluded via string array
-  excluded: 
-    - to
-    - up
+#  excluded: 
+#    - to
+#    - up
 
 line_length:
   error: 80
