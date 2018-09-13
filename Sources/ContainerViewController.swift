@@ -191,7 +191,7 @@ open class ContainerViewController : UIViewController {
         self.viewControllerStack.append(viewController)
       }
       //
-      self.addChildViewController(viewController)
+      self.addChild(viewController)
     }
     //
     (!option.isInteractive).whenTrue(execute: sendEvents)
@@ -202,7 +202,7 @@ open class ContainerViewController : UIViewController {
     // Start transition
     startTransition(on: animator(newTransition)) {
       option.isInteractive.whenTrue(execute: sendEvents)
-      viewController.didMove(toParentViewController: self)
+      viewController.didMove(toParent: self)
     }
   }
 
@@ -231,7 +231,7 @@ open class ContainerViewController : UIViewController {
         self.viewControllerStack.removeLast(1)
       }
       //
-      fromViewController.willMove(toParentViewController: nil)
+      fromViewController.willMove(toParent: nil)
     }
     //
     (!option.isInteractive).whenTrue(execute: sendEvents)
@@ -242,7 +242,7 @@ open class ContainerViewController : UIViewController {
     // Start transition
     startTransition(on: animator(newTransition)) {
       option.isInteractive.whenTrue(execute: sendEvents)
-      fromViewController.removeFromParentViewController()
+      fromViewController.removeFromParent()
     }
     return fromViewController
   }
@@ -283,7 +283,7 @@ open class ContainerViewController : UIViewController {
       // Notify all these controllers in the right order that they
       // will be removed.
       resultArray.reversed()
-        .forEach { $0.willMove(toParentViewController: nil) }
+        .forEach { $0.willMove(toParent: nil) }
     }
     //
     (!option.isInteractive).whenTrue(execute: sendEvents)
@@ -295,7 +295,7 @@ open class ContainerViewController : UIViewController {
     startTransition(on: animator(newTransition)) {
       option.isInteractive.whenTrue(execute: sendEvents)
       resultArray.reversed()
-        .forEach { $0.removeFromParentViewController() }
+        .forEach { $0.removeFromParent() }
     }
     return resultArray
   }
@@ -346,9 +346,9 @@ open class ContainerViewController : UIViewController {
         self.viewControllerStack = newStack
       }
       // Notify only view controllers that will be removed from the stack
-      filteredOldStack.forEach { $0.willMove(toParentViewController: nil) }
+      filteredOldStack.forEach { $0.willMove(toParent: nil) }
       // Link only new view controllers to self
-      filteredNewStack.forEach(self.addChildViewController)
+      filteredNewStack.forEach(self.addChild)
     }
     //
     (!option.isInteractive).whenTrue(execute: sendEvents)
@@ -375,9 +375,9 @@ open class ContainerViewController : UIViewController {
     startTransition(on: transitionAnimator) {
       option.isInteractive.whenTrue(execute: sendEvents)
       // Remove only distinct view controllers
-      filteredOldStack.forEach { $0.removeFromParentViewController() }
+      filteredOldStack.forEach { $0.removeFromParent() }
       // Notify only new linked view controllers
-      filteredNewStack.forEach { $0.didMove(toParentViewController: self) }
+      filteredNewStack.forEach { $0.didMove(toParent: self) }
     }
   }
 }
@@ -448,7 +448,7 @@ extension ContainerViewController {
     // Alter the stack
     viewControllerStack = viewControllers
     //
-    viewControllers.forEach(addChildViewController)
+    viewControllers.forEach(addChild)
     //
     let subview: UIView = viewController.view
     subview.autoresizingMask = .complete
@@ -459,7 +459,7 @@ extension ContainerViewController {
       subview.frame = containerView.bounds
     }
     // Finish without animation or transition
-    viewController.didMove(toParentViewController: self)
+    viewController.didMove(toParent: self)
   }
 
   /// It is assumed that there should be no transion when the current

@@ -8,9 +8,9 @@
 
 import UIKit
 
-extension UIViewAutoresizing {
+extension UIView.AutoresizingMask {
   ///
-  static var complete: UIViewAutoresizing {
+  static var complete: UIView.AutoresizingMask {
     return [
       .flexibleTopMargin,
       .flexibleBottomMargin,

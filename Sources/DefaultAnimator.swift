@@ -104,7 +104,7 @@ public final class DefaultAnimator : Animator {
     style: Style = .overlap,
     order: Order = .normal,
     duration: TimeInterval = 0.4,
-    curve: UIViewAnimationCurve = .easeInOut
+    curve: UIView.AnimationCurve = .easeInOut
   ) {
     self.transition = transition
     self.direction = direction
