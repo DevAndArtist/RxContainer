@@ -256,7 +256,7 @@ open class ContainerViewController : UIViewController {
     with animator: (Transition) -> Animator = RxContainer.animator(for:)
   ) -> [UIViewController]? {
     //
-    guard let position = viewControllerStack.index(of: viewController) else {
+    guard let position = viewControllerStack.firstIndex(of: viewController) else {
       fatalError("Cannot pop a view controller that is not on the stack")
     }
     //
