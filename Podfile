@@ -9,6 +9,7 @@ abstract_target 'project' do
   use_frameworks!
 
   pod 'RxSwift'
+  pod 'RxRelay'
   pod 'RxCocoa'
   pod 'SwiftLint', :configurations => ['Debug']
 
@@ -17,9 +18,9 @@ abstract_target 'project' do
     # pods from abstract target 'project' (inherited)
   end
 
-  target 'RxContainerTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+  #target 'RxContainerTests' do
+  #  inherit! :search_paths
+  #  # Pods for testing
+  #end
 
 end
